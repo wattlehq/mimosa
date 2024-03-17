@@ -1,0 +1,17 @@
+version: "3"
+services:
+  app:
+    build: .
+    depends_on:
+      - postgres
+    volumes:
+      - ./src:/usr/src/app
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://app@postgres/app
+  postgres:
+    image: postgres:9.6.2-alpine
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_DB: app
