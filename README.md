@@ -322,6 +322,9 @@ docker compose up --build
 
 # Then in a 2nd terminal once it's up and ready.
 ./run manage migrate
+
+# Create a new user.
+./run manage createsuperuser
 ```
 
 #### Sanity check to make sure the tests still pass:
