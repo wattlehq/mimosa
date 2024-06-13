@@ -29,8 +29,7 @@ ALLOWED_HOSTS = list(map(str.strip, allowed_hosts.split(",")))
 
 # Application definitions
 INSTALLED_APPS = [
-    "models.apps.ModelsConfig",
-    "pages.apps.PagesConfig",
+    "core.apps.CoreConfig",
     "debug_toolbar",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -52,7 +51,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "config.urls"
+ROOT_URLCONF = "app.urls"
 
 # Starting with Django 4.1+ we need to pick which template loaders to use
 # based on our environment since 4.1+ will cache templates by default.
@@ -79,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "config.wsgi.application"
+WSGI_APPLICATION = "app.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
