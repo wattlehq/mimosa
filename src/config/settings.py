@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 import socket
-from distutils.util import strtobool
 from pathlib import Path
+
+from distutils.util import strtobool
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +29,7 @@ ALLOWED_HOSTS = list(map(str.strip, allowed_hosts.split(",")))
 
 # Application definitions
 INSTALLED_APPS = [
+    "models.apps.ModelsConfig",
     "pages.apps.PagesConfig",
     "debug_toolbar",
     "django.contrib.admin",
@@ -100,16 +102,20 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa: E501
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        # noqa: E501
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",  # noqa: E501
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        # noqa: E501
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",  # noqa: E501
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        # noqa: E501
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",  # noqa: E501
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        # noqa: E501
     },
 ]
 
