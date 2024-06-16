@@ -3,6 +3,8 @@
 
 ### App #######################################################################
 
+uploads/*
+!uploads/.keep
 public/*
 !public/.keep
 public_collected/*

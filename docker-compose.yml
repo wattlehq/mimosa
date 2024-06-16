@@ -14,6 +14,7 @@ x-app: &default-app
   tty: true
   volumes:
     - "${DOCKER_WEB_VOLUME:-./public_collected:/app/public_collected}"
+    - "${DOCKER_UPLOADS_VOLUME:-./uploads:/app/src/uploads}"
 
 x-assets: &default-assets
   build:

@@ -23,6 +23,12 @@ class Order(models.Model):
         return str(self.property) + " " + str(self.certificate)
 
 
+def certificate_file_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/certificates/order_<id>/<filename>
+    return "certificates/order_{0}/{1}".format(instance.certificate.id,
+                                               filename)
+
+
 class OrderLine(models.Model):
     order = models.ForeignKey(
         Order,
@@ -33,6 +39,9 @@ class OrderLine(models.Model):
         Certificate,
         on_delete=models.CASCADE,
     )
+
+    certificate_file = models.FileField(
+        upload_to=certificate_file_directory_path, null=True)
 
     def __str__(self):
         return str(self.certificate)
