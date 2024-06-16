@@ -18,3 +18,6 @@ class Property(models.Model):
 
     def __str__(self):
         return self.address_street
+
+    class Meta:
+        verbose_name_plural = "properties"
