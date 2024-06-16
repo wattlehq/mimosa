@@ -3,7 +3,7 @@
 set -o errexit
 set -o pipefail
 
-DC="${DC:-exec}"
+DC="${DC:-run}"
 
 # If we're running in CI we need to disable TTY allocation for docker compose
 # commands that enable it by default, such as exec and run.
@@ -30,7 +30,7 @@ function _build_run_down {
 
 function cmd {
   # Run any command you want in the web container
-  _dc web "${@}"
+  _dc python "${@}"
 }
 
 function manage {
