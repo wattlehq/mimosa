@@ -14,10 +14,25 @@ class Order(models.Model):
         on_delete=models.CASCADE,
     )
 
+    certificate = models.ManyToManyField(
+        Certificate,
+        through="OrderLine"
+    )
+
+    def __str__(self):
+        return str(self.property) + " " + str(self.certificate)
+
+
+class OrderLine(models.Model):
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+    )
+
     certificate = models.ForeignKey(
         Certificate,
         on_delete=models.CASCADE,
     )
 
     def __str__(self):
-        return str(self.property) + " " + str(self.certificate)
+        return str(self.certificate)
