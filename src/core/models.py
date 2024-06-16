@@ -1,2 +1,2 @@
 # noinspection PyUnresolvedReferences
-from .certificate import Certificate
+from .models.certificate import Certificate
