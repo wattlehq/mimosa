@@ -8,6 +8,7 @@ from .property import Property
 class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    is_fulfilled = models.BooleanField(default=False)
 
     property = models.ForeignKey(
         Property,
@@ -30,6 +31,8 @@ def certificate_file_directory_path(instance, filename):
 
 
 class OrderLine(models.Model):
+    is_fulfilled = models.BooleanField(default=False)
+
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
