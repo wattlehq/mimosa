@@ -9,6 +9,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     is_fulfilled = models.BooleanField(default=False)
+    email = models.EmailField(max_length=254)
 
     property = models.ForeignKey(
         Property,
