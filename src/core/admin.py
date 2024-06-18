@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models.certificate import Certificate
+from .models.fee import Fee
 from .models.order import Order, OrderLine
 from .models.property import Property
 
@@ -17,3 +18,4 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.register(Certificate)
 admin.site.register(Property)
+admin.site.register(Fee)
