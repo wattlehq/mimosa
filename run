@@ -30,7 +30,7 @@ function _build_run_down {
 
 function cmd {
   # Run any command you want in the web container
-  _dc python "${@}"
+  _dc web "${@}"
 }
 
 function manage {
