@@ -92,6 +92,17 @@ services:
       - "${DOCKER_WEB_PORT_FORWARD:-127.0.0.1:8000}:${PORT:-8000}"
     profiles: [ "web" ]
 
+  stripe:
+    image: "stripe/stripe-cli"
+    env_file:
+      - ".env"
+    command:
+      - "listen"
+      - "--api-key"
+      - "$STRIPE_API_SECRET_KEY"
+      - "--forward-to"
+      - "web/webhook/stripe"
+
   worker:
     <<: *default-app
     command: celery -A app worker -l "${CELERY_LOG_LEVEL:-info}"
