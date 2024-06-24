@@ -1,13 +1,11 @@
-import os
-
 import stripe
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
 from .fee import Fee
 
-# @todo Move to settings
-stripe.api_key = os.environ.get("STRIPE_API_SECRET_KEY")
+stripe.api_key = settings.STRIPE_API_SECRET_KEY
 
 
 class Certificate(models.Model):
