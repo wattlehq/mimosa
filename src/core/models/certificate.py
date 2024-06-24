@@ -23,6 +23,7 @@ class Certificate(models.Model):
     )
 
     def save(self, *args, **kwargs):
+        # @todo Move sync logic to function inside model file.
         is_new = self.pk is None
         if is_new:
             sync_product_id, sync_price_id = sync_to_stripe_new(
