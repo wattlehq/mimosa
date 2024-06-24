@@ -39,8 +39,7 @@ class Certificate(models.Model):
             price_cents = stripe.Price.create(
                 product=product.stripe_id,
                 unit_amount=price_cents,  # Stripe expects the amount in cents
-                # @todo Move to settings.
-                currency='aud'
+                currency=settings.STRIPE_CURRENCY
             )
 
             self.stripe_product_id = product.id
@@ -57,8 +56,7 @@ class Certificate(models.Model):
                     new_price = stripe.Price.create(
                         product=self.stripe_product_id,
                         unit_amount=price_cents,
-                        # @todo Move to settings.
-                        currency='aud'
+                        currency=settings.STRIPE_CURRENCY
                     )
                     self.stripe_price_id = new_price.id
 

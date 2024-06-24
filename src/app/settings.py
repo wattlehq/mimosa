@@ -173,3 +173,4 @@ if DEBUG:
 
 # Stripe.
 STRIPE_API_SECRET_KEY = os.environ.get("STRIPE_API_SECRET_KEY")
+STRIPE_CURRENCY = "aud"
