@@ -26,10 +26,7 @@ class Certificate(models.Model):
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
-        original = Certificate.objects.get(pk=self.pk)
         price_cents = int(self.price * 100)
-
-        super().save(*args, **kwargs)
 
         # @todo Get Stripe webhook working.
         if is_new:
@@ -44,8 +41,8 @@ class Certificate(models.Model):
 
             self.stripe_product_id = product.id
             self.stripe_price_id = price_cents.id
-            super().save(*args, **kwargs)
         else:
+            original = Certificate.objects.get(pk=self.pk)
             if self.stripe_product_id and self.stripe_price_id:
                 if original.name != self.name:
                     stripe.Product.modify(self.stripe_product_id,
@@ -60,7 +57,7 @@ class Certificate(models.Model):
                     )
                     self.stripe_price_id = new_price.id
 
-        super(Certificate, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
