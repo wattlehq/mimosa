@@ -22,9 +22,9 @@ def sync_to_stripe_new(**kwargs):
 
 
 def sync_to_stripe_existing(**kwargs):
-    product_id = kwargs.get("product_id")
-    price_id_old = kwargs.get("price_id")
-    price_id_new = price_id_old
+    stripe_product_id = kwargs.get("product_id")
+    stripe_price_id_old = kwargs.get("price_id")
+    stripe_price_id_new = stripe_price_id_old
 
     price_new = kwargs.get("price_new")
     price_old = kwargs.get("price_old")
@@ -35,15 +35,15 @@ def sync_to_stripe_existing(**kwargs):
     price_new_cents = int(price_new * 100)
 
     if name_old != name_new:
-        stripe.Product.modify(product_id, name=name_new)
+        stripe.Product.modify(stripe_product_id, name=name_new)
 
     if price_old != price_new:
-        stripe.Price.modify(price_id_old, active=False)
+        stripe.Price.modify(stripe_price_id_old, active=False)
 
-        price_id_new = stripe.Price.create(
-            product=product_id,
+        stripe_price_id_new = stripe.Price.create(
+            product=stripe_product_id,
             unit_amount=price_new_cents,
             currency=settings.STRIPE_CURRENCY
         ).stripe_id
 
-    return product_id, price_id_new
+    return stripe_product_id, stripe_price_id_new
