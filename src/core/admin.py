@@ -14,9 +14,14 @@ class OrderLineInline(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderLineInline]
-    exclude = ('email',)
+    # @todo Remove email
+    exclude = ("email",)
 
 
-admin.site.register(Certificate)
+@admin.register(Certificate)
+class CertificateAdmin(admin.ModelAdmin):
+    exclude = ("stripe_product_id", "stripe_price_id",)
+
+
 admin.site.register(Property)
 admin.site.register(Fee)
