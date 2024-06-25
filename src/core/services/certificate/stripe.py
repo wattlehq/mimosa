@@ -7,11 +7,14 @@ stripe.api_key = settings.STRIPE_API_SECRET_KEY
 def sync_to_stripe_new(**kwargs):
     name_new = kwargs.get("name_new")
     price_new = kwargs.get("price_new")
+    pk = kwargs.get("pk")
 
-    # @todo save PK to product.
-    stripe_product = stripe.Product.create(name=name_new)
+    stripe_product = stripe.Product.create(
+        name=name_new,
+        metadata={"certificate_pk": pk}
+    )
+
     price_cents = int(price_new * 100)
-
     stripe_price = stripe.Price.create(
         product=stripe_product.stripe_id,
         unit_amount=price_cents,  # Stripe expects the amount in cents

@@ -23,29 +23,40 @@ class Certificate(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        sync_product_id, sync_price_id = sync_to_stripe(self)
+        is_new = self.pk is None
+
+        if is_new:
+            certificate_old = None
+        else:
+            certificate_old = Certificate.objects.get(pk=self.pk)
+
+        # Must save first so a PK is available for Stripe.
+        super(Certificate, self).save(*args, **kwargs)
+
+        sync_product_id, sync_price_id = sync_to_stripe(certificate_old, self)
         self.stripe_product_id = sync_product_id
         self.stripe_price_id = sync_price_id
-        super().save(*args, **kwargs)
+
+        # Must save Stripe IDs to DB.
+        super(Certificate, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
 
 
-def sync_to_stripe(certificate: Certificate):
-    is_new = certificate.pk is None
-    if is_new:
+def sync_to_stripe(certificate_old: Certificate, certificate_new: Certificate):
+    if certificate_old is None:
         return sync_to_stripe_new(
-            name_new=certificate.name,
-            price_new=certificate.price,
+            name_new=certificate_new.name,
+            price_new=certificate_new.price,
+            pk=certificate_new.pk,
         )
     else:
-        original = Certificate.objects.get(pk=certificate.pk)
         return sync_to_stripe_existing(
-            product_id=certificate.stripe_product_id,
-            price_id=certificate.stripe_price_id,
-            name_new=certificate.name,
-            name_old=original.name,
-            price_new=certificate.price,
-            price_old=original.price
+            product_id=certificate_old.stripe_product_id,
+            price_id=certificate_old.stripe_price_id,
+            name_new=certificate_new.name,
+            name_old=certificate_old.name,
+            price_new=certificate_new.price,
+            price_old=certificate_old.price
         )
