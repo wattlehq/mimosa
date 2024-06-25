@@ -49,7 +49,7 @@ def sync_to_stripe(certificate_old: Certificate, certificate_new: Certificate):
         return sync_to_stripe_new(
             name_new=certificate_new.name,
             price_new=certificate_new.price,
-            pk=certificate_new.pk,
+            pk=str(certificate_new.pk),
         )
     else:
         return sync_to_stripe_existing(
