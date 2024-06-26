@@ -16,10 +16,10 @@ class Certificate(models.Model):
     stripe_product_id = models.CharField(max_length=100, blank=True, null=True)
     stripe_price_id = models.CharField(max_length=100, blank=True, null=True)
 
-    # @todo Make optional
     fees = models.ManyToManyField(
         Fee,
-        related_name="fees"
+        related_name="fees",
+        blank=True
     )
 
     def save(self, *args, **kwargs):
