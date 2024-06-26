@@ -12,7 +12,6 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         site_url = settings.SITE_PROTOCOL + settings.SITE_DOMAIN + ":" + str(
             settings.SITE_PORT)
-        print(site_url)
         checkout_session = stripe.checkout.Session.create(
             line_items=[
                 {
