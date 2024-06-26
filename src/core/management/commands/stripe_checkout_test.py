@@ -1,5 +1,5 @@
 import stripe
-
+from core.services.utils.site import get_site_url
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -10,8 +10,6 @@ class Command(BaseCommand):
     help = "Create a Stripe checkout instance"
 
     def handle(self, *args, **kwargs):
-        site_url = settings.SITE_PROTOCOL + settings.SITE_DOMAIN + ":" + str(
-            settings.SITE_PORT)
         checkout_session = stripe.checkout.Session.create(
             line_items=[
                 {
@@ -20,9 +18,8 @@ class Command(BaseCommand):
                 },
             ],
             mode="payment",
-            success_url=site_url + "/success.html",
-            cancel_url=site_url + "/cancel.html",
+            success_url=get_site_url() + "/success.html",
+            cancel_url=get_site_url() + "/cancel.html",
         )
 
-        self.stdout.write(
-            self.style.SUCCESS(checkout_session.url))
+        self.stdout.write(self.style.SUCCESS(checkout_session.url))
