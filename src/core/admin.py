@@ -14,8 +14,6 @@ class OrderLineInline(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderLineInline]
-    # @todo Remove email
-    exclude = ("email",)
 
 
 @admin.register(Certificate)
