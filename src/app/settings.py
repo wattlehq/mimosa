@@ -175,3 +175,8 @@ if DEBUG:
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET")
 STRIPE_CURRENCY = "aud"
+
+# Site.
+SITE_PROTOCOL = os.environ.get("SITE_PROTOCOL")
+SITE_DOMAIN = os.environ.get("SITE_DOMAIN")
+SITE_PORT = int(os.environ.get("SITE_PORT"))
