@@ -84,30 +84,36 @@ having Dockerized and deployed a number of Django projects. Here's a few (but
 not all) note worthy additions and changes.
 
 - **Packages and extensions**:
-    - *[gunicorn](https://gunicorn.org/)* for an app server in both development and production
-    - *[whitenoise](https://github.com/evansd/whitenoise)* for serving static files
-    - *[django-debug-toolbar](https://github.com/jazzband/django-debug-toolbar)* for displaying info about a request
+  - *[gunicorn](https://gunicorn.org/)* for an app server in both development
+    and production
+  - *[whitenoise](https://github.com/evansd/whitenoise)* for serving static
+    files
+  - *[django-debug-toolbar](https://github.com/jazzband/django-debug-toolbar)*
+    for displaying info about a request
 - **Linting and formatting**:
-    - *[flake8](https://github.com/PyCQA/flake8)* is used to lint the code base
-    - *[isort](https://github.com/PyCQA/isort)* is used to auto-sort Python imports
-    - *[black](https://github.com/psf/black)* is used to format the code base
+  - *[flake8](https://github.com/PyCQA/flake8)* is used to lint the code base
+  - *[isort](https://github.com/PyCQA/isort)* is used to auto-sort Python
+    imports
+  - *[black](https://github.com/psf/black)* is used to format the code base
 - **Django apps**:
-    - Add `pages` app to render a home page
-    - Add `up` app to provide a few health check pages
+  - Add `pages` app to render a home page
+  - Add `up` app to provide a few health check pages
 - **Config**:
-    - Log to STDOUT so that Docker can consume and deal with log output
-    - Extract a bunch of configuration settings into environment variables
-    - Rename project directory from its custom name to `config/`
-    - `src/config/settings.py` and the `.env` file handles configuration in all environments
+  - Log to STDOUT so that Docker can consume and deal with log output
+  - Extract a bunch of configuration settings into environment variables
+  - Rename project directory from its custom name to `config/`
+  - `src/config/settings.py` and the `.env` file handles configuration in all
+    environments
 - **Front-end assets**:
-    - `assets/` contains all your CSS, JS, images, fonts, etc. and is managed by esbuild
-    - Custom `502.html` and `maintenance.html` pages
-    - Generate favicons using modern best practices
+  - `assets/` contains all your CSS, JS, images, fonts, etc. and is managed by
+    esbuild
+  - Custom `502.html` and `maintenance.html` pages
+  - Generate favicons using modern best practices
 - **Django defaults that are changed**:
-    - Use Redis as the default Cache back-end
-    - Use signed cookies as the session back-end
-    - `public/` is the static directory where Django will serve static files from
-    - `public_collected/` is where `collectstatic` will write its files to
+  - Use Redis as the default Cache back-end
+  - Use signed cookies as the session back-end
+  - `public/` is the static directory where Django will serve static files from
+  - `public_collected/` is where `collectstatic` will write its files to
 
 Besides the Django app itself:
 
@@ -318,6 +324,13 @@ also need to setup our database since a new one will be created for us by
 Docker.
 
 ```sh
+# Populate .env
+edit .env
+
+# Start webhook, copy and paste webhook secret into .env, then stop.
+docker-compose up stripe
+
+# Start the application.
 docker compose up --build
 
 # Then in a 2nd terminal once it's up and ready.
@@ -444,7 +457,8 @@ notified](https://nickjanetakis.com/courses/deploy-to-production).
 
 ## About the author
 
-- Nick Janetakis | <https://nickjanetakis.com> | [@nickjanetakis](https://twitter.com/nickjanetakis)
+- Nick
+  Janetakis | <https://nickjanetakis.com> | [@nickjanetakis](https://twitter.com/nickjanetakis)
 
 I'm a self taught developer and have been freelancing for the last ~20 years.
 You can read about everything I've learned along the way on my site at

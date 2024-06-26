@@ -94,14 +94,16 @@ services:
 
   stripe:
     image: "stripe/stripe-cli"
+    depends_on:
+      - web
     env_file:
       - ".env"
     command:
       - "listen"
       - "--api-key"
-      - "$STRIPE_API_SECRET_KEY"
+      - "$STRIPE_SECRET_KEY"
       - "--forward-to"
-      - "web/webhook/stripe"
+      - "web:8000/webhook/stripe"
 
   worker:
     <<: *default-app
