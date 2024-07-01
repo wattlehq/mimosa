@@ -33,4 +33,4 @@ jobs:
           
           ls -la
 
-          DEBUG=false ./run ci:test
+          DEBUG=false NODE_ENV=production ./run ci:test

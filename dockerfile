@@ -64,14 +64,18 @@ ENV DEBUG="${DEBUG}" \
     PATH="${PATH}:/home/python/.local/bin" \
     USER="python"
 
-COPY --chown=python:python --from=assets /app/public /public
+COPY --chown=python:python --from=assets /app/public /app/public
 COPY --chown=python:python . .
 
 WORKDIR /app/src
 
 RUN if [ "${DEBUG}" = "false" ]; then \
-  SECRET_KEY=dummyvalue python3 manage.py collectstatic --no-input; \
-    else mkdir -p /app/public_collected; fi
+  SITE_PROTOCOL="http://" \
+  SITE_DOMAIN="example.com" \
+  SITE_PORT="8000" \
+  SECRET_KEY=dummyvalue \
+    python3 manage.py collectstatic --no-input; \
+      else mkdir -p /app/public_collected; fi
 
 ENTRYPOINT ["/app/bin/docker-entrypoint-web"]
 
