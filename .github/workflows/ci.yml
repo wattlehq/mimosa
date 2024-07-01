@@ -30,5 +30,7 @@ jobs:
           # test suite. That means we need to generate production assets from
           # esbuild. This line ensures NODE_ENV is set to production.
           sed -i "s|export NODE_ENV|#export NODE_ENV|g" .env*
+          
+          ls -la
 
           ./run ci:test
