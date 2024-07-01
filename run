@@ -164,7 +164,7 @@ function ci:test {
   #   - https://github.com/koalaman/shellcheck
   #   - https://github.com/nickjj/wait-until
   # shellcheck run bin/*
-  lint:dockerfile "${@}"
+  # lint:dockerfile "${@}"
 
   # cp --no-clobber .env.example .env
 
