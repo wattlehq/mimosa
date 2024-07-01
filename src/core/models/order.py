@@ -16,12 +16,10 @@ class Order(models.Model):
     customer_company_name = models.CharField(max_length=200, null=True)
     customer_company_ref = models.CharField(max_length=200, null=True)
     customer_address_street_line_1 = models.CharField(
-        max_length=200,
-        null=True
+        max_length=200, null=True
     )
     customer_address_street_line_2 = models.CharField(
-        max_length=200,
-        null=True
+        max_length=200, null=True
     )
     customer_address_suburb = models.CharField(max_length=50, null=True)
     customer_address_state = models.CharField(max_length=3, null=True)
@@ -32,10 +30,7 @@ class Order(models.Model):
         on_delete=models.CASCADE,
     )
 
-    certificate = models.ManyToManyField(
-        Certificate,
-        through="OrderLine"
-    )
+    certificate = models.ManyToManyField(Certificate, through="OrderLine")
 
     def __str__(self):
         return str(self.property) + " " + str(self.certificate)
@@ -43,8 +38,9 @@ class Order(models.Model):
 
 def certificate_file_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/certificates/order_<id>/<filename>
-    return "certificates/order_{0}/{1}".format(instance.certificate.id,
-                                               filename)
+    return "certificates/order_{0}/{1}".format(
+        instance.certificate.id, filename
+    )
 
 
 class OrderLine(models.Model):
@@ -61,7 +57,8 @@ class OrderLine(models.Model):
     )
 
     certificate_file = models.FileField(
-        upload_to=certificate_file_directory_path, null=True)
+        upload_to=certificate_file_directory_path, null=True
+    )
 
     def __str__(self):
         return str(self.certificate)
