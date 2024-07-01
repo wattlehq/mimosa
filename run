@@ -166,7 +166,11 @@ function ci:test {
   # shellcheck run bin/*
   # lint:dockerfile "${@}"
 
-  cp -n .env.example .env
+  # create .env if not exists.
+  if [ ! -f .env ]; then
+    cp -n .env.example .env
+  fi
+
 
   docker compose build
   docker compose up -d

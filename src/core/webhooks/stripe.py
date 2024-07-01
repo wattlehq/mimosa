@@ -11,23 +11,23 @@ endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 def webhook_stripe(request):
     payload = request.body
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
-    event = None
 
     try:
         # Verify the webhook signature
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
         )
-    except ValueError as e:
+    except ValueError:
         # Invalid payload
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
+    except stripe.error.SignatureVerificationError:
         # Invalid signature
         return HttpResponse(status=400)
 
     # Handle the event
     if event["type"] == "...":
         event_data = event["data"]["object"]
+        print(event_data)
     else:
         # Unexpected event type
         return HttpResponse(status=400)

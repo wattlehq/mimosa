@@ -15,8 +15,14 @@ class Order(models.Model):
     customer_mobile = models.CharField(max_length=15, null=True)
     customer_company_name = models.CharField(max_length=200, null=True)
     customer_company_ref = models.CharField(max_length=200, null=True)
-    customer_address_street_line_1 = models.CharField(max_length=200, null=True)
-    customer_address_street_line_2 = models.CharField(max_length=200, null=True)
+    customer_address_street_line_1 = models.CharField(
+        max_length=200,
+        null=True
+    )
+    customer_address_street_line_2 = models.CharField(
+        max_length=200,
+        null=True
+    )
     customer_address_suburb = models.CharField(max_length=50, null=True)
     customer_address_state = models.CharField(max_length=3, null=True)
     customer_address_post_code = models.CharField(max_length=4, null=True)
