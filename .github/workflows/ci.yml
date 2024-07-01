@@ -33,4 +33,4 @@ jobs:
           
           ls -la
 
-          ./run ci:test
+          DEBUG=false ./run ci:test
