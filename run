@@ -166,7 +166,7 @@ function ci:test {
   # shellcheck run bin/*
   # lint:dockerfile "${@}"
 
-  # cp --no-clobber .env.example .env
+  cp -n .env.example .env
 
   docker compose build
   docker compose up -d
