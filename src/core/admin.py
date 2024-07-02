@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from .models.certificate import Certificate
 from .models.fee import Fee
-from .models.order import Order, OrderLine
+from .models.order import Order
+from .models.order import OrderLine
 from .models.property import Property
 
 
@@ -18,12 +19,18 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(Certificate)
 class CertificateAdmin(admin.ModelAdmin):
-    exclude = ("stripe_product_id", "stripe_price_id",)
+    exclude = (
+        "stripe_product_id",
+        "stripe_price_id",
+    )
 
 
 @admin.register(Fee)
 class FeeAdmin(admin.ModelAdmin):
-    exclude = ("stripe_product_id", "stripe_price_id",)
+    exclude = (
+        "stripe_product_id",
+        "stripe_price_id",
+    )
 
 
 admin.site.register(Property)
