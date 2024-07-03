@@ -88,15 +88,16 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
 
     # @todo Move all the saving logic below to a function.
     # @todo Maybe do this in a transaction to prevent failure?
+    customer = event_data.customer_details
     order = Order(
-        customer_email=event_data.customer_details.email,
-        customer_phone=event_data.customer_details.phone,
-        customer_address_street_line_1=event_data.customer_details.address.line1,
-        customer_address_street_line_2=event_data.customer_details.address.line2,
-        customer_address_suburb=event_data.customer_details.address.city,
-        customer_address_state=event_data.customer_details.address.state,
-        customer_address_post_code=event_data.customer_details.address.postal_code,
-        customer_address_country=event_data.customer_details.address.state,
+        customer_email=customer.email,
+        customer_phone=customer.phone,
+        customer_address_street_line_1=customer.address.line1,
+        customer_address_street_line_2=customer.address.line2,
+        customer_address_suburb=customer.address.city,
+        customer_address_state=customer.address.state,
+        customer_address_post_code=customer.address.postal_code,
+        customer_address_country=customer.address.state,
         property=property_obj
     )
 
