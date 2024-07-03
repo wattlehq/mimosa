@@ -43,6 +43,8 @@ def certificate_file_directory_path(instance, filename):
     )
 
 
+# @todo Implement fee FK
+# @todo Define a better __str__
 class OrderLine(models.Model):
     is_fulfilled = models.BooleanField(default=False)
 

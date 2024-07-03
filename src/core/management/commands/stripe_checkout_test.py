@@ -1,7 +1,8 @@
 import stripe
-from core.services.utils.site import get_site_url
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
+from core.services.utils.site import get_site_url
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -19,12 +20,16 @@ class Command(BaseCommand):
                 {
                     "price": "price_1PWPngBEiTiT42p6vNkKOQ5j",
                     "quantity": 1,
+                },
+                {
+                    "price": "price_1PYaggBEiTiT42p63kdskJb2",
+                    "quantity": 1,
                 }
             ],
             metadata={
                 "property_id": "1",
-                "fee__price_1PWPoIBEiTiT42p62cyp4UF3":
-                    "price_1PWPngBEiTiT42p6vNkKOQ5j"
+                "fee__price_1PWPngBEiTiT42p6vNkKOQ5j":
+                    "price_1PWPoIBEiTiT42p62cyp4UF3"
             },
             mode="payment",
             success_url=get_site_url() + "/success.html",
