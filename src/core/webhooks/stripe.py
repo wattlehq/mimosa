@@ -46,6 +46,7 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
     property_id = event_data.metadata.property_id
     property_obj = Property.objects.get(id=property_id)
 
+    # Expand product data for product metadata.
     line_items_data = stripe.checkout.Session.retrieve(
         event_data["id"],
         expand=["line_items", "line_items.data.price.product"],
@@ -53,7 +54,6 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
 
     line_items = line_items_data["line_items"]
 
-    # Process the line items as needed
     certificates = {}
     fees = {}
 
