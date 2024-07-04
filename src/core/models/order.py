@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils import timezone
 
-from .certificate import Certificate
-from .property import Property
+from core.models.certificate import Certificate
+from core.models.fee import Fee
+from core.models.property import Property
 
 
 class Order(models.Model):
@@ -43,7 +44,6 @@ def certificate_file_directory_path(instance, filename):
     )
 
 
-# @todo Implement fee FK
 # @todo Define a better __str__
 class OrderLine(models.Model):
     is_fulfilled = models.BooleanField(default=False)
@@ -59,7 +59,14 @@ class OrderLine(models.Model):
     )
 
     certificate_file = models.FileField(
-        upload_to=certificate_file_directory_path, null=True
+        upload_to=certificate_file_directory_path,
+        null=True
+    )
+
+    fee = models.ForeignKey(
+        Fee,
+        on_delete=models.CASCADE,
+        null=True
     )
 
     def __str__(self):

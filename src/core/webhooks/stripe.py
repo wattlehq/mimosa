@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from core.models.certificate import Certificate
+from core.models.fee import Fee
 from core.models.order import Order, OrderLine
 from core.models.property import Property
 
@@ -39,8 +40,6 @@ def webhook_stripe(request):
     return HttpResponse(status=200)
 
 
-# @todo Validate that all prices and PKs exist.
-# @todo Validate that fee can be allocated to certificate on order create.
 def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
     event_data = event
     property_id = event_data.metadata.property_id
@@ -66,6 +65,7 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
 
         if "certificate_pk" in metadata:
             certificate_pk = metadata["certificate_pk"]
+            # Associated fee will be added to `fee` key later.
             certificates[price_id] = {
                 "price": price_id,
                 "product": product_id,
@@ -103,10 +103,21 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
 
     order.save()
 
-    # @todo Implement fee FK
     for key, value in certificates.items():
-        certificate = Certificate.objects.get(id=value["certificate_pk"])
-        OrderLine.objects.create(
+        # Save certificate to order line.
+        certificate_pk = int(value["certificate_pk"])
+        certificate = Certificate.objects.get(id=certificate_pk)
+        order_line = OrderLine.objects.create(
             order=order,
             certificate=certificate
         )
+
+        if "fee" in value:
+            # Save associated fee to order line.
+            fee_pk = int(value["fee"]["fee_pk"])
+            fee = Fee.objects.get(id=fee_pk)
+            # Verify fee is associated with certificate.
+            is_valid = certificate.fees.filter(id=fee_pk).exists()
+            if is_valid:
+                order_line.fee = fee
+                order_line.save()
