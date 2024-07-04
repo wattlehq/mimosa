@@ -94,7 +94,6 @@ def save_event_order(event: stripe.checkout.Session):
     property_obj = Property.objects.get(id=property_id)
     certificates, fees = get_event_pk_map(event)
 
-    # @todo Maybe do this in a transaction to prevent failure?
     customer = event.customer_details
     order = Order(
         customer_email=customer.email,
