@@ -19,20 +19,18 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(Certificate)
 class CertificateAdmin(admin.ModelAdmin):
-    pass
-    # exclude = (
-    #     "stripe_product_id",
-    #     "stripe_price_id",
-    # )
+    exclude = (
+        "stripe_product_id",
+        "stripe_price_id",
+    )
 
 
 @admin.register(Fee)
 class FeeAdmin(admin.ModelAdmin):
-    pass
-    # exclude = (
-    #     "stripe_product_id",
-    #     "stripe_price_id",
-    # )
+    exclude = (
+        "stripe_product_id",
+        "stripe_price_id",
+    )
 
 
 admin.site.register(Property)
