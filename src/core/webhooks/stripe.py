@@ -1,5 +1,6 @@
 import stripe
 from django.conf import settings
+from django.db import transaction
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -87,6 +88,7 @@ def get_event_pk_map(event: stripe.checkout.Session):
 
 
 # Creates an order instance from a Stripe Checkout Session.
+@transaction.atomic
 def save_event_order(event: stripe.checkout.Session):
     property_id = event.metadata.property_id
     property_obj = Property.objects.get(id=property_id)
@@ -131,4 +133,3 @@ def save_event_order(event: stripe.checkout.Session):
 # Creates an order instance from a certificate and fee PK map.
 def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
     save_event_order(event)
-   
