@@ -40,23 +40,20 @@ def webhook_stripe(request):
     return HttpResponse(status=200)
 
 
-def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
-    event_data = event
-    property_id = event_data.metadata.property_id
-    property_obj = Property.objects.get(id=property_id)
+# Creates a map of certificate and fee PKs that are keyed by Stripe price ID.
+# Used to map price IDs to model object instances.
+def get_event_pk_map(event: stripe.checkout.Session):
+    certificates = {}
+    fees = {}
 
     # Expand product data for product metadata.
     line_items_data = stripe.checkout.Session.retrieve(
-        event_data["id"],
+        event["id"],
         expand=["line_items", "line_items.data.price.product"],
     )
 
     line_items = line_items_data["line_items"]
 
-    certificates = {}
-    fees = {}
-
-    # @todo Move this mapping to a function.
     for item in line_items["data"]:
         price = item["price"]
         price_id = price["id"]
@@ -80,15 +77,23 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
                 "fee_pk": fee_pk,
             }
 
-    for key, value in event_data.metadata.items():
+    for key, value in event.metadata.items():
         if key.startswith("fee__"):
             [fee_key, fee_price] = key.split("__")
             if fee_key == "fee" and value in certificates and fee_price in fees:
                 certificates[value]["fee"] = fees[fee_price]
 
-    # @todo Move all the saving logic below to a function.
+    return certificates, fees
+
+
+# Creates an order instance from a Stripe Checkout Session.
+def save_event_order(event: stripe.checkout.Session):
+    property_id = event.metadata.property_id
+    property_obj = Property.objects.get(id=property_id)
+    certificates, fees = get_event_pk_map(event)
+
     # @todo Maybe do this in a transaction to prevent failure?
-    customer = event_data.customer_details
+    customer = event.customer_details
     order = Order(
         customer_email=customer.email,
         customer_phone=customer.phone,
@@ -121,3 +126,9 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
             if is_valid:
                 order_line.fee = fee
                 order_line.save()
+
+
+# Creates an order instance from a certificate and fee PK map.
+def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
+    save_event_order(event)
+   
