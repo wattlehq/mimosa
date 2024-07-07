@@ -8,6 +8,7 @@ from core.models.property import Property
 
 # @todo Implement status
 # @todo Implement customer details?
+# @todo Implement better __str__
 class OrderSession(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -27,7 +28,6 @@ class OrderSession(models.Model):
         return str(self.property) + " " + str(self.certificate)
 
 
-# @todo Implement better __str__
 class OrderSessionLine(models.Model):
     order_session = models.ForeignKey(
         OrderSession,
@@ -90,7 +90,6 @@ def certificate_file_directory_path(instance, filename):
     )
 
 
-# @todo Define a better __str__
 class OrderLine(models.Model):
     is_fulfilled = models.BooleanField(default=False)
 
