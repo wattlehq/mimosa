@@ -6,6 +6,50 @@ from core.models.fee import Fee
 from core.models.property import Property
 
 
+class OrderSession(models.Model):
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+    stripe_session_id = models.CharField(max_length=255)
+
+    property = models.ForeignKey(
+        Property,
+        on_delete=models.CASCADE,
+    )
+
+    certificate = models.ManyToManyField(
+        Certificate,
+        through="OrderSessionLine"
+    )
+
+    def __str__(self):
+        return str(self.property) + " " + str(self.certificate)
+
+
+# @todo Implement better __str__
+class OrderSessionLine(models.Model):
+    order_session = models.ForeignKey(
+        OrderSession,
+        on_delete=models.CASCADE,
+    )
+
+    certificate = models.ForeignKey(
+        Certificate,
+        on_delete=models.CASCADE,
+    )
+
+    fee = models.ForeignKey(
+        Fee,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return str(self.certificate)
+
+
+# @todo Implement better __str__
+# @todo Implement Stripe Order ID.
 class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -66,7 +110,8 @@ class OrderLine(models.Model):
     fee = models.ForeignKey(
         Fee,
         on_delete=models.CASCADE,
-        null=True
+        null=True,
+        blank=True
     )
 
     def __str__(self):
