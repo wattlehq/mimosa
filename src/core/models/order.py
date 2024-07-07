@@ -7,6 +7,7 @@ from core.models.property import Property
 
 
 # @todo Implement status
+# @todo Implement customer details?
 class OrderSession(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
