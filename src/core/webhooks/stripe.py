@@ -40,52 +40,6 @@ def webhook_stripe(request):
     return HttpResponse(status=200)
 
 
-# Creates a map of certificate and fee PKs that are keyed by Stripe price ID.
-# Used to map price IDs to model object instances.
-def get_event_pk_map(event: stripe.checkout.Session):
-    certificates = {}
-    fees = {}
-
-    # Expand product data for product metadata.
-    line_items_data = stripe.checkout.Session.retrieve(
-        event["id"],
-        expand=["line_items", "line_items.data.price.product"],
-    )
-
-    line_items = line_items_data["line_items"]
-
-    for item in line_items["data"]:
-        price = item["price"]
-        price_id = price["id"]
-        product_id = price["product"]["id"]
-        metadata = price["product"]["metadata"]
-
-        if "certificate_pk" in metadata:
-            certificate_pk = metadata["certificate_pk"]
-            # Associated fee will be added to `fee` key later.
-            certificates[price_id] = {
-                "price": price_id,
-                "product": product_id,
-                "certificate_pk": certificate_pk
-            }
-
-        if "fee_pk" in metadata:
-            fee_pk = metadata["fee_pk"]
-            fees[price_id] = {
-                "price": price_id,
-                "product": product_id,
-                "fee_pk": fee_pk,
-            }
-
-    for key, value in event.metadata.items():
-        if key.startswith("fee__"):
-            [fee_key, fee_price] = key.split("__")
-            if fee_key == "fee" and value in certificates and fee_price in fees:
-                certificates[value]["fee"] = fees[fee_price]
-
-    return certificates, fees
-
-
 # Creates an order instance from a Stripe Checkout Session.
 @transaction.atomic
 def save_event_order(event: stripe.checkout.Session):
