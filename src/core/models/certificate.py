@@ -2,8 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 from core.models.abstract.stripe_product import StripeProduct
-
-from .fee import Fee
+from core.models.fee import Fee
 
 
 class Certificate(StripeProduct):

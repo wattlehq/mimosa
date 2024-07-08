@@ -1,8 +1,7 @@
 from django.urls import path
 
 from core import views
-
-from .webhooks.stripe import webhook_stripe
+from core.webhooks.stripe import webhook_stripe
 
 urlpatterns = [
     path("", views.home, name="home"),
