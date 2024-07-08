@@ -90,6 +90,12 @@ class Order(models.Model):
         blank=True,
     )
 
+    stripe_payment_intent = models.CharField(
+        max_length=254,
+        null=True,
+        blank=True,
+    )
+
     def __str__(self):
         return str(self.property)
 
