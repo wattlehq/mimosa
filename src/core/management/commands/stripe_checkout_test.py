@@ -49,24 +49,20 @@ def create_line_items():
     return line_items
 
 
-def create_stripe_order_session():
+def create_stripe_checkout_session(order_session: OrderSession):
     line_items = create_line_items()
     return stripe.checkout.Session.create(
         line_items=line_items,
+        metadata={"order_session_pk": order_session.id},
         mode="payment",
         success_url=get_site_url() + "/success.html",
         cancel_url=get_site_url() + "/cancel.html",
     )
 
 
-def save_order_session(session_id: str):
+def save_order_session():
     property_obj = Property.objects.get(id=request["property_id"])
-
-    order_session = OrderSession(
-        property=property_obj,
-        stripe_session_id=session_id,
-    )
-
+    order_session = OrderSession(property=property_obj)
     order_session.save()
 
     for value in request["lines"]:
@@ -85,11 +81,19 @@ def save_order_session(session_id: str):
                 order_line.fee = fee
                 order_line.save()
 
+    return order_session
+
+
+def update_order_session(order_session: OrderSession, stripe_checkout_id: str):
+    order_session.stripe_checkout_id = stripe_checkout_id
+    order_session.save()
+
 
 class Command(BaseCommand):
     help = "Create a Stripe checkout instance"
 
     def handle(self, *args, **kwargs):
-        session = create_stripe_order_session()
-        save_order_session(session.stripe_id)
-        self.stdout.write(self.style.SUCCESS(session.url))
+        order_session = save_order_session()
+        stripe_checkout = create_stripe_checkout_session(order_session)
+        update_order_session(order_session, stripe_checkout.stripe_id)
+        self.stdout.write(self.style.SUCCESS(stripe_checkout.url))

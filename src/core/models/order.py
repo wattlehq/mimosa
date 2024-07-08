@@ -12,20 +12,21 @@ from core.models.property import Property
 class OrderSession(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    stripe_session_id = models.CharField(max_length=255)
+    stripe_checkout_id = models.CharField(max_length=255)
 
     property = models.ForeignKey(
         Property,
         on_delete=models.CASCADE,
     )
 
-    certificate = models.ManyToManyField(
+    # @todo Is "through" correct?
+    lines = models.ManyToManyField(
         Certificate,
         through="OrderSessionLine"
     )
 
     def __str__(self):
-        return str(self.property) + " " + str(self.certificate)
+        return str(self.property) + " " + str(self.lines)
 
 
 class OrderSessionLine(models.Model):
@@ -47,7 +48,7 @@ class OrderSessionLine(models.Model):
     )
 
     def __str__(self):
-        return str(self.certificate)
+        return str(self.certificate) + " " + str(self.fee)
 
 
 # @todo Implement better __str__
@@ -77,7 +78,16 @@ class Order(models.Model):
         on_delete=models.CASCADE,
     )
 
+    # @todo Is "through" correct?
+    # @todo Rename to "lines"
     certificate = models.ManyToManyField(Certificate, through="OrderLine")
+
+    order_session = models.ForeignKey(
+        OrderSession,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return str(self.property) + " " + str(self.certificate)
@@ -86,7 +96,7 @@ class Order(models.Model):
 def certificate_file_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/certificates/order_<id>/<filename>
     return "certificates/order_{0}/{1}".format(
-        instance.certificate.id, filename
+        instance.lines.id, filename
     )
 
 
@@ -98,6 +108,7 @@ class OrderLine(models.Model):
         on_delete=models.CASCADE,
     )
 
+    # @todo Rename to `lines`
     certificate = models.ForeignKey(
         Certificate,
         on_delete=models.CASCADE,
