@@ -7,9 +7,9 @@ from core.models.property import Property
 
 
 class OrderSessionStatus(models.IntegerChoices):
-    PENDING = 1, 'Pending'
-    COMPLETED = 2, 'Completed'
-    ERROR = 3, 'Error'
+    PENDING = 1, "Pending"
+    COMPLETED = 2, "Completed"
+    ERROR = 3, "Error"
 
 
 class OrderSession(models.Model):
@@ -18,8 +18,7 @@ class OrderSession(models.Model):
     stripe_checkout_id = models.CharField(max_length=255)
 
     status = models.IntegerField(
-        choices=OrderSessionStatus.choices,
-        default=OrderSessionStatus.PENDING
+        choices=OrderSessionStatus.choices, default=OrderSessionStatus.PENDING
     )
 
     status_error = models.CharField(max_length=255, null=True, blank=True)
@@ -30,10 +29,7 @@ class OrderSession(models.Model):
     )
 
     # @todo Is "through" correct?
-    lines = models.ManyToManyField(
-        Certificate,
-        through="OrderSessionLine"
-    )
+    lines = models.ManyToManyField(Certificate, through="OrderSessionLine")
 
     # @todo Implement customer details when available
     def __str__(self):
@@ -52,10 +48,7 @@ class OrderSessionLine(models.Model):
     )
 
     fee = models.ForeignKey(
-        Fee,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
+        Fee, on_delete=models.CASCADE, null=True, blank=True
     )
 
     def __str__(self):
@@ -103,9 +96,7 @@ class Order(models.Model):
 
 def certificate_file_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/certificates/order_<id>/<filename>
-    return "certificates/order_{0}/{1}".format(
-        instance.lines.id, filename
-    )
+    return "certificates/order_{0}/{1}".format(instance.lines.id, filename)
 
 
 class OrderLine(models.Model):
@@ -122,15 +113,11 @@ class OrderLine(models.Model):
     )
 
     certificate_file = models.FileField(
-        upload_to=certificate_file_directory_path,
-        null=True
+        upload_to=certificate_file_directory_path, null=True
     )
 
     fee = models.ForeignKey(
-        Fee,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
+        Fee, on_delete=models.CASCADE, null=True, blank=True
     )
 
     def __str__(self):

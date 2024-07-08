@@ -2,7 +2,10 @@ from django.contrib import admin
 
 from core.models.certificate import Certificate
 from core.models.fee import Fee
-from core.models.order import Order, OrderLine, OrderSession, OrderSessionLine
+from core.models.order import Order
+from core.models.order import OrderLine
+from core.models.order import OrderSession
+from core.models.order import OrderSessionLine
 from core.models.property import Property
 
 

@@ -4,7 +4,8 @@ from django.core.management.base import BaseCommand
 
 from core.models.certificate import Certificate
 from core.models.fee import Fee
-from core.models.order import OrderSession, OrderSessionLine
+from core.models.order import OrderSession
+from core.models.order import OrderSessionLine
 from core.models.property import Property
 from core.services.utils.site import get_site_url
 
@@ -12,15 +13,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 request = {
     "property_id": 1,
-    "lines": [
-        {
-            "certificate_id": 1,
-            "fee_id": 3
-        },
-        {
-            "certificate_id": 2
-        }
-    ]
+    "lines": [{"certificate_id": 1, "fee_id": 3}, {"certificate_id": 2}],
 }
 
 
@@ -31,20 +24,18 @@ def create_line_items():
         certificate_id = value["certificate_id"]
         certificate = Certificate.objects.get(pk=certificate_id)
 
-        line_items.append({
-            "price": certificate.stripe_price_id,
-            "quantity": 1
-        })
+        line_items.append(
+            {"price": certificate.stripe_price_id, "quantity": 1}
+        )
 
         if "fee_id" in value:
             fee_id = value["fee_id"]
             is_valid_fee = certificate.fees.filter(id=fee_id).exists()
             if is_valid_fee:
                 fee = Fee.objects.get(pk=fee_id)
-                line_items.append({
-                    "price": fee.stripe_price_id,
-                    "quantity": 1
-                })
+                line_items.append(
+                    {"price": fee.stripe_price_id, "quantity": 1}
+                )
 
     return line_items
 
@@ -69,8 +60,7 @@ def save_order_session():
         certificate_id = value["certificate_id"]
         certificate = Certificate.objects.get(id=certificate_id)
         order_line = OrderSessionLine.objects.create(
-            order_session=order_session,
-            certificate=certificate
+            order_session=order_session, certificate=certificate
         )
 
         if "fee_id" in value:
