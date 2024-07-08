@@ -1,10 +1,12 @@
 from django.contrib import admin
 
-from .models.certificate import Certificate
-from .models.fee import Fee
-from .models.order import Order
-from .models.order import OrderLine
-from .models.property import Property
+from core.models.certificate import Certificate
+from core.models.fee import Fee
+from core.models.order import Order
+from core.models.order import OrderLine
+from core.models.order import OrderSession
+from core.models.order import OrderSessionLine
+from core.models.property import Property
 
 
 class OrderLineInline(admin.TabularInline):
@@ -15,6 +17,16 @@ class OrderLineInline(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderLineInline]
+
+
+class OrderSessionLineInline(admin.TabularInline):
+    model = OrderSessionLine
+    extra = 1
+
+
+@admin.register(OrderSession)
+class OrderSessionAdmin(admin.ModelAdmin):
+    inlines = [OrderSessionLineInline]
 
 
 @admin.register(Certificate)
