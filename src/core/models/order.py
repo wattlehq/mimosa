@@ -12,8 +12,6 @@ class OrderSessionStatus(models.IntegerChoices):
     ERROR = 3, 'Error'
 
 
-# @todo Implement customer details?
-# @todo Implement better __str__
 class OrderSession(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -37,6 +35,8 @@ class OrderSession(models.Model):
         through="OrderSessionLine"
     )
 
+    # @todo Implement better __str__
+    # @todo Implement customer details when available
     def __str__(self):
         return str(self.property) + " " + str(self.lines)
 
@@ -63,7 +63,6 @@ class OrderSessionLine(models.Model):
         return str(self.certificate) + " " + str(self.fee)
 
 
-# @todo Implement better __str__
 # @todo Implement Stripe Order/Invoice ID.
 class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
@@ -100,6 +99,7 @@ class Order(models.Model):
         blank=True,
     )
 
+    # @todo Implement better __str__
     def __str__(self):
         return str(self.property) + " " + str(self.lines)
 
