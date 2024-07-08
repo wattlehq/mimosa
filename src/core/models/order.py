@@ -35,10 +35,9 @@ class OrderSession(models.Model):
         through="OrderSessionLine"
     )
 
-    # @todo Implement better __str__
     # @todo Implement customer details when available
     def __str__(self):
-        return str(self.property) + " " + str(self.lines)
+        return str(self.property) + " - " + str(self.created_at)
 
 
 class OrderSessionLine(models.Model):
@@ -98,9 +97,8 @@ class Order(models.Model):
         blank=True,
     )
 
-    # @todo Implement better __str__
     def __str__(self):
-        return str(self.property) + " " + str(self.lines)
+        return str(self.property)
 
 
 def certificate_file_directory_path(instance, filename):
