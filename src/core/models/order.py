@@ -6,13 +6,25 @@ from core.models.fee import Fee
 from core.models.property import Property
 
 
-# @todo Implement status
+class OrderSessionStatus(models.IntegerChoices):
+    PENDING = 1, 'Pending'
+    COMPLETED = 2, 'Completed'
+    ERROR = 3, 'Error'
+
+
 # @todo Implement customer details?
 # @todo Implement better __str__
 class OrderSession(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     stripe_checkout_id = models.CharField(max_length=255)
+
+    status = models.IntegerField(
+        choices=OrderSessionStatus.choices,
+        default=OrderSessionStatus.PENDING
+    )
+
+    status_error = models.CharField(max_length=255, null=True)
 
     property = models.ForeignKey(
         Property,
@@ -52,7 +64,7 @@ class OrderSessionLine(models.Model):
 
 
 # @todo Implement better __str__
-# @todo Implement Stripe Order ID.
+# @todo Implement Stripe Order/Invoice ID.
 class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)

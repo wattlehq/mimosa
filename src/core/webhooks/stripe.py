@@ -4,7 +4,8 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from core.models.order import Order, OrderLine, OrderSession, OrderSessionLine
+from core.models.order import Order, OrderLine, OrderSession, OrderSessionLine, \
+    OrderSessionStatus
 from core.models.property import Property
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -112,8 +113,6 @@ def save_event_order(event: stripe.checkout.Session):
     )
 
     for session_order_line in order_session_lines:
-        print(session_order_line)
-
         # Save certificate to order line.
         order_line = OrderLine.objects.create(
             order=order,
@@ -123,7 +122,21 @@ def save_event_order(event: stripe.checkout.Session):
 
         order_line.save()
 
+    order_session.status = OrderSessionStatus.COMPLETED
+    order_session.save()
+
+
+def save_event_order_error(event: stripe.checkout.Session, e: Exception):
+    order_session_id = event.metadata["order_session_pk"]
+    order_session = OrderSession.objects.get(id=order_session_id)
+    order_session.status_error = str(e)
+    order_session.status = OrderSessionStatus.ERROR
+    order_session.save()
+
 
 # Creates an order instance from a certificate and fee PK map.
 def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
-    save_event_order(event)
+    try:
+        save_event_order(event)
+    except Exception as e:
+        save_event_order_error(event, e)
