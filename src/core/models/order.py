@@ -79,8 +79,7 @@ class Order(models.Model):
     )
 
     # @todo Is "through" correct?
-    # @todo Rename to "lines"
-    certificate = models.ManyToManyField(Certificate, through="OrderLine")
+    lines = models.ManyToManyField(Certificate, through="OrderLine")
 
     order_session = models.ForeignKey(
         OrderSession,
@@ -90,7 +89,7 @@ class Order(models.Model):
     )
 
     def __str__(self):
-        return str(self.property) + " " + str(self.certificate)
+        return str(self.property) + " " + str(self.lines)
 
 
 def certificate_file_directory_path(instance, filename):
@@ -108,7 +107,6 @@ class OrderLine(models.Model):
         on_delete=models.CASCADE,
     )
 
-    # @todo Rename to `lines`
     certificate = models.ForeignKey(
         Certificate,
         on_delete=models.CASCADE,
