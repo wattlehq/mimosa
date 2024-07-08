@@ -24,7 +24,7 @@ class OrderSession(models.Model):
         default=OrderSessionStatus.PENDING
     )
 
-    status_error = models.CharField(max_length=255, null=True)
+    status_error = models.CharField(max_length=255, null=True, blank=True)
 
     property = models.ForeignKey(
         Property,
