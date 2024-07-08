@@ -4,8 +4,13 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from core.models.order import Order, OrderLine, OrderSession, OrderSessionLine, \
+from core.models.order import (
+    Order,
+    OrderLine,
+    OrderSession,
+    OrderSessionLine,
     OrderSessionStatus
+)
 from core.models.property import Property
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
