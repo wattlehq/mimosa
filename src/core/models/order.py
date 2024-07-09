@@ -28,7 +28,6 @@ class OrderSession(models.Model):
         on_delete=models.CASCADE,
     )
 
-    # @todo Is "through" correct?
     lines = models.ManyToManyField(Certificate, through="OrderSessionLine")
 
     # @todo Implement customer details when available
@@ -121,7 +120,6 @@ class Order(models.Model):
         on_delete=models.CASCADE,
     )
 
-    # @todo Is "through" correct?
     lines = models.ManyToManyField(Certificate, through="OrderLine")
 
     order_session = models.ForeignKey(
