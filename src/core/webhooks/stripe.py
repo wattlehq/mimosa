@@ -62,7 +62,7 @@ def save_event_order(event: stripe.checkout.Session):
         customer_address_country=customer.address.state,
         property=property_obj,
         order_session=order_session,
-        stripe_payment_intent=event.payment_intent
+        stripe_payment_intent=event.payment_intent,
     )
 
     order.save()

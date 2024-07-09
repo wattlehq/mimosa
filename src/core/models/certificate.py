@@ -9,6 +9,9 @@ class Certificate(StripeProduct):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
+    description = models.CharField(max_length=255, null=True, blank=True)
+    account_code = models.CharField(max_length=10)
+
     fees = models.ManyToManyField(Fee, related_name="fees", blank=True)
 
     def save(self, *args, **kwargs):
