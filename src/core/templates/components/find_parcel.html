@@ -1,0 +1,64 @@
+<section id="find-parcel">
+    <h2>1. Find a parcel</h2>
+    <form method="post" action="{% url 'find_parcel' %}">
+        {% csrf_token %}
+        <div class="search-options">
+            <div class="lot-section-dp-fields">
+                <div class="input-group">
+                    <label for="{{ form.lot.id_for_label }}">Lot</label>
+                    {{ form.lot }}
+                </div>
+                <div class="input-group">
+                    <label for="{{ form.section.id_for_label }}">Section</label>
+                    {{ form.section }}
+                </div>
+                <div class="input-group">
+                    <label for="{{ form.deposited_plan.id_for_label }}">Deposited Plan</label>
+                    {{ form.deposited_plan }}
+                </div>
+            </div>
+            <div class="or-divider">OR</div>
+            <div class="address-field">
+                <div class="input-group">
+                    <label for="{{ form.street_address.id_for_label }}">Street Address</label>
+                    {{ form.street_address }}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="find-button">Find <span class="arrow">→</span></button>
+    </form>
+</section>
+
+{% if grouped_properties %}
+    <section id="matching-assessments">
+        <h2>Matching Assessments</h2>
+        <form method="post" action="{% url 'find_parcel' %}">
+            {% csrf_token %}
+            <ul>
+                {% for assessment, properties in grouped_properties.items %}
+                    <li>
+                        <label>
+                            <input type="radio" name="selected_assessment" value="{{ assessment }}" required {% if assessment == selected_assessment %}checked{% endif %}>
+                            {{ assessment }} {{ properties.0.address_street }}, {{ properties.0.address_suburb }} {{ properties.0.address_state }} {{ properties.0.address_post_code }}
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="submit">Next</button>
+        </form>
+    </section>
+{% endif %}
+
+{% if selected_properties %}
+    <section id="property-details">
+        <h2>Selected Property Details</h2>
+        <ul>
+        {% for property in selected_properties %}
+            <li>
+                Lot {{ property.lot }} Section {{ property.section }} Deposited Plan {{ property.deposited_plan }}<br>
+                {{ property.address_street }}, {{ property.address_suburb }} {{ property.address_state }}, {{ property.address_post_code }}
+            </li>
+        {% endfor %}
+        </ul>
+    </section>
+{% endif %}
