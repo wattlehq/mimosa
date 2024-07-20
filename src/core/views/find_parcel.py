@@ -5,6 +5,7 @@ from django.views import View
 import json
 
 from core.forms.find_parcel import FindParcelForm
+from core.services.property.serialize_property import serialize_property
 from core.services.property.search_properties import search_properties
 from core.services.property.group_properties_by_assessment import (
     group_properties_by_assessment
@@ -55,7 +56,7 @@ class FindParcel(View):
             )
 
             serializable_grouped_properties = {
-                assessment: [self.serialize_property(prop) for prop in props]
+                assessment: [serialize_property(prop) for prop in props]
                 for assessment, props in grouped_properties.items()
             }
 
@@ -118,26 +119,3 @@ class FindParcel(View):
                 "original_search_data": json.dumps(original_search_data),
             },
         )
-
-    @staticmethod
-    def serialize_property(prop):
-        """
-        Serialize a Property object into a dictionary of its attributes.
-
-        Args:
-            prop (Property): The Property model instance to be serialized.
-
-        Returns:
-            dict: A dictionary containing the essential attributes of
-            the Property.
-        """
-        return {
-            "id": prop.id,
-            "lot": prop.lot,
-            "section": prop.section,
-            "deposited_plan": prop.deposited_plan,
-            "address_street": prop.address_street,
-            "address_suburb": prop.address_suburb,
-            "address_state": prop.address_state,
-            "address_post_code": prop.address_post_code,
-        }
