@@ -2,8 +2,8 @@ from django.urls import path
 
 from core.webhooks.stripe import webhook_stripe
 
-from .views.find_parcel import FindParcel
-from .views.home import home
+from core.views.find_parcel import FindParcel
+from core.views.home import home
 
 urlpatterns = [
     path("", home, name="home"),

@@ -5,7 +5,7 @@ from django.views import View
 from django.db.models import Q
 
 from core.models.property import Property
-from ..forms.find_parcel import FindParcelForm
+from core.forms.find_parcel import FindParcelForm
 
 
 class FindParcel(View):
