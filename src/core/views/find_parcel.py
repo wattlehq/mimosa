@@ -2,11 +2,10 @@
 
 from django.shortcuts import render
 from django.views import View
-from django.db.models import Q
 import json
 
-from core.models.property import Property
 from core.forms.find_parcel import FindParcelForm
+from core.services.property.search_properties import search_properties
 from core.services.property.group_properties_by_assessment import (
     group_properties_by_assessment
 )
@@ -50,7 +49,7 @@ class FindParcel(View):
         """
         form = FindParcelForm(request.POST)
         if form.is_valid():
-            properties = self.search_properties(form.cleaned_data)
+            properties = search_properties(form.cleaned_data)
             grouped_properties = group_properties_by_assessment(
                 properties
             )
@@ -119,43 +118,6 @@ class FindParcel(View):
                 "original_search_data": json.dumps(original_search_data),
             },
         )
-
-    @staticmethod
-    def search_properties(cleaned_data):
-        """
-        Search for properties based on the provided criteria.
-
-        Args:
-            cleaned_data (dict): Cleaned form data containing search criteria.
-
-        Returns:
-            QuerySet: Filtered Property objects.
-        """
-        q_objects = Q()
-
-        lot = cleaned_data.get("lot")
-        section = cleaned_data.get("section")
-        deposited_plan = cleaned_data.get("deposited_plan")
-        street_address = cleaned_data.get("street_address")
-
-        if lot or section or deposited_plan:
-            if lot:
-                q_objects &= Q(lot__icontains=lot)
-            if section:
-                q_objects &= Q(section__icontains=section)
-            if deposited_plan:
-                q_objects &= Q(deposited_plan__icontains=deposited_plan)
-        elif street_address:
-            parts = street_address.split()
-            for part in parts:
-                q_objects |= (
-                    Q(address_street__icontains=part)
-                    | Q(address_suburb__icontains=part)
-                    | Q(address_state__icontains=part)
-                    | Q(address_post_code__icontains=part)
-                )
-
-        return Property.objects.filter(q_objects)
 
     @staticmethod
     def serialize_property(prop):
