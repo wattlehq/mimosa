@@ -7,6 +7,9 @@ import json
 
 from core.models.property import Property
 from core.forms.find_parcel import FindParcelForm
+from core.services.property.group_properties_by_assessment import (
+    group_properties_by_assessment
+)
 
 
 class FindParcel(View):
@@ -48,7 +51,7 @@ class FindParcel(View):
         form = FindParcelForm(request.POST)
         if form.is_valid():
             properties = self.search_properties(form.cleaned_data)
-            grouped_properties = self.group_properties_by_assessment(
+            grouped_properties = group_properties_by_assessment(
                 properties
             )
 
@@ -153,25 +156,6 @@ class FindParcel(View):
                 )
 
         return Property.objects.filter(q_objects)
-
-    @staticmethod
-    def group_properties_by_assessment(properties):
-        """
-        Group properties by their assessment values.
-
-        Args:
-            properties (QuerySet): Property objects to be grouped.
-
-        Returns:
-            dict: Properties grouped by assessment.
-        """
-        grouped_properties = {}
-        for prop in properties:
-            if prop.assessment:
-                if prop.assessment not in grouped_properties:
-                    grouped_properties[prop.assessment] = []
-                grouped_properties[prop.assessment].append(prop)
-        return grouped_properties
 
     @staticmethod
     def serialize_property(prop):
