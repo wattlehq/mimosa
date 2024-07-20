@@ -14,4 +14,3 @@ def home(request):
     }
 
     return render(request, "pages/home.html", context)
-    return render(request, "pages/home.html", context)

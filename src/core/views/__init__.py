@@ -1,1 +1,1 @@
-from .product_selection import product_selection_view
+from .product_selection import product_selection
