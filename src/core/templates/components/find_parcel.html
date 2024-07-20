@@ -31,19 +31,21 @@
 
 {% if grouped_properties %}
     <section id="matching-assessments">
-        <h2>Matching Assessments</h2>
+        <h2>2. Matching Assessments</h2>
         <form method="post" action="{% url 'find_parcel' %}">
             {% csrf_token %}
             <ul>
                 {% for assessment, properties in grouped_properties.items %}
                     <li>
                         <label>
-                            <input type="radio" name="selected_assessment" value="{{ assessment }}" required {% if assessment == selected_assessment %}checked{% endif %}>
+                            <input type="radio" name="selected_assessment" value="{{ assessment }}" required>
                             {{ assessment }} {{ properties.0.address_street }}, {{ properties.0.address_suburb }} {{ properties.0.address_state }} {{ properties.0.address_post_code }}
                         </label>
                     </li>
                 {% endfor %}
             </ul>
+            <input type="hidden" name="grouped_properties" id="grouped-properties-input" value="{{ serializable_grouped_properties }}">
+            <input type="hidden" name="original_search_data" id="original-search-data" value="{{ original_search_data|default:'{}' }}">
             <button type="submit">Next</button>
         </form>
     </section>
@@ -51,14 +53,28 @@
 
 {% if selected_properties %}
     <section id="property-details">
-        <h2>Selected Property Details</h2>
+        <h2>3. Selected Property Details</h2>
         <ul>
         {% for property in selected_properties %}
             <li>
                 Lot {{ property.lot }} Section {{ property.section }} Deposited Plan {{ property.deposited_plan }}<br>
-                {{ property.address_street }}, {{ property.address_suburb }} {{ property.address_state }}, {{ property.address_post_code }}
+                {{ property.address_street }}, {{ property.address_suburb }} {{ property.address_state }} {{ property.address_post_code }}
             </li>
         {% endfor %}
         </ul>
     </section>
 {% endif %}
+
+<script>
+    // Store grouped properties and original search data in localStorage
+    document.addEventListener('DOMContentLoaded', function() {
+        const groupedPropertiesInput = document.getElementById('grouped-properties-input');
+        const originalSearchDataInput = document.getElementById('original-search-data');
+        if (groupedPropertiesInput) {
+            localStorage.setItem('groupedProperties', groupedPropertiesInput.value);
+        }
+        if (originalSearchDataInput) {
+            localStorage.setItem('originalSearchData', originalSearchDataInput.value);
+        }
+    });
+</script>

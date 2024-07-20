@@ -3,6 +3,7 @@
 from django.shortcuts import render
 from django.views import View
 from django.db.models import Q
+import json
 
 from core.models.property import Property
 from core.forms.find_parcel import FindParcelForm
@@ -33,13 +34,16 @@ class FindParcel(View):
 
     def handle_search(self, request):
         """
-        Process the search form and return results.
+        Process the search form, find matching properties, and prepare data
+        for rendering.
 
         Args:
-            request (HttpRequest): The request object.
+            request (HttpRequest): The request object containing the search
+            form data.
 
         Returns:
-            HttpResponse: Rendered template with search results.
+            HttpResponse: Rendered template with search results and serialized
+            data for client-side storage.
         """
         form = FindParcelForm(request.POST)
         if form.is_valid():
@@ -49,41 +53,54 @@ class FindParcel(View):
             )
 
             serializable_grouped_properties = {
-                assessment: [prop.id for prop in props]
+                assessment: [self.serialize_property(prop) for prop in props]
                 for assessment, props in grouped_properties.items()
             }
-
-            request.session["grouped_properties"] = (
-                serializable_grouped_properties
-            )
 
             return render(
                 request,
                 self.template_name,
-                {"form": form, "grouped_properties": grouped_properties},
+                {
+                    "form": form,
+                    "grouped_properties": grouped_properties,
+                    "serializable_grouped_properties": json.dumps(
+                        serializable_grouped_properties,
+                    ),
+                },
             )
 
         return render(request, self.template_name, {"form": form})
 
     def handle_assessment_selection(self, request):
         """
-        Process the selection of an assessment and return relevant properties.
+        Process the selection of an assessment and prepare the selected
+        properties for display.
 
         Args:
-            request (HttpRequest): The request object.
+            request (HttpRequest): The request object containing the selected
+            assessment and previously serialized property data.
 
         Returns:
-            HttpResponse: Rendered template with selected properties.
+            HttpResponse: Rendered template with selected properties and
+            related data. In case of invalid data, returns an error message.
         """
         selected_assessment = request.POST.get("selected_assessment")
-        serializable_grouped_properties = request.session.get(
-            "grouped_properties", {}
-        )
+        grouped_properties_json = request.POST.get("grouped_properties")
 
-        grouped_properties = {
-            assessment: list(Property.objects.filter(id__in=prop_ids))
-            for assessment, prop_ids in serializable_grouped_properties.items()
-        }
+        original_search_data = json.loads(request.POST.get(
+            "original_search_data", "{}")
+        )
+        form = FindParcelForm(original_search_data)
+
+        try:
+            grouped_properties = json.loads(grouped_properties_json)
+        except json.JSONDecodeError:
+            return render(
+                request, self.template_name, {
+                    "form": form,
+                    "error": "Invalid grouped properties data",
+                }
+            )
 
         selected_properties = grouped_properties.get(selected_assessment, [])
 
@@ -91,10 +108,12 @@ class FindParcel(View):
             request,
             self.template_name,
             {
-                "form": FindParcelForm(),
+                "form": form,
                 "grouped_properties": grouped_properties,
                 "selected_properties": selected_properties,
                 "selected_assessment": selected_assessment,
+                "serializable_grouped_properties": grouped_properties_json,
+                "original_search_data": json.dumps(original_search_data),
             },
         )
 
@@ -153,3 +172,26 @@ class FindParcel(View):
                     grouped_properties[prop.assessment] = []
                 grouped_properties[prop.assessment].append(prop)
         return grouped_properties
+
+    @staticmethod
+    def serialize_property(prop):
+        """
+        Serialize a Property object into a dictionary of its attributes.
+
+        Args:
+            prop (Property): The Property model instance to be serialized.
+
+        Returns:
+            dict: A dictionary containing the essential attributes of
+            the Property.
+        """
+        return {
+            "id": prop.id,
+            "lot": prop.lot,
+            "section": prop.section,
+            "deposited_plan": prop.deposited_plan,
+            "address_street": prop.address_street,
+            "address_suburb": prop.address_suburb,
+            "address_state": prop.address_state,
+            "address_post_code": prop.address_post_code,
+        }
