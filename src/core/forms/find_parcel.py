@@ -2,7 +2,10 @@ from django import forms
 
 
 class FindParcelForm(forms.Form):
-    """Form for searching properties by lot, section, deposited plan, or street address."""
+    """Form for searching properties by lot, section, deposited plan,
+
+    or street address.
+    """
 
     lot = forms.CharField(max_length=50, required=False)
     section = forms.CharField(max_length=50, required=False)
