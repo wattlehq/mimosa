@@ -3,22 +3,20 @@ from django.db.models import Q
 from core.models.property import Property
 
 
-def search_properties(cleaned_data):
+def search_properties(lot=None, section=None, deposited_plan=None, street_address=None):
     """
     Search for properties based on the provided criteria.
-
+    
     Args:
-        cleaned_data (dict): Cleaned form data containing search criteria.
-
+        lot (str, optional): Lot number to search for.
+        section (str, optional): Section number to search for.
+        deposited_plan (str, optional): Deposited plan number to search for.
+        street_address (str, optional): Street address to search for.
+    
     Returns:
         QuerySet: Filtered Property objects.
     """
     q_objects = Q()
-
-    lot = cleaned_data.get("lot")
-    section = cleaned_data.get("section")
-    deposited_plan = cleaned_data.get("deposited_plan")
-    street_address = cleaned_data.get("street_address")
 
     if lot or section or deposited_plan:
         if lot:

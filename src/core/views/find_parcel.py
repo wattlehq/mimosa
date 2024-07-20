@@ -50,7 +50,12 @@ class FindParcel(View):
         """
         form = FindParcelForm(request.POST)
         if form.is_valid():
-            properties = search_properties(form.cleaned_data)
+            properties = search_properties(
+                lot=form.cleaned_data.get('lot'),
+                section=form.cleaned_data.get('section'),
+                deposited_plan=form.cleaned_data.get('deposited_plan'),
+                street_address=form.cleaned_data.get('street_address')
+            )
             grouped_properties = group_properties_by_assessment(
                 properties
             )
