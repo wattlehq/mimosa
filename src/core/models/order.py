@@ -56,8 +56,7 @@ class OrderSessionLine(models.Model):
 
 
 # @todo Implement `customer_name`
-# @todo Ensure upload is not requried on save
-# @todo Implement `fulfilled_at` date for order and lines
+# @todo Ensure upload is not required on save
 # @todo Implement order total and line cost
 class Order(Fulfillable):
     created_at = models.DateTimeField(default=timezone.now)
