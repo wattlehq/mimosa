@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+from core.models.abstract.fulfillable import Fulfillable
 from core.models.certificate import Certificate
 from core.models.fee import Fee
 from core.models.property import Property
@@ -58,12 +59,9 @@ class OrderSessionLine(models.Model):
 # @todo Ensure upload is not requried on save
 # @todo Implement `fulfilled_at` date for order and lines
 # @todo Implement order total and line cost
-class Order(models.Model):
+class Order(Fulfillable):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    fulfilled_at = models.DateTimeField(null=True, blank=True, default=None)
-
-    is_fulfilled = models.BooleanField(default=False)
 
     customer_email = models.EmailField(max_length=254)
 
@@ -121,16 +119,8 @@ class Order(models.Model):
         blank=True,
     )
 
-    def handle_save_fulfilled(self):
-        """ updated `fulfilled_at` when `fulfilled` is set """
-        if self.pk:
-            record_old = Order.objects.get(pk=self.pk)
-            if not record_old.is_fulfilled and self.is_fulfilled:
-                self.fulfilled_at = timezone.now()
-
     def save(self, *args, **kwargs):
-        self.handle_save_fulfilled()
-        super(Order, self).save(*args, **kwargs)
+        super(Order, self).fulfilled_save(*args, **kwargs)
 
     def __str__(self):
         return str(self.property)
@@ -141,9 +131,7 @@ def certificate_file_directory_path(instance, filename):
     return "certificates/order_{0}/{1}".format(instance.order.id, filename)
 
 
-class OrderLine(models.Model):
-    is_fulfilled = models.BooleanField(default=False)
-
+class OrderLine(Fulfillable):
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
@@ -161,6 +149,9 @@ class OrderLine(models.Model):
     fee = models.ForeignKey(
         Fee, on_delete=models.CASCADE, null=True, blank=True
     )
+
+    def save(self, *args, **kwargs):
+        super(OrderLine, self).fulfilled_save(*args, **kwargs)
 
     def __str__(self):
         return str(self.certificate)

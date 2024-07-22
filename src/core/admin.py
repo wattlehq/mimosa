@@ -12,11 +12,17 @@ from core.models.property import Property
 class OrderLineInline(admin.TabularInline):
     model = OrderLine
     extra = 1
+    exclude = (
+        "fulfilled_at",
+    )
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderLineInline]
+    exclude = (
+        "fulfilled_at",
+    )
 
 
 class OrderSessionLineInline(admin.TabularInline):
