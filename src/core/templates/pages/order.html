@@ -22,9 +22,9 @@
         <strong>Ordered</strong> {{ order.created_at|date:"jS F Y" }}
       </li>
       {% if order.fulfilled_at %}
-      <li>
-        <strong>Delivered</strong> {{ order.fulfilled_at|date:"jS F Y" }}
-      </li>
+        <li>
+          <strong>Delivered</strong> {{ order.fulfilled_at|date:"jS F Y" }}
+        </li>
       {% endif %}
     </ul>
   </section>
@@ -34,6 +34,9 @@
   {% for line in order_lines %}
     <section>
       {{ line.certificate.name }}
+      {% if line.fulfilled_at %}
+        Delivered on {{ line.fulfilled_at|date:"jS F Y" }}
+      {% endif %}
       {% if line.is_fulfilled %}
         Fulfilled
       {% else %}
