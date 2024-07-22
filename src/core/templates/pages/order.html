@@ -1,4 +1,5 @@
 {% extends "../layouts/index.html" %}
+{% load custom_filters %}
 {% load static %}
 
 {% block title %}Order{% endblock %}
@@ -31,6 +32,10 @@
       {% else %}
         Pending
       {% endif %}
+      <a href="{{ line.certificate_file.url }}">
+        {{ line.certificate_file.name|filename }}
+        {{ line.certificate_file.size|filesize_kb|floatformat:2 }} MB
+      </a>
     </section>
   {% endfor %}
 {% endblock %}
