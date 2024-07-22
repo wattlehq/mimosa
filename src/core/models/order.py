@@ -61,6 +61,8 @@ class OrderSessionLine(models.Model):
 class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    fulfilled_at = models.DateTimeField(null=True, blank=True, default=None)
+
     is_fulfilled = models.BooleanField(default=False)
 
     customer_email = models.EmailField(max_length=254)
@@ -118,6 +120,17 @@ class Order(models.Model):
         null=True,
         blank=True,
     )
+
+    def handle_save_fulfilled(self):
+        """ updated `fulfilled_at` when `fulfilled` is set """
+        if self.pk:
+            record_old = Order.objects.get(pk=self.pk)
+            if not record_old.is_fulfilled and self.is_fulfilled:
+                self.fulfilled_at = timezone.now()
+
+    def save(self, *args, **kwargs):
+        self.handle_save_fulfilled()
+        super(Order, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.property)
