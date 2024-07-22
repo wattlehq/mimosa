@@ -54,7 +54,7 @@ class OrderSessionLine(models.Model):
         return str(self.certificate) + " " + str(self.fee)
 
 
-# @todo Implement `name`
+# @todo Implement `customer_name`
 # @todo Ensure upload is not requried on save
 # @todo Implement `fulfilled_at` date for order and lines
 # @todo Implement order total and line cost
