@@ -54,6 +54,8 @@ class OrderSessionLine(models.Model):
         return str(self.certificate) + " " + str(self.fee)
 
 
+# @todo Implement `name`
+# @todo Ensure upload is not requried on save
 class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)

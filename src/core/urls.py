@@ -9,5 +9,5 @@ urlpatterns = [
     path("webhook/stripe", webhook_stripe, name="webhook-stripe"),
 
     # @todo Obfuscate URL.
-    path("order", order, name="order")
+    path("order/<str:order_id>/", order, name="order")
 ]
