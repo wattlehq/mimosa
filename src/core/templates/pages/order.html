@@ -14,4 +14,9 @@
     {{ order.customer_address_post_code|default:"" }}
     {{ order.customer_email|default:"" }}
   </section>
+  <section>
+    <ul>
+      <li><strong>Ordered</strong> {{ order.created_at|date:"jS F Y" }}</li>
+    </ul>
+  </section>
 {% endblock %}

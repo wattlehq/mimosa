@@ -56,6 +56,7 @@ class OrderSessionLine(models.Model):
 
 # @todo Implement `name`
 # @todo Ensure upload is not requried on save
+# @todo Implement `fulfilled_at` date
 class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
