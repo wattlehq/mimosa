@@ -28,24 +28,37 @@
       {% endif %}
     </ul>
   </section>
+  <br/>
   <section>
     <h2>Assessment {{ order.property.assessment }}</h2>
   </section>
+  <br/>
   {% for line in order_lines %}
     <section>
-      {{ line.certificate.name }}
-      {% if line.fulfilled_at %}
-        Delivered on {{ line.fulfilled_at|date:"jS F Y" }}
-      {% endif %}
-      {% if line.is_fulfilled %}
-        Fulfilled
-      {% else %}
-        Pending
-      {% endif %}
-      <a href="{{ line.certificate_file.url }}">
-        {{ line.certificate_file.name|filename }}
-        {{ line.certificate_file.size|filesize_kb|floatformat:2 }} MB
-      </a>
+      <ul>
+        <li>{{ line.certificate.name }}</li>
+        {% if line.fulfilled_at %}
+          <li>
+            Delivered on {{ line.fulfilled_at|date:"jS F Y" }}
+          </li>
+        {% endif %}
+        <li>
+          {% if line.is_fulfilled %}
+            Fulfilled
+          {% else %}
+            Pending
+          {% endif %}
+        </li>
+        {% if line.certificate_file %}
+          <li>
+            <a href="{{ line.certificate_file.url }}">
+              {{ line.certificate_file.name|filename }}
+              {{ line.certificate_file.size|filesize_kb|floatformat:2 }} MB
+            </a>
+          </li>
+        {% endif %}
+      </ul>
     </section>
+    <br/>
   {% endfor %}
 {% endblock %}
