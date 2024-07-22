@@ -18,7 +18,14 @@
   </section>
   <section>
     <ul>
-      <li><strong>Ordered</strong> {{ order.created_at|date:"jS F Y" }}</li>
+      <li>
+        <strong>Ordered</strong> {{ order.created_at|date:"jS F Y" }}
+      </li>
+      {% if order.fulfilled_at %}
+      <li>
+        <strong>Delivered</strong> {{ order.fulfilled_at|date:"jS F Y" }}
+      </li>
+      {% endif %}
     </ul>
   </section>
   <section>
