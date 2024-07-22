@@ -56,7 +56,8 @@ class OrderSessionLine(models.Model):
 
 # @todo Implement `name`
 # @todo Ensure upload is not requried on save
-# @todo Implement `fulfilled_at` date
+# @todo Implement `fulfilled_at` date for order and lines
+# @todo Implement order total and line cost
 class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -124,7 +125,7 @@ class Order(models.Model):
 
 def certificate_file_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/certificates/order_<id>/<filename>
-    return "certificates/order_{0}/{1}".format(instance.lines.id, filename)
+    return "certificates/order_{0}/{1}".format(instance.order.id, filename)
 
 
 class OrderLine(models.Model):

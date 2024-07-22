@@ -19,4 +19,17 @@
       <li><strong>Ordered</strong> {{ order.created_at|date:"jS F Y" }}</li>
     </ul>
   </section>
+  <section>
+    <h2>Assessment {{ order.property.assessment }}</h2>
+  </section>
+  {% for certificate in order.lines.all %}
+    <section>
+      {{ certificate.name }}
+      {% if certificate.is_fulfilled %}
+        Fulfilled
+      {% else %}
+        Pending
+      {% endif %}
+    </section>
+  {% endfor %}
 {% endblock %}
