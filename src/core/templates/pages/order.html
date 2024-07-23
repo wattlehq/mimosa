@@ -66,6 +66,12 @@
             </a>
           </li>
         {% endif %}
+        {% if line.fee %}
+          <li>
+            {{ line.fee.name }}
+          </li>
+        {% endif %}
+
       </ul>
     </section>
     <br/>
