@@ -7,7 +7,7 @@ class ParcelFinder {
      * Initialises DOM elements and sets up event listeners.
      */
     constructor() {
-        console.log('ParcelFinder constructor called');
+        console.debug('ParcelFinder constructor called');
         this.form = null;
         this.resultsSection = null;
         this.assessmentList = null;
@@ -23,7 +23,7 @@ class ParcelFinder {
      * Initialise DOM elements and set up event listeners.
      */
     initialiseElements() {
-        console.log('Initialising elements');
+        console.debug('Initialising elements');
         this.form = document.querySelector('#parcel-search-form');
         this.resultsSection = document.querySelector('#matching-assessments');
         this.assessmentList = document.querySelector('#assessment-list');
@@ -33,14 +33,14 @@ class ParcelFinder {
         this.selectedPropertiesList = document.querySelector('#selected-properties-list');
 
         if (this.form) {
-            console.log('Search form found, adding event listener');
+            console.debug('Search form found, adding event listener');
             this.form.addEventListener('submit', this.handleSearch.bind(this));
         } else {
             console.error('Search form not found');
         }
 
         if (this.assessmentForm) {
-            console.log('Assessment form found, adding event listener');
+            console.debug('Assessment form found, adding event listener');
             this.assessmentForm.addEventListener('submit', this.handleAssessmentSelection.bind(this));
         } else {
             console.error('Assessment form not found');
@@ -53,17 +53,17 @@ class ParcelFinder {
      * @param {Event} event - The submit event.
      */
     async handleSearch(event) {
-        console.log('handleSearch called');
+        console.debug('handleSearch called');
         event.preventDefault();
         
         const formData = new FormData(this.form);
         const searchParams = Object.fromEntries(formData.entries());
-        console.log('Search params:', searchParams);
+        console.debug('Search params:', searchParams);
 
         try {
-            console.log('Calling API.searchProperties');
+            console.debug('Calling API.searchProperties');
             const groupedProperties = await API.searchProperties(searchParams);
-            console.log('API response:', groupedProperties);
+            console.debug('API response:', groupedProperties);
             this.displaySearchResults(groupedProperties);
         } catch (error) {
             console.error('Error searching properties:', error);
@@ -76,19 +76,19 @@ class ParcelFinder {
      * @param {Event} event - The submit event.
      */
     async handleAssessmentSelection(event) {
-        console.log('handleAssessmentSelection called');
+        console.debug('handleAssessmentSelection called');
         event.preventDefault();
 
         const selectedAssessment = document.querySelector('input[name="selected_assessment"]:checked').value;
         const groupedProperties = JSON.parse(this.assessmentList.dataset.groupedProperties);
 
-        console.log('Selected assessment:', selectedAssessment);
-        console.log('Grouped properties:', groupedProperties);
+        console.debug('Selected assessment:', selectedAssessment);
+        console.debug('Grouped properties:', groupedProperties);
 
         try {
-            console.log('Calling API.selectAssessment');
+            console.debug('Calling API.selectAssessment');
             const result = await API.selectAssessment(selectedAssessment, groupedProperties);
-            console.log('API response:', result);
+            console.debug('API response:', result);
             this.displaySelectedProperties(result.selected_properties, result.selected_assessment);
         } catch (error) {
             console.error('Error selecting assessment:', error);
@@ -101,7 +101,7 @@ class ParcelFinder {
      * @param {Object} groupedProperties - The properties grouped by assessment.
      */
     displaySearchResults(groupedProperties) {
-        console.log('Displaying search results');
+        console.debug('Displaying search results');
         this.assessmentList.innerHTML = '';
         this.assessmentList.dataset.groupedProperties = JSON.stringify(groupedProperties);
         
@@ -139,7 +139,7 @@ class ParcelFinder {
      * @param {string} selectedAssessment - The selected assessment identifier.
      */
     displaySelectedProperties(selectedProperties, selectedAssessment) {
-        console.log('Displaying selected properties');
+        console.debug('Displaying selected properties');
         this.selectedAssessmentTitle.textContent = `Assessment: ${selectedAssessment}`;
         this.selectedPropertiesList.innerHTML = '';
         
@@ -182,28 +182,28 @@ class ParcelFinder {
      * @param {Event} event - The submit event.
      */
     handlePropertySelection(event) {
-        console.log('handlePropertySelection called');
+        console.debug('handlePropertySelection called');
         event.preventDefault();
         const selectedPropertyRadio = document.querySelector('input[name="selected_property"]:checked');
         if (selectedPropertyRadio) {
             const selectedProperty = JSON.parse(selectedPropertyRadio.value);
             StateManager.setState('selectedProperty', selectedProperty);
             StateManager.clearState('groupedProperties');
-            console.log('Property selected and saved locally. Other data cleared.');
+            console.debug('Property selected and saved locally. Other data cleared.');
             alert('Property selected and saved locally. Other data cleared.');
         } else {
-            console.log('No property selected');
+            console.debug('No property selected');
             alert('Please select a property.');
         }
     }
 }
 
-console.log('ParcelFinder class defined');
+console.debug('ParcelFinder class defined');
 
 /**
  * Initialise the ParcelFinder when the DOM is fully loaded.
  */
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM content loaded in parcelFinder.js');
+    console.debug('DOM content loaded in parcelFinder.js');
     new ParcelFinder();
 });
