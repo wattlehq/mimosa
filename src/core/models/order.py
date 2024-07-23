@@ -55,7 +55,6 @@ class OrderSessionLine(models.Model):
         return str(self.certificate) + " " + str(self.fee)
 
 
-# @todo Implement `customer_name`
 # @todo Ensure upload is not required on save
 # @todo Implement order total and line cost
 class Order(Fulfillable):
