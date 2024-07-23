@@ -31,6 +31,15 @@
   <br/>
   <section>
     <h2>Assessment {{ order.property.assessment }}</h2>
+    <ul>
+      <li>{{ order.property.lot }}</li>
+      <li>{{ order.property.section }}</li>
+      <li>{{ order.property.deposited_plan }}</li>
+      <li>{{ order.property.address_street }}</li>
+      <li>{{ order.property.address_suburb }}</li>
+      <li>{{ order.property.address_state }}</li>
+      <li>{{ order.property.address_post_code }}</li>
+    </ul>
   </section>
   <br/>
   {% for line in order_lines %}
