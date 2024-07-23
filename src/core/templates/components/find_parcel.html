@@ -1,6 +1,8 @@
+{% load static %}
+
 <section id="find-parcel">
     <h2>1. Find a parcel</h2>
-    <form method="post" action="{% url 'find_parcel' %}">
+    <form method="post" id="parcel-search-form">
         {% csrf_token %}
         <div class="search-options">
             <div class="lot-section-dp-fields">
@@ -29,52 +31,22 @@
     </form>
 </section>
 
-{% if grouped_properties %}
-    <section id="matching-assessments">
-        <h2>2. Matching Assessments</h2>
-        <form method="post" action="{% url 'find_parcel' %}">
-            {% csrf_token %}
-            <ul>
-                {% for assessment, properties in grouped_properties.items %}
-                    <li>
-                        <label>
-                            <input type="radio" name="selected_assessment" value="{{ assessment }}" required>
-                            {{ assessment }} {{ properties.0.address_street }}, {{ properties.0.address_suburb }} {{ properties.0.address_state }} {{ properties.0.address_post_code }}
-                        </label>
-                    </li>
-                {% endfor %}
-            </ul>
-            <input type="hidden" name="grouped_properties" id="grouped-properties-input" value="{{ serializable_grouped_properties }}">
-            <input type="hidden" name="original_search_data" id="original-search-data" value="{{ original_search_data|default:'{}' }}">
-            <button type="submit">Next</button>
-        </form>
-    </section>
-{% endif %}
+<section id="matching-assessments" style="display:none;">
+    <h2>2. Matching Assessments</h2>
+    <form id="assessment-form">
+        <div id="assessment-list"></div>
+        <button type="submit">Next</button>
+    </form>
+</section>
 
-{% if selected_properties %}
-    <section id="property-details">
-        <h2>3. Selected Property Details</h2>
-        <ul>
-        {% for property in selected_properties %}
-            <li>
-                Lot {{ property.lot }} Section {{ property.section }} Deposited Plan {{ property.deposited_plan }}<br>
-                {{ property.address_street }}, {{ property.address_suburb }} {{ property.address_state }} {{ property.address_post_code }}
-            </li>
-        {% endfor %}
-        </ul>
-    </section>
-{% endif %}
+<section id="property-details" style="display:none;">
+    <h2>3. Selected Property Details</h2>
+    <h3 id="selected-assessment-title"></h3>
+    <ul id="selected-properties-list"></ul>
+</section>
 
-<script>
-    // Store grouped properties and original search data in localStorage
-    document.addEventListener('DOMContentLoaded', function() {
-        const groupedPropertiesInput = document.getElementById('grouped-properties-input');
-        const originalSearchDataInput = document.getElementById('original-search-data');
-        if (groupedPropertiesInput) {
-            localStorage.setItem('groupedProperties', groupedPropertiesInput.value);
-        }
-        if (originalSearchDataInput) {
-            localStorage.setItem('originalSearchData', originalSearchDataInput.value);
-        }
-    });
-</script>
+{% block extra_js %}
+<script src="{% static 'js/api.js' %}"></script>
+<script src="{% static 'js/stateManager.js' %}"></script>
+<script src="{% static 'js/parcelFinder.js' %}"></script>
+{% endblock %}

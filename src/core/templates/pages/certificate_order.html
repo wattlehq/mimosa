@@ -1,3 +1,5 @@
+{% load static %}
+
 {% block content %}
 <h1>Order Building & Property Certificates</h1>
 <p>Working with businesses around the nation</p>
@@ -5,7 +7,7 @@
 <hr>
 
 <section id="find-parcel">
-    {% include "components/find_parcel.html" with form=form grouped_properties=grouped_properties selected_properties=selected_properties selected_assessment=selected_assessment serializable_grouped_properties=serializable_grouped_properties %}
+    {% include "components/find_parcel.html" with form=form %}
 </section>
 
 <!-- Placeholders for other sections -->
@@ -21,4 +23,13 @@
     <!-- Payment form -->
 </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    console.log('certificate_order.html loaded');
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM content loaded in certificate_order.html');
+    });
+</script>
 {% endblock %}
