@@ -13,7 +13,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 request = {
     "property_id": 1,
-    "lines": [{"certificate_id": 1, "fee_id": 3}, {"certificate_id": 2}],
+    "lines": [{"certificate_id": 1, "fee_id": 1}, {"certificate_id": 2}],
 }
 
 
@@ -62,7 +62,7 @@ def save_order_session():
         order_line = OrderSessionLine.objects.create(
             order_session=order_session,
             certificate=certificate,
-            cost_certificate=certificate.price
+            cost_certificate=certificate.price,
         )
 
         if "fee_id" in value:

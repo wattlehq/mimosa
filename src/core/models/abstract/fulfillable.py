@@ -14,7 +14,7 @@ class Fulfillable(models.Model):
         abstract = True
 
     def fulfilled_save(self, *args, **kwargs):
-        """ updated `fulfilled_at` when `fulfilled` is set """
+        """updated `fulfilled_at` when `fulfilled` is set"""
         if self.pk:
             manager = self.__class__._default_manager
             record_old = manager.get(pk=self.pk)

@@ -54,8 +54,9 @@ class OrderSessionLine(models.Model):
     )
 
     cost_certificate = models.DecimalField(max_digits=10, decimal_places=2)
-    cost_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True,
-                                   blank=True)
+    cost_fee = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
 
     def __str__(self):
         return str(self.certificate) + " " + str(self.fee)
@@ -122,7 +123,7 @@ class Order(Fulfillable):
     )
 
     def cost_total(self):
-        total_cost = Decimal('0.00')
+        total_cost = Decimal("0.00")
         for order_line in self.orderline_set.all():
             total_cost += order_line.cost_certificate
             if order_line.cost_fee is not None:
@@ -161,8 +162,9 @@ class OrderLine(Fulfillable):
     )
 
     cost_certificate = models.DecimalField(max_digits=10, decimal_places=2)
-    cost_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True,
-                                   blank=True)
+    cost_fee = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
 
     def save(self, *args, **kwargs):
         super(OrderLine, self).fulfilled_save(*args, **kwargs)
