@@ -55,7 +55,6 @@ class OrderSessionLine(models.Model):
         return str(self.certificate) + " " + str(self.fee)
 
 
-# @todo Ensure upload is not required on save
 # @todo Implement order total and line cost
 class Order(Fulfillable):
     created_at = models.DateTimeField(default=timezone.now)
@@ -141,7 +140,7 @@ class OrderLine(Fulfillable):
     )
 
     certificate_file = models.FileField(
-        upload_to=certificate_file_directory_path, null=True
+        upload_to=certificate_file_directory_path, null=True, blank=True
     )
 
     fee = models.ForeignKey(
