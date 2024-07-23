@@ -1,35 +1,36 @@
+{% extends "layouts/index.html" %}
 {% load static %}
 
-{% block content %}
-<h1>Order Building & Property Certificates</h1>
-<p>Working with businesses around the nation</p>
+{% block body %}
+  <h1>Order Building & Property Certificates</h1>
+  <p>Working with businesses around the nation</p>
 
-<hr>
+  <hr>
 
-<section id="find-parcel">
+  <section id="find-parcel">
     {% include "components/find_parcel.html" with form=form %}
-</section>
+  </section>
 
-<!-- Placeholders for other sections -->
-<section id="select-certificates" style="display:none;">
+  <!-- Placeholders for other sections -->
+  <section id="select-certificates" style="display:none;">
     <!-- Content for selecting certificates -->
-</section>
+  </section>
 
-<section id="your-details" style="display:none;">
+  <section id="your-details" style="display:none;">
     <!-- Form for user details -->
-</section>
+  </section>
 
-<section id="finalise-payment" style="display:none;">
+  <section id="finalise-payment" style="display:none;">
     <!-- Payment form -->
-</section>
+  </section>
 
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    console.log('certificate_order.html loaded');
+  <script>
+    console.log('certificate_order.html loaded')
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM content loaded in certificate_order.html');
-    });
-</script>
+      console.log('DOM content loaded in certificate_order.html')
+    })
+  </script>
 {% endblock %}
