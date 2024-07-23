@@ -62,8 +62,8 @@ class Order(Fulfillable):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
+    customer_name = models.CharField(max_length=254, null=True, blank=True)
     customer_email = models.EmailField(max_length=254)
-
     customer_phone = models.CharField(max_length=15, null=True, blank=True)
 
     customer_company_name = models.CharField(

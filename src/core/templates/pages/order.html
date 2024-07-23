@@ -9,12 +9,15 @@
   <h1>Building & Property Certificate Request</h1>
   <h2>Order Number {{ order.id }}</h2>
   <section>
-    {{ order.customer_company_name|default:"" }}
-    {{ order.customer_address_street_line_2|default:"" }}
-    {{ order.customer_address_suburb|default:"" }}
-    {{ order.customer_address_state|default:"" }}
-    {{ order.customer_address_post_code|default:"" }}
-    {{ order.customer_email|default:"" }}
+    <ul>
+      <li>{{ order.customer_company_name|default:"" }}</li>
+      <li>{{ order.customer_name|default:"" }}</li>
+      <li>{{ order.customer_address_street_line_2|default:"" }}</li>
+      <li>{{ order.customer_address_suburb|default:"" }}</li>
+      <li>{{ order.customer_address_state|default:"" }}</li>
+      <li>{{ order.customer_address_post_code|default:"" }}</li>
+      <li>{{ order.customer_email|default:"" }}</li>
+    </ul>
   </section>
   <section>
     <ul>
