@@ -77,6 +77,8 @@ def save_event_order(event: stripe.checkout.Session):
             order=order,
             certificate=session_order_line.certificate,
             fee=session_order_line.fee,
+            cost_certificate=session_order_line.cost_certificate,
+            cost_fee=session_order_line.cost_fee
         )
 
         order_line.save()

@@ -34,6 +34,7 @@
   <br/>
   <section>
     <h2>Assessment {{ order.property.assessment }}</h2>
+    <p>{{ order.cost_total|money }}</p>
     <ul>
       <li>{{ order.property.lot }}</li>
       <li>{{ order.property.section }}</li>
@@ -54,6 +55,7 @@
             Delivered on {{ line.fulfilled_at|date:"jS F Y" }}
           </li>
         {% endif %}
+        <li>{{ line.cost_certificate|add_decimals:line.cost_fee|money }}</li>
         <li>
           {% if line.is_fulfilled %}
             Fulfilled
