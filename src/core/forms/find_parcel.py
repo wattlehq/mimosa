@@ -44,27 +44,27 @@ class FindParcelForm(forms.Form):
             if section and not (lot and deposited_plan):
                 if lot:
                     raise forms.ValidationError(
-                        "Section and Lot provided. Please also include the" +
+                        "Section and Lot provided. Please also include the " +
                         "Deposited Plan."
                         )
                 elif deposited_plan:
                     raise forms.ValidationError(
-                        "Section and Deposited Plan provided. Please also" +
+                        "Section and Deposited Plan provided. Please also " +
                         "include the Lot number."
                         )
                 else:
                     raise forms.ValidationError(
-                        "Section alone is not sufficient. Please provide" +
+                        "Section alone is not sufficient. Please provide " +
                         "Lot and Deposited Plan as well."
                         )
             elif lot and not deposited_plan:
                 raise forms.ValidationError(
-                    "Lot provided without Deposited Plan. Please include" +
+                    "Lot provided without Deposited Plan. Please include " +
                     "both Lot and Deposited Plan."
                     )
             elif deposited_plan and not lot:
                 raise forms.ValidationError(
-                    "Deposited Plan provided without Lot. Please include" +
+                    "Deposited Plan provided without Lot. Please include " +
                     "both Lot and Deposited Plan."
                     )
 
