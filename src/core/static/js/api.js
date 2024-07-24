@@ -19,6 +19,23 @@ const API = {
         if (!response.ok) throw new Error('Network response was not ok');
         return response.json();
     },
+    /**
+     * Validate search parameters before performing a search.
+     * @param {Object} searchParams - The search parameters to validate.
+     * @returns {Promise<Object>} A promise that resolves to {isValid: boolean, errors: Object}.
+     * @throws {Error} If the network response is not ok.
+     */
+    validateSearch: async (searchParams) => {
+        const queryString = new URLSearchParams(searchParams).toString();
+        const response = await fetch(`/api/validate-search/?${queryString}`, {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    },
 };
 
 /**

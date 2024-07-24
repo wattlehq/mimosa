@@ -15,6 +15,7 @@ class ParcelFinder {
         this.detailsSection = null;
         this.selectedAssessmentTitle = null;
         this.selectedPropertiesList = null;
+        this.errorContainer = document.getElementById('search-errors');
 
         this.initialiseElements();
     }
@@ -59,15 +60,50 @@ class ParcelFinder {
         const formData = new FormData(this.form);
         const searchParams = Object.fromEntries(formData.entries());
         console.debug('Search params:', searchParams);
-
+    
         try {
-            console.debug('Calling API.searchProperties');
+            const validationResult = await API.validateSearch(searchParams);
+            if (validationResult.isValid) {
+                this.errorContainer.innerHTML = '';
+                await this.performSearch(searchParams);
+            } else {
+                this.displayValidationErrors(validationResult.errors);
+            }
+        } catch (error) {
+            console.error('Error during search validation:', error);
+            this.displayError('An error occurred while validating the search parameters.');
+        }
+    }
+
+    async performSearch(searchParams) {
+        try {
             const groupedProperties = await API.searchProperties(searchParams);
-            console.debug('API response:', groupedProperties);
             this.displaySearchResults(groupedProperties);
         } catch (error) {
             console.error('Error searching properties:', error);
         }
+    }
+
+    displayValidationErrors(errors) {
+        const displayedErrors = new Set(); // To track unique error messages
+        this.errorContainer.innerHTML = '';
+        for (const field in errors) {
+            const errorMessages = errors[field];
+            for (const message of errorMessages) {
+                if (!displayedErrors.has(message.message)) {
+                    const errorElement = document.createElement('p');
+                    errorElement.textContent = message.message;
+                    errorElement.classList.add('error-message');
+                    this.errorContainer.appendChild(errorElement);
+                    displayedErrors.add(message.message);
+                }
+            }
+        }
+    }
+
+    displayError(message) {
+        const errorContainer = document.getElementById('search-errors');
+        errorContainer.innerHTML = `<p class="error-message">${message}</p>`;
     }
 
     /**

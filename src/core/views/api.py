@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
+from core.forms.find_parcel import FindParcelForm
 from core.services.property.serialize_property import serialize_property
 from core.services.property.search_properties import search_properties
 from core.services.property.group_properties_by_assessment import (
@@ -29,3 +30,16 @@ def search_properties_view(request):
     }
 
     return JsonResponse(serialized_grouped_properties)
+
+
+@require_http_methods(["GET"])
+def validate_search_view(request):
+    form = FindParcelForm(request.GET)
+    is_valid = form.is_valid()
+
+    response_data = {
+        "isValid": is_valid,
+        "errors": form.errors.get_json_data() if not is_valid else {}
+    }
+
+    return JsonResponse(response_data)
