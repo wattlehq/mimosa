@@ -1,3 +1,4 @@
+import uuid
 from decimal import Decimal
 
 from django.db import models
@@ -65,6 +66,9 @@ class OrderSessionLine(models.Model):
 class Order(Fulfillable):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+
+    order_hash = models.UUIDField(default=uuid.uuid4, unique=True,
+                                  editable=False)
 
     customer_name = models.CharField(max_length=254, null=True, blank=True)
     customer_email = models.EmailField(max_length=254)
@@ -138,8 +142,11 @@ class Order(Fulfillable):
 
 
 def certificate_file_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/certificates/order_<id>/<filename>
-    return "certificates/order_{0}/{1}".format(instance.order.id, filename)
+    # file will be uploaded to MEDIA_ROOT/certificates/order_<hash>/<filename>
+    return "certificates/order_{0}/{1}".format(
+        instance.order.order_hash,
+        filename
+    )
 
 
 class OrderLine(Fulfillable):
