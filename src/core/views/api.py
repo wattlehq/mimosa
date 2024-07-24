@@ -11,6 +11,17 @@ from core.services.property.group_properties_by_assessment import (
 
 @require_http_methods(["GET"])
 def search_properties_view(request):
+    """
+    View function to handle property search requests.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response containing the serialized
+        grouped properties.
+
+    """
     lot = request.GET.get('lot')
     section = request.GET.get('section')
     deposited_plan = request.GET.get('deposited_plan')
@@ -34,6 +45,18 @@ def search_properties_view(request):
 
 @require_http_methods(["GET"])
 def validate_search_view(request):
+    """
+    View function to validate search form data.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response containing:
+            - isValid (bool): Whether the form data is valid.
+            - errors (dict): A dictionary of form errors if any,
+                            empty if the form is valid.
+    """
     form = FindParcelForm(request.GET)
     is_valid = form.is_valid()
 

@@ -49,9 +49,12 @@ class ParcelFinder {
     }
 
     /**
-     * Handle the search form submission.
-     * Prevents default form submission, calls the search API, and displays results.
-     * @param {Event} event - The submit event.
+     * Handles the search form submission.
+     * Validates search parameters, and either performs the search or
+     * displays validation errors.
+     *
+     * @param {Event} event - The form submission event.
+     * @returns {Promise<void>}
      */
     async handleSearch(event) {
         console.debug('handleSearch called');
@@ -75,6 +78,13 @@ class ParcelFinder {
         }
     }
 
+    /**
+     * Performs the property search using the provided search parameters.
+     * Displays the search results upon successful search.
+     *
+     * @param {Object} searchParams - The search parameters.
+     * @returns {Promise<void>}
+     */
     async performSearch(searchParams) {
         try {
             const groupedProperties = await API.searchProperties(searchParams);
@@ -83,7 +93,12 @@ class ParcelFinder {
             console.error('Error searching properties:', error);
         }
     }
-
+    
+    /**
+     * Displays validation errors in the error container.
+     *
+     * @param {Object} errors - An object containing validation errors.
+     */
     displayValidationErrors(errors) {
         const displayedErrors = new Set(); // To track unique error messages
         this.errorContainer.innerHTML = '';
@@ -101,6 +116,11 @@ class ParcelFinder {
         }
     }
 
+    /**
+     * Displays a single error message in the error container.
+     *
+     * @param {string} message - The error message to display.
+     */
     displayError(message) {
         const errorContainer = document.getElementById('search-errors');
         errorContainer.innerHTML = `<p class="error-message">${message}</p>`;
