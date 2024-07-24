@@ -72,27 +72,23 @@ class ParcelFinder {
 
     /**
      * Handle the assessment selection form submission.
-     * Prevents default form submission, calls the select assessment API, and displays selected properties.
+     * filters the selected properties client-side,
+     * and displays the selected properties.
      * @param {Event} event - The submit event.
      */
-    async handleAssessmentSelection(event) {
+    handleAssessmentSelection(event) {
         console.debug('handleAssessmentSelection called');
         event.preventDefault();
-
+    
         const selectedAssessment = document.querySelector('input[name="selected_assessment"]:checked').value;
         const groupedProperties = JSON.parse(this.assessmentList.dataset.groupedProperties);
-
+    
         console.debug('Selected assessment:', selectedAssessment);
         console.debug('Grouped properties:', groupedProperties);
-
-        try {
-            console.debug('Calling API.selectAssessment');
-            const result = await API.selectAssessment(selectedAssessment, groupedProperties);
-            console.debug('API response:', result);
-            this.displaySelectedProperties(result.selected_properties, result.selected_assessment);
-        } catch (error) {
-            console.error('Error selecting assessment:', error);
-        }
+    
+        const selectedProperties = groupedProperties[selectedAssessment] || [];
+    
+        this.displaySelectedProperties(selectedProperties, selectedAssessment);
     }
 
     /**

@@ -3,7 +3,7 @@ from django.urls import path
 from core.webhooks.stripe import webhook_stripe
 
 from core.views.find_parcel import FindParcel
-from core.views.api import search_properties_view, select_assessment_view
+from core.views.api import search_properties_view
 from core.views.home import home
 
 urlpatterns = [
@@ -13,9 +13,5 @@ urlpatterns = [
     path("api/search-properties/",
          search_properties_view,
          name="api_search_properties"
-         ),
-    path("api/select-assessment/",
-         select_assessment_view,
-         name="api_select_assessment"
          ),
 ]

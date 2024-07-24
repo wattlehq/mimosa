@@ -32,17 +32,3 @@ def search_properties_view(request):
 
     return JsonResponse(serialized_grouped_properties)
 
-
-@require_http_methods(["POST"])
-@ensure_csrf_cookie
-def select_assessment_view(request):
-    data = json.loads(request.body)
-    selected_assessment = data.get('selected_assessment')
-    grouped_properties = data.get('grouped_properties', {})
-
-    selected_properties = grouped_properties.get(selected_assessment, [])
-
-    return JsonResponse({
-        'selected_properties': selected_properties,
-        'selected_assessment': selected_assessment
-    })
