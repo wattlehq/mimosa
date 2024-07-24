@@ -143,8 +143,7 @@ class Order(Fulfillable):
 def certificate_file_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/certificates/order_<hash>/<filename>
     return "certificates/order_{0}/{1}".format(
-        instance.order.order_hash,
-        filename
+        instance.order.order_hash, filename
     )
 
 
