@@ -1,0 +1,84 @@
+{% extends "../layouts/index.html" %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}Order{% endblock %}
+
+{% block body %}
+  {{ order_debug }}
+  <h1>Building & Property Certificate Request</h1>
+  <h2>Order Number {{ order.id }}</h2>
+  <section>
+    <ul>
+      <li>{{ order.customer_company_name|default:"" }}</li>
+      <li>{{ order.customer_name|default:"" }}</li>
+      <li>{{ order.customer_address_street_line_2|default:"" }}</li>
+      <li>{{ order.customer_address_suburb|default:"" }}</li>
+      <li>{{ order.customer_address_state|default:"" }}</li>
+      <li>{{ order.customer_address_post_code|default:"" }}</li>
+      <li>{{ order.customer_email|default:"" }}</li>
+    </ul>
+  </section>
+  <section>
+    <ul>
+      <li>
+        <strong>Ordered</strong> {{ order.created_at|date:"jS F Y" }}
+      </li>
+      {% if order.fulfilled_at %}
+        <li>
+          <strong>Delivered</strong> {{ order.fulfilled_at|date:"jS F Y" }}
+        </li>
+      {% endif %}
+    </ul>
+  </section>
+  <br/>
+  <section>
+    <h2>Assessment {{ order.property.assessment }}</h2>
+    <p>{{ order.cost_total|money }}</p>
+    <ul>
+      <li>{{ order.property.lot }}</li>
+      <li>{{ order.property.section }}</li>
+      <li>{{ order.property.deposited_plan }}</li>
+      <li>{{ order.property.address_street }}</li>
+      <li>{{ order.property.address_suburb }}</li>
+      <li>{{ order.property.address_state }}</li>
+      <li>{{ order.property.address_post_code }}</li>
+    </ul>
+  </section>
+  <br/>
+  {% for line in order_lines %}
+    <section>
+      <ul>
+        <li>{{ line.certificate.name }}</li>
+        {% if line.fulfilled_at %}
+          <li>
+            Delivered on {{ line.fulfilled_at|date:"jS F Y" }}
+          </li>
+        {% endif %}
+        <li>{{ line.cost_certificate|add_decimals:line.cost_fee|money }}</li>
+        <li>
+          {% if line.is_fulfilled %}
+            Fulfilled
+          {% else %}
+            Pending
+          {% endif %}
+        </li>
+        {% if line.certificate_file %}
+          <li>
+            <a href="{{ line.certificate_file.url }}">
+              {{ line.certificate_file.name|filename }}
+              {{ line.certificate_file.size|filesize_kb|floatformat:2 }} KB
+            </a>
+          </li>
+        {% endif %}
+        {% if line.fee %}
+          <li>
+            {{ line.fee.name }}
+          </li>
+        {% endif %}
+
+      </ul>
+    </section>
+    <br/>
+  {% endfor %}
+{% endblock %}

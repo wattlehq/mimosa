@@ -13,7 +13,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 request = {
     "property_id": 1,
-    "lines": [{"certificate_id": 1, "fee_id": 3}, {"certificate_id": 2}],
+    "lines": [{"certificate_id": 1, "fee_id": 1}, {"certificate_id": 2}],
 }
 
 
@@ -60,7 +60,9 @@ def save_order_session():
         certificate_id = value["certificate_id"]
         certificate = Certificate.objects.get(id=certificate_id)
         order_line = OrderSessionLine.objects.create(
-            order_session=order_session, certificate=certificate
+            order_session=order_session,
+            certificate=certificate,
+            cost_certificate=certificate.price,
         )
 
         if "fee_id" in value:
@@ -69,6 +71,7 @@ def save_order_session():
             is_valid_fee = certificate.fees.filter(id=fee_id).exists()
             if is_valid_fee:
                 order_line.fee = fee
+                order_line.cost_fee = fee.price
                 order_line.save()
 
     return order_session
