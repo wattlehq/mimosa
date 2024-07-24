@@ -19,26 +19,6 @@ const API = {
         if (!response.ok) throw new Error('Network response was not ok');
         return response.json();
     },
-
-    /**
-     * Select an assessment from grouped properties.
-     * @param {string} selectedAssessment - The selected assessment identifier.
-     * @param {Object} groupedProperties - The properties grouped by assessment.
-     * @returns {Promise<Object>} A promise that resolves to the selected assessment data.
-     * @throws {Error} If the network response is not ok.
-     */
-    selectAssessment: async (selectedAssessment, groupedProperties) => {
-        const response = await fetch('/api/select-assessment/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
-            body: JSON.stringify({ selected_assessment: selectedAssessment, grouped_properties: groupedProperties }),
-        });
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.json();
-    },
 };
 
 /**

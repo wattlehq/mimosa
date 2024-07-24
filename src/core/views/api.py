@@ -1,7 +1,5 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import ensure_csrf_cookie
-import json
 
 from core.services.property.serialize_property import serialize_property
 from core.services.property.search_properties import search_properties
@@ -31,4 +29,3 @@ def search_properties_view(request):
     }
 
     return JsonResponse(serialized_grouped_properties)
-
