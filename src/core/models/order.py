@@ -67,8 +67,7 @@ class Order(Fulfillable):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
-    order_hash = models.UUIDField(default=uuid.uuid4, unique=True,
-                                  editable=False)
+    order_hash = models.UUIDField(default=uuid.uuid4, unique=True)
 
     customer_name = models.CharField(max_length=254, null=True, blank=True)
     customer_email = models.EmailField(max_length=254)

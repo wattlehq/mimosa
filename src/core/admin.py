@@ -19,6 +19,7 @@ class OrderLineInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderLineInline]
     exclude = ("fulfilled_at",)
+    readonly_fields = ("order_hash",)
 
 
 class OrderSessionLineInline(admin.TabularInline):
