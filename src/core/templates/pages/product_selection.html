@@ -2,8 +2,135 @@
 <html>
 <head>
     <title>Product Section</title>
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2ef459;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .accordion {
+            background-color: #ffffff;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: right;
+            outline: none;
+            font-size: 15px;
+            transition: 0.4s;
+        }
+
+        .panel {
+            padding: 0 18px;
+            display: none;
+            background-color: white;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
-    <h1>Product Section</h1>
+    <h1>2 Select Certificates</h1>
+    <input type="radio" name="certificate" value="1"> Section 10.7(2) Certificate
+    <br> <small> Planning requirements and restrictions that apply to a parcel of land</small>
+    <br>
+    <p style="text-align: left;">or</p>
+    <br>
+    <input type="radio" name="certificate" value="2"> Section 10.7(5) Certificate
+    <br> <small> S10.7(5) provides all the details of a S10.7(2) and additional advice which may include:
+        <br>
+        <br>
+        Site or area specific advice
+        <br>
+        Mining lease areas
+        <br>
+        Contaminated land
+        <br>
+        Exhibited draft Development Control Plans
+    </small>
+    <br>
+    <br>
+    <label class="switch">
+        <input type="checkbox">
+        <span class="slider round"></span>
+    </label> <small>Urgent 24 hour turnaround</small>
+    <br>
+    <br>
+    <br>
+    <input type="radio" name="certificate" value="1"> Section 603 Certificate
+    <br> <small>Section 603 Rating Certificates specifying any outstanding rates, charges<br>
+    and debts payable to Council in respect of a parcel of land.</small>
+    <br>
+    <br>
+    <label class="switch">
+        <input type="checkbox">
+        <span class="slider round"></span>
+    </label> <small>Urgent 24 hour turnaround</small>
+    <h1>3 Your Details</h1>
+    <button class="accordion">>></button>
+    <div class="panel">
+        <small> 
+            example corp pty ltd
+            <br>
+            John Smith
+        </small>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var acc = document.getElementsByClassName("accordion");
+            for (var i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.display === "block") {
+                        panel.style.display = "none";
+                    } else {
+                        panel.style.display = "block";
+                    }
+                });
+            }
+        });
+    </script>
+    <h1>4 Finalise Payment</h1>
 </body>
 </html>
