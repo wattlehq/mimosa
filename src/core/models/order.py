@@ -1,6 +1,9 @@
+from decimal import Decimal
+
 from django.db import models
 from django.utils import timezone
 
+from core.models.abstract.fulfillable import Fulfillable
 from core.models.certificate import Certificate
 from core.models.fee import Fee
 from core.models.property import Property
@@ -50,17 +53,21 @@ class OrderSessionLine(models.Model):
         Fee, on_delete=models.CASCADE, null=True, blank=True
     )
 
+    cost_certificate = models.DecimalField(max_digits=10, decimal_places=2)
+    cost_fee = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+
     def __str__(self):
         return str(self.certificate) + " " + str(self.fee)
 
 
-class Order(models.Model):
+class Order(Fulfillable):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    is_fulfilled = models.BooleanField(default=False)
 
+    customer_name = models.CharField(max_length=254, null=True, blank=True)
     customer_email = models.EmailField(max_length=254)
-
     customer_phone = models.CharField(max_length=15, null=True, blank=True)
 
     customer_company_name = models.CharField(
@@ -115,18 +122,27 @@ class Order(models.Model):
         blank=True,
     )
 
+    def cost_total(self):
+        total_cost = Decimal("0.00")
+        for order_line in self.orderline_set.all():
+            total_cost += order_line.cost_certificate
+            if order_line.cost_fee is not None:
+                total_cost += order_line.cost_fee
+        return total_cost
+
+    def save(self, *args, **kwargs):
+        super(Order, self).fulfilled_save(*args, **kwargs)
+
     def __str__(self):
         return str(self.property)
 
 
 def certificate_file_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/certificates/order_<id>/<filename>
-    return "certificates/order_{0}/{1}".format(instance.lines.id, filename)
+    return "certificates/order_{0}/{1}".format(instance.order.id, filename)
 
 
-class OrderLine(models.Model):
-    is_fulfilled = models.BooleanField(default=False)
-
+class OrderLine(Fulfillable):
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
@@ -138,12 +154,20 @@ class OrderLine(models.Model):
     )
 
     certificate_file = models.FileField(
-        upload_to=certificate_file_directory_path, null=True
+        upload_to=certificate_file_directory_path, null=True, blank=True
     )
 
     fee = models.ForeignKey(
         Fee, on_delete=models.CASCADE, null=True, blank=True
     )
+
+    cost_certificate = models.DecimalField(max_digits=10, decimal_places=2)
+    cost_fee = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+
+    def save(self, *args, **kwargs):
+        super(OrderLine, self).fulfilled_save(*args, **kwargs)
 
     def __str__(self):
         return str(self.certificate)

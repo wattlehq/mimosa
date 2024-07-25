@@ -1,10 +1,10 @@
 from django.urls import path
 
-from core.webhooks.stripe import webhook_stripe
-
+from core.views.home import home
+from core.views.order import order
 from core.views.find_parcel import FindParcel
 from core.views.api import search_properties_view, validate_search_view
-from core.views.home import home
+from core.webhooks.stripe import webhook_stripe
 
 urlpatterns = [
     path("", home, name="home"),
@@ -18,4 +18,6 @@ urlpatterns = [
          search_properties_view,
          name="api_search_properties"
          ),
+    # @todo Obfuscate URL.
+    path("order/<str:order_id>/", order, name="order"),
 ]
