@@ -170,8 +170,8 @@ if DEBUG:
     # to access the toolbar from our browser outside of the container.
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
-        "127.0.0.1",
         "10.0.2.2",
+        os.environ.get("INTERNAL_IP", "127.0.0.1"),
     ]
 
 # Stripe.
