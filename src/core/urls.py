@@ -20,4 +20,5 @@ urlpatterns = [
          ),
     # @todo Obfuscate URL.
     path("order/<str:order_id>/", order, name="order"),
+    path("order/<uuid:order_hash>/", order, name="order"),
 ]
