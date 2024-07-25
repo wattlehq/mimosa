@@ -7,6 +7,5 @@ from core.webhooks.stripe import webhook_stripe
 urlpatterns = [
     path("", home, name="home"),
     path("webhook/stripe", webhook_stripe, name="webhook-stripe"),
-    # @todo Obfuscate URL.
-    path("order/<str:order_id>/", order, name="order"),
+    path("order/<uuid:order_hash>/", order, name="order"),
 ]
