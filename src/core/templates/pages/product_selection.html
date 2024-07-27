@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
     <title>Product Section</title>
-    <style>
+    <!-- <style>
         .switch {
             position: relative;
             display: inline-block;
@@ -89,7 +91,7 @@
             justify-content: space-between;
             cursor: pointer;
         }
-    </style>
+    </style> -->
 </head>
 <body>
     <div class="section-header" onclick="toggleSection('certificates')">
