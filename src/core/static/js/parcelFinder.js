@@ -65,32 +65,16 @@ class ParcelFinder {
         console.debug('Search params:', searchParams);
     
         try {
-            const validationResult = await API.validateSearch(searchParams);
-            if (validationResult.isValid) {
+            const result = await API.searchProperties(searchParams);
+            if (result.isValid) {
                 this.errorContainer.innerHTML = '';
-                await this.performSearch(searchParams);
+                this.displaySearchResults(result.results);
             } else {
-                this.displayValidationErrors(validationResult.errors);
+                this.displayValidationErrors(result.errors);
             }
         } catch (error) {
-            console.error('Error during search validation:', error);
-            this.displayError('An error occurred while validating the search parameters.');
-        }
-    }
-
-    /**
-     * Performs the property search using the provided search parameters.
-     * Displays the search results upon successful search.
-     *
-     * @param {Object} searchParams - The search parameters.
-     * @returns {Promise<void>}
-     */
-    async performSearch(searchParams) {
-        try {
-            const groupedProperties = await API.searchProperties(searchParams);
-            this.displaySearchResults(groupedProperties);
-        } catch (error) {
-            console.error('Error searching properties:', error);
+            console.error('Error during search:', error);
+            this.displayError('An error occurred while searching for properties.');
         }
     }
     
@@ -153,7 +137,7 @@ class ParcelFinder {
      * @param {Object} groupedProperties - The properties grouped by assessment.
      */
     displaySearchResults(groupedProperties) {
-        console.debug('Displaying search results');
+        console.debug('Displaying search results', groupedProperties);
         this.assessmentList.innerHTML = '';
         this.assessmentList.dataset.groupedProperties = JSON.stringify(groupedProperties);
         
@@ -179,9 +163,13 @@ class ParcelFinder {
             ul.appendChild(li);
         }
 
-        this.assessmentList.appendChild(ul);
-        this.resultsSection.style.display = 'block';
-        this.detailsSection.style.display = 'none';
+        if (ul.children.length === 0) {
+            this.displayError('No properties found matching the search criteria.');
+        } else {
+            this.assessmentList.appendChild(ul);
+            this.resultsSection.style.display = 'block';
+            this.detailsSection.style.display = 'none';
+        }
     }
 
     /**

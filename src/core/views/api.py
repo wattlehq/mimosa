@@ -10,18 +10,26 @@ from core.services.property.group_properties_by_assessment import (
 
 
 @require_http_methods(["GET"])
-def search_properties_view(request):
+def api_property_search(request):
     """
-    View function to handle property search requests.
+    View function to validate and handle property search requests.
 
     Args:
-        request (HttpRequest): The HTTP request object.
+        request (HttpRequest): The HTTP request object containing
+        search parameters.
 
     Returns:
         JsonResponse: A JSON response containing the serialized
-        grouped properties.
+        grouped properties or error messages.
 
     """
+    form = FindParcelForm(request.GET)
+    if not form.is_valid():
+        return JsonResponse({
+            "isValid": False,
+            "errors": form.errors.get_json_data()
+        })
+
     lot = request.GET.get('lot')
     section = request.GET.get('section')
     deposited_plan = request.GET.get('deposited_plan')
@@ -40,29 +48,7 @@ def search_properties_view(request):
         for assessment, props in grouped_properties.items()
     }
 
-    return JsonResponse(serialized_grouped_properties)
-
-
-@require_http_methods(["GET"])
-def validate_search_view(request):
-    """
-    View function to validate search form data.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        JsonResponse: A JSON response containing:
-            - isValid (bool): Whether the form data is valid.
-            - errors (dict): A dictionary of form errors if any,
-                            empty if the form is valid.
-    """
-    form = FindParcelForm(request.GET)
-    is_valid = form.is_valid()
-
-    response_data = {
-        "isValid": is_valid,
-        "errors": form.errors.get_json_data() if not is_valid else {}
-    }
-
-    return JsonResponse(response_data)
+    return JsonResponse({
+        "isValid": True,
+        "results": serialized_grouped_properties
+    })
