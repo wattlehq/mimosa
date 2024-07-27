@@ -2,122 +2,165 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <script src="https://js.stripe.com/v3/"></script>
+<!-- <link rel="stylesheet" href="{% static 'css/app.css' %}"> -->
     <title>Product Section</title>
-    <!-- <style>
+    <style>
+    /* #paymentPanel {
+        display: none;
+    }
+    #paymentPanel.active {
+        display: block;
+    } */
+    #paymentButton {
+        display: block !important;
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
         .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
 
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
 
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
 
-        input:checked + .slider {
-            background-color: #2ef459;
-        }
+    input:checked + .slider {
+        background-color: #4CAF50;
+    }
 
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
 
-        .accordion {
-            background-color: #ffffff;
-            color: #444;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: right;
-            outline: none;
-            font-size: 15px;
-            transition: 0.4s;
-        }
+    .accordion {
+        background-color: #ffffff;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: right;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+    }
 
-        .panel {
-            display: none;
-            overflow: hidden;
-        }
+    /* .panel {
+        display: none;
+        overflow: hidden;
+    } */
 
-        .details-header {
+    .details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    }
+
+    .chevron {
+        font-size: 24px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        flex-shrink: 0;
+        margin-left: 10px;
+    }
+
+    .chevron.active {
+        transform: rotate(90deg);
+    }
+
+    .section-header {
         display: flex;
+        flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        cursor: pointer;
+        width: 100%;
+        padding: 10px 0;
+    }
 
-        }
-
-        .chevron {
-            font-size: 24px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .chevron.active {
-            transform: rotate(90deg);
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-    </style> -->
+    .section-header h1 {
+        margin: 0;
+        flex-grow: 1;
+    }
+    </style>
 </head>
 <body>
-    <div class="section-header" onclick="toggleSection('certificates')">
-        <h1>2 Select Certificates</h1>
-        <span class="chevron" id="certificatesChevron"">&#10095;</span>
-    </div>
-    <div class="panel" id="certificatesPanel">
-        <ul>
-            {% for certificate in certificates %}
-                {% if certificate.name == "Section 10.7(2) Certificate" or certificate.name == "Section 10.7(5) Certificate" %}
-                    <input type="radio" name="certificate_10_7" value="{{ certificate.id }}" data-name="{{ certificate.name }}" data-price="{{ certificate.price }}" onchange="updateOrderSummary()">
-                    {{ certificate.name }} &nbsp;&nbsp;&nbsp;&nbsp; {{ certificate.price }} <br>
+    <h1>2 Select Certificates</h1>
+    <ul id="product-list">
+        {% for certificate in certificates %}
+            {% if certificate.name == "Section 10.7(2) Certificate" %}
+                <input type="radio" name="certificate_10_7" id="product-10.7.2" value="{{ certificate.id }}" data-name="{{ certificate.name }}" data-price="{{ certificate.price }}">
+                <label for="certificate-{{ certificate.id }}">
+                    {{ certificate.name }} &nbsp;&nbsp;&nbsp;&nbsp; {% if certificate.price %}${{ certificate.price|floatformat:2 }}{% else %}Price not available{% endif %} <br>
                     <small> {{ certificate.description }} </small> <br>
-                {% endif %}
-            {% endfor %}
-        </ul>
+                </label>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <br>
+    or
+    <br>
+    <br>
+
+    <ul id="product-list">
+        {% for certificate in certificates %}
+            {% if certificate.name == "Section 10.7(5) Certificate" %}
+                <input type="radio" name="certificate_10_7" id="product-10.7.5" value="{{ certificate.id }}" data-name="{{ certificate.name }}" data-price="{{ certificate.price }}">
+                <label for="certificate-{{ certificate.id }}">
+                    {{ certificate.name }} &nbsp;&nbsp;&nbsp;&nbsp; {% if certificate.price %}${{ certificate.price|floatformat:2 }}{% else %}Price not available{% endif %} <br>
+                    <small> {{ certificate.description }} </small> <br>
+                </label>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
         <br>
         <br>
         <label class="switch">
-            <input type="checkbox" name="urgent_10_7" onchange="updateOrderSummary()">
+            <input type="checkbox" name="urgent_10_7">
             <span class="slider round"></span>
         </label> 
-            {% for fee in fees %}
-                {% if "Urgent" in fee.name %}
-                    <span data-fee-name="{{ fee.name }}" data-fee-price="{{ fee.price }}"></span>
-                        {{ fee.name }} &nbsp;&nbsp;&nbsp;&nbsp; {{ fee.price }}
+        {% for fee in fees %}
+            {% if fee.name == "Urgent 24 hour turnaround" %}
+                    <span data-fee-name="fee-{{ fee.name }}" data-fee-price="{{ fee.price }}"></span>
+                    {{ fee.name }} &nbsp;&nbsp;&nbsp;&nbsp; {% if fee.price %}${{ fee.price|floatformat:2 }}{% else %}Price not available{% endif %}
                     </span>
                 {% endif %}
             {% endfor %}
@@ -126,97 +169,143 @@
         <ul>
             {% for certificate in certificates %}
                 {% if certificate.name == "Section 603 Certificate" %}
-                    <input type="radio" name="certificate_603" value="{{ certificate.id }}" data-name="{{ certificate.name }}" data-price="{{ certificate.price }}" onchange="updateOrderSummary()">
-                    {{ certificate.name }} &nbsp;&nbsp;&nbsp;&nbsp; {{ certificate.price }} <br>
-                    <small> {{ certificate.description }} </small> <br>
-                {% endif %}
-            {% endfor %}
+                <input type="radio" name="certificate_603" id="certificate-603" value="{{ certificate.id }}" data-name="{{ certificate.name }}" data-price="{{ certificate.price }}">
+                <label for="certificate-{{ certificate.id }}">
+                    {{ certificate.name }} &nbsp;&nbsp;&nbsp;&nbsp; {% if certificate.price %}${{ certificate.price|floatformat:2 }}{% else %}Price not available{% endif %} <br>
+                    <small> {{ certificate.description }} </small>
+                </label>
+            {% endif %}
+        {% endfor %}
         </ul>
         <br>
         <label class="switch">
-            <input type="checkbox" name="urgent_603" onchange="updateOrderSummary()">
+            <input type="checkbox" name="urgent_603">
             <span class="slider round"></span>
         </label>
-            {% for fee in fees %}
-                {% if "Urgent" in fee.name %}
-                    <span data-fee-name="{{ fee.name }}" data-fee-price="{{ fee.price }}">
-                        {{fee.name }} &nbsp;&nbsp;&nbsp;&nbsp; {{ fee.price }}
-                    </span>
-                {% endif %}
-            {% endfor %}
-    </div>
-    <div class="section-header" onclick="toggleSection('details')">
+        {% for fee in fees %}
+        {% if fee.name == "Urgent 24 hour turnaround" %}
+                <span data-fee-name="fee-{{ fee.name }}" data-fee-price="{{ fee.price }}"></span>
+                {{ fee.name }} &nbsp;&nbsp;&nbsp;&nbsp; {% if fee.price %}${{ fee.price|floatformat:2 }}{% else %}Price not available{% endif %}
+                </span>
+            {% endif %}
+        {% endfor %}
         <h1>3 Your Details</h1>
-        <span class="chevron" id="detailsChevron">&#10095;</span>
-    </div>
-    <!-- <button class="accordion">>></button> -->
-    <div class="panel" id="detailsPanel">
         <small> 
             example corp pty ltd
             <br>
             John Smith
         </small>
-    </div>
-    <div class="section-header" onclick="toggleSection('payment')">
     <h1>4 Finalise Payment</h1>
-    <span class="chevron" id="paymentChevron">&#10095;</span>
-    </div>
     <div class="panel" id="paymentPanel">
-    <div id="orderSummary"></div>
+        <div id="orderSummary"></div>
+        <button id="paymentButton">Pay Now</button>
+    </div>
     <script>
-            function toggleSection(sectionId) {
-            var panel = document.getElementById(sectionId + 'Panel');
-            var chevron = document.getElementById(sectionId + 'Chevron');
-            
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-                chevron.classList.remove('active');
-            } else {
-                panel.style.display = "block";
-                chevron.classList.add('active');
-            }
-        }
-            function updateOrderSummary() {
+        function updateOrderSummary() {
             let summary = "";
             let total = 0;
 
-            // Check 10.7 certificate
             const cert107 = document.querySelector('input[name="certificate_10_7"]:checked');
+            const cert603 = document.querySelector('input[name="certificate_603"]:checked');
+            const urgent107 = document.querySelector('input[name="urgent_10_7"]');
+            const urgent603 = document.querySelector('input[name="urgent_603"]');
+
             if (cert107) {
                 summary += `${cert107.dataset.name}: $${cert107.dataset.price}<br>`;
                 total += parseFloat(cert107.dataset.price);
-
-                // Check if urgent 10.7 is selected
-                const urgent107 = document.querySelector('input[name="urgent_10_7"]');
-                if (urgent107.checked) {
+                if (urgent107 && urgent107.checked) {
                     const fee107 = document.querySelector('span[data-fee-name*="Urgent"]');
-                    summary += `${fee107.dataset.feeName}: $${fee107.dataset.feePrice}<br>`;
+                    summary += `Urgent ${cert107.dataset.name}: $${fee107.dataset.feePrice}<br>`;
                     total += parseFloat(fee107.dataset.feePrice);
                 }
             }
 
-            // Check 603 certificate
-            const cert603 = document.querySelector('input[name="certificate_603"]:checked');
             if (cert603) {
                 summary += `${cert603.dataset.name}: $${cert603.dataset.price}<br>`;
                 total += parseFloat(cert603.dataset.price);
-
-                // Check if urgent 603 is selected
-                const urgent603 = document.querySelector('input[name="urgent_603"]');
-                if (urgent603.checked) {
+                if (urgent603 && urgent603.checked) {
                     const fee603 = document.querySelector('span[data-fee-name*="Urgent"]');
-                    summary += `${fee603.dataset.feeName}: $${fee603.dataset.feePrice}<br>`;
+                    summary += `Urgent ${cert603.dataset.name}: $${fee603.dataset.feePrice}<br>`;
                     total += parseFloat(fee603.dataset.feePrice);
                 }
             }
 
             summary += `<strong>Total: $${total.toFixed(2)}</strong>`;
 
-            document.getElementById('orderSummary').innerHTML = summary;
+            const orderSummaryElement = document.getElementById('orderSummary');
+            if (orderSummaryElement) {
+                orderSummaryElement.innerHTML = summary;
+            }
         }
 
-        // Initial call to set up the order summary
-        updateOrderSummary();
+        document.addEventListener('DOMContentLoaded', function() {
+            const certificates = document.querySelectorAll('input[name^="certificate_"]');
+            const urgentSwitches = document.querySelectorAll('input[name^="urgent_"]');
+
+            certificates.forEach(cert => cert.addEventListener('change', updateOrderSummary));
+            urgentSwitches.forEach(urgentSwitch => urgentSwitch.addEventListener('change', updateOrderSummary));
+
+            updateOrderSummary(); // Initial call to set up the order summary
+        });
+
+        document.getElementById('paymentButton').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const selectedItems = [];
+            
+            const cert107 = document.querySelector('input[name="certificate_10_7"]:checked');
+            const cert603 = document.querySelector('input[name="certificate_603"]:checked');
+            const urgent107 = document.querySelector('input[name="urgent_10_7"]');
+            const urgent603 = document.querySelector('input[name="urgent_603"]');
+
+            if (cert107) {
+                selectedItems.push({
+                    id: cert107.value,
+                    name: cert107.dataset.name,
+                    price: parseFloat(cert107.dataset.price)
+                });
+                if (urgent107 && urgent107.checked) {
+                    const fee107 = document.querySelector('span[data-fee-name*="Urgent"]');
+                    selectedItems.push({
+                        id: fee107.dataset.feeId,
+                        name: `Urgent ${cert107.dataset.name}`,
+                        price: parseFloat(fee107.dataset.feePrice)
+                    });
+                }
+            }
+
+            if (cert603) {
+                selectedItems.push({
+                    id: cert603.value,
+                    name: cert603.dataset.name,
+                    price: parseFloat(cert603.dataset.price)
+                });
+                if (urgent603 && urgent603.checked) {
+                    const fee603 = document.querySelector('span[data-fee-name*="Urgent"]');
+                    selectedItems.push({
+                        id: fee603.dataset.feeId,
+                        name: `Urgent ${cert603.dataset.name}`,
+                        price: parseFloat(fee603.dataset.feePrice)
+                    });
+                }
+            }
+
+            const response = await fetch("{% url 'create_checkout_session' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ selectedItems })
+            });
+
+            const session = await response.json();
+            if (session.error) {
+                console.error(session.error);
+                return;
+            }
+
+            window.open(session.url, '_blank', 'width=600,height=800');
+        });
     </script>
 </body>
 </html>
