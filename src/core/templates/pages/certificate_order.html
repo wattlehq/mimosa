@@ -1,0 +1,27 @@
+{% extends "layouts/index.html" %}
+{% load static %}
+
+{% block body %}
+  <h1>Order Building & Property Certificates</h1>
+  <p>Working with businesses around the nation</p>
+
+  <hr>
+
+  <section id="find-parcel">
+    {% include "components/find_parcel.html" with form=form %}
+  </section>
+
+  <!-- Placeholders for other sections -->
+  <section id="select-certificates" style="display:none;">
+    <!-- Content for selecting certificates -->
+  </section>
+
+  <section id="your-details" style="display:none;">
+    <!-- Form for user details -->
+  </section>
+
+  <section id="finalise-payment" style="display:none;">
+    <!-- Payment form -->
+  </section>
+
+{% endblock %}
