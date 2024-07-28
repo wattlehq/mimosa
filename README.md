@@ -187,11 +187,24 @@ Linux and your `uid:gid` aren't `1000:1000` (you can verify this by running
 `id`). Check out the docs in the `.env` file to customize the `UID` and `GID`
 variables to fix this.
 
-#### Setup the initial database:
+#### Setup the initial database & infrastructure:
 
 ```sh
 # You can run this from a 2nd terminal.
 ./run manage migrate
+```
+
+Start the Stripe webhook service, copy and paste webhook secret into .env,
+then stop.
+
+```sh
+docker-compose up stripe
+```
+
+Create a new admin super user.
+
+```sh
+./run manage createsuperuser
 ```
 
 *We'll go over that `./run` script in a bit!*
@@ -277,46 +290,6 @@ functions as you want. This file's purpose is to make your experience better!
 `alias run=./run` in your `~/.bash_aliases` or equivalent file. Then you'll be
 able to run `run` instead of `./run`.*
 
-## Running a script to automate renaming the project
-
-The app is named `mimosa` right now but chances are your app will be a different
-name. Since the app is already created we'll need to do a find / replace on a
-few variants of the string "mimosa" and update a few Docker related resources.
-
-And by we I mean I created a zero dependency shell script that does all of the
-heavy lifting for you. All you have to do is run the script below.
-
-#### Run the rename-project script included in this repo:
-
-```sh
-# The script takes 2 arguments.
-#
-# The first one is the lower case version of your app's name, such as myapp or
-# my_app depending on your preference.
-#
-# The second one is used for your app's module name. For example if you used
-# myapp or my_app for the first argument you would want to use MyApp here.
-bin/rename-project myapp MyApp
-```
-
-The [bin/rename-project
-script](https://github.com/nickjj/docker-django-example/blob/main/bin/rename-project)
-is going to:
-
-- Remove any Docker resources for your current project
-- Perform a number of find / replace actions
-- Optionally initialize a new git repo for you
-
-*Afterwards you can delete this script because its only purpose is to assist in
-helping you change this project's name without depending on any complicated
-project generator tools or 3rd party dependencies.*
-
-If you're not comfy running the script or it doesn't work for whatever reasons
-you can [check it
-out](https://github.com/nickjj/docker-django-example/blob/main/bin/rename-project)
-and perform the actions manually. It's mostly running a find / replace across
-files and then renaming a few directories and files.
-
 #### Start and setup the project:
 
 This won't take as long as before because Docker can re-use most things. We'll
@@ -324,20 +297,11 @@ also need to setup our database since a new one will be created for us by
 Docker.
 
 ```sh
-# Populate .env
-edit .env
-
-# Start webhook, copy and paste webhook secret into .env, then stop.
-docker-compose up stripe
-
 # Start the application.
 docker compose up --build
 
 # Then in a 2nd terminal once it's up and ready.
 ./run manage migrate
-
-# Create a new user.
-./run manage createsuperuser
 ```
 
 #### Sanity check to make sure the tests still pass:
@@ -354,22 +318,6 @@ adding custom changes.
 If everything passes now you can optionally `git add -A && git commit -m
 "Initial commit"` and start customizing your app. Alternatively you can wait
 until you develop more of your app before committing anything. It's up to you!
-
-#### Tying up a few loose ends:
-
-You'll probably want to create a fresh `CHANGELOG.md` file for your project. I
-like following the style guide at <https://keepachangelog.com/> but feel free
-to use whichever style you prefer.
-
-Since this project is MIT licensed you should keep my name and email address in
-the `LICENSE` file to adhere to that license's agreement, but you can also add
-your name and email on a new line.
-
-If you happen to base your app off this example app or write about any of the
-code in this project it would be rad if you could credit this repo by linking
-to it. If you want to reference me directly please link to my site at
-<https://nickjanetakis.com>. You don't have to do this, but it would be very
-much appreciated!
 
 ## Updating dependencies
 
@@ -420,51 +368,3 @@ This is usually a non-issue since you'll be pulling down pre-built images from
 a Docker registry but if you decide to build your Docker images directly on
 your server you could run `docker compose build` as part of your deploy
 pipeline.
-
-## See a way to improve something?
-
-If you see anything that could be improved please open an issue or start a PR.
-Any help is much appreciated!
-
-## Additional resources
-
-Now that you have your app ready to go, it's time to build something cool! If
-you want to learn more about Docker, Django and deploying a Django app here's a
-couple of free and paid resources. There's Google too!
-
-### Learn more about Docker and Django
-
-#### Official documentation
-
-- <https://docs.docker.com/>
-- <https://docs.djangoproject.com/en/5.0/>
-
-#### Courses / books
-
-- [https://diveintodocker.com](https://diveintodocker.com?ref=docker-django-example)
-  is a course I created which goes over the Docker and Docker Compose
-  fundamentals
-- William Vincent has a bunch of [beginner and advanced Django
-  books](https://gumroad.com/a/139727987). He also co-hosts the [Django
-  Chat](https://djangochat.com/) podcast
-
-### Deploy to production
-
-I'm creating an in-depth course related to deploying Dockerized web apps. If
-you want to get notified when it launches with a discount and potentially get
-free videos while the course is being developed then [sign up here to get
-notified](https://nickjanetakis.com/courses/deploy-to-production).
-
-## About the author
-
-- Nick
-  Janetakis | <https://nickjanetakis.com> | [@nickjanetakis](https://twitter.com/nickjanetakis)
-
-I'm a self taught developer and have been freelancing for the last ~20 years.
-You can read about everything I've learned along the way on my site at
-[https://nickjanetakis.com](https://nickjanetakis.com/).
-
-There's hundreds of [blog posts](https://nickjanetakis.com/blog/) and a couple
-of [video courses](https://nickjanetakis.com/courses/) on web development and
-deployment topics. I also have a [podcast](https://runninginproduction.com)
-where I talk with folks about running web apps in production.
