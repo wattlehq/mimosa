@@ -46,8 +46,8 @@ def create_stripe_checkout_session(order_session: OrderSession):
         line_items=line_items,
         metadata={"order_session_pk": order_session.id},
         mode="payment",
-        success_url=get_site_url() + "/success.html",
-        cancel_url=get_site_url() + "/cancel.html",
+        success_url=get_site_url() + "/success",
+        cancel_url=get_site_url() + "/cancel",
     )
 
 
