@@ -32,21 +32,28 @@ from core.models.property import Property
 #     }
 #     return render(request, 'pages/product_selection.html', context)
 
+# View for rendering the product selection page
 def product_selection(request):
+    # Fetch all certificates and fees from the database
     certificates = Certificate.objects.all()
     fees = Fee.objects.all()
+    # Prepare context for the template
     context = {
         'certificates': certificates,
         'fees': fees
     }
+    # Render the product selection page with the context
     return render(request, 'pages/product_selection.html', context)
 
+# View for creating a Stripe checkout session
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'POST':
+        # Parse the JSON data from the request body
         data = json.loads(request.body)
         selected_items = data.get('selectedItems', [])
         
+        # Prepare line items for Stripe checkout
         line_items = []
         for item in selected_items:
             line_items.append({
@@ -60,6 +67,7 @@ def create_checkout_session(request):
                 'quantity': 1,
             })
 
+        # Create a Stripe checkout session
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=line_items,
@@ -68,11 +76,16 @@ def create_checkout_session(request):
             cancel_url=request.build_absolute_uri(reverse('payment_cancel')),
         )
         
+        # Return the checkout session URL
         return JsonResponse({'url': checkout_session.url})
+
+     # Return an error if the request method is not POST
     return JsonResponse({'error': 'Invalid request method'})
 
+# View for handling successful payments
 def payment_success(request):
     return render(request, 'pages/payment_success.html')
 
+# View for handling cancelled payments
 def payment_cancel(request):
     return render(request, 'pages/payment_cancel.html')
