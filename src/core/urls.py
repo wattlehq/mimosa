@@ -12,9 +12,8 @@ urlpatterns = [
     path("success/", success, name="success"),
     path("webhook/stripe", webhook_stripe, name="webhook-stripe"),
     path("certificate-order/", FindParcel.as_view(), name="find_parcel"),
-    path("api/property/search/",
-         api_property_search,
-         name="api_property_search"
-         ),
+    path(
+        "api/property/search/", api_property_search, name="api_property_search"
+    ),
     path("order/<uuid:order_hash>/", order, name="order"),
 ]
