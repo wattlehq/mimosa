@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from core.forms.settings import SettingsForm
 from core.models.certificate import Certificate
 from core.models.fee import Fee
 from core.models.order import Order
@@ -7,6 +8,7 @@ from core.models.order import OrderLine
 from core.models.order import OrderSession
 from core.models.order import OrderSessionLine
 from core.models.property import Property
+from core.models.settings import Settings
 
 
 class OrderLineInline(admin.TabularInline):
@@ -46,6 +48,19 @@ class FeeAdmin(admin.ModelAdmin):
         "stripe_product_id",
         "stripe_price_id",
     )
+
+
+@admin.register(Settings)
+class SettingsAdmin(admin.ModelAdmin):
+    form = SettingsForm
+
+    def has_add_permission(self, request):
+        # Prevent adding new settings if one already exists.
+        return not Settings.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        # Prevent deletion of settings.
+        return False
 
 
 admin.site.register(Property)
