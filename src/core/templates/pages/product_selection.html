@@ -103,7 +103,6 @@
             {% if fee.name == "Urgent 24 hour turnaround" %}
                     <span data-fee-name="fee-{{ fee.name }}" data-fee-price="{{ fee.price }}"></span>
                     {{ fee.name }} &nbsp;&nbsp;&nbsp;&nbsp; {% if fee.price %}${{ fee.price|floatformat:2 }}{% else %}Price not available{% endif %}
-                    </span>
                 {% endif %}
             {% endfor %}
         <br>
@@ -128,7 +127,6 @@
         {% if fee.name == "Urgent 24 hour turnaround" %}
                 <span data-fee-name="fee-{{ fee.name }}" data-fee-price="{{ fee.price }}"></span>
                 {{ fee.name }} &nbsp;&nbsp;&nbsp;&nbsp; {% if fee.price %}${{ fee.price|floatformat:2 }}{% else %}Price not available{% endif %}
-                </span>
             {% endif %}
         {% endfor %}
         <h1>3 Your Details</h1>
