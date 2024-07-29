@@ -34,3 +34,7 @@ jobs:
           ls -la
 
           DEBUG=false NODE_ENV=production ./run ci:test
+
+      - name: "Verify lints"
+        run: |
+          git diff --exit-code || (echo "Code is not formatted properly. Run ./run quality" && exit 1)
