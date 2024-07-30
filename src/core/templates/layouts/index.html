@@ -23,6 +23,9 @@
 </head>
 <body>
 <main>
+  {% if settings.logo %}
+    <img src="{{ settings.logo.url }}" alt="Logo">
+  {% endif %}
   {% block body %}{% endblock %}
 </main>
 </body>
