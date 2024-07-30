@@ -1,14 +1,14 @@
 """Views for handling property searches and certificate orders."""
 
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_http_methods
-from django.utils.decorators import method_decorator
 
 from core.forms.find_parcel import FindParcelForm
 
 
-@method_decorator(require_http_methods(["GET", "POST"]), name='dispatch')
+@method_decorator(require_http_methods(["GET", "POST"]), name="dispatch")
 class FindParcel(View):
     """
     View for handling the find parcel component.
@@ -16,6 +16,7 @@ class FindParcel(View):
     This view renders the certificate order page and processes
     form submissions for finding parcels.
     """
+
     template_name = "pages/certificate_order.html"
 
     def get(self, request):
