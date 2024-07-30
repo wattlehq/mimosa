@@ -185,12 +185,12 @@ SITE_DOMAIN = os.environ.get("SITE_DOMAIN")
 SITE_PORT = int(os.environ.get("SITE_PORT"))
 
 # Email settings
-# if DEBUG:
-#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# else:
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
-EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
-EMAIL_USE_TLS = bool(strtobool(os.environ.get("EMAIL_USE_TLS", "true")))
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "your-email@gmail.com")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "app-password")
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+    EMAIL_PORT = int(os.environ.get("EMAIL_PORT") or 587)
+    EMAIL_USE_TLS = bool(strtobool(os.environ.get("EMAIL_USE_TLS", "true")))
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "your-email@gmail.com")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "app-password")
