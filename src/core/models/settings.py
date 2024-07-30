@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.validators import EmailValidator
+from django.db import models
 
 
 class Settings(models.Model):
@@ -9,7 +9,7 @@ class Settings(models.Model):
         blank=True,
         null=True,
         validators=[EmailValidator()],
-        help_text="Email for sending customers order notifications"
+        help_text="Email for sending customers order notifications",
     )
 
     def __str__(self):
