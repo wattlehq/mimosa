@@ -52,6 +52,7 @@ def send_order_status_email(order_id, override_email=None):
             logger.error(f"Error retrieving settings: {str(e)}")
             return False
 
+        # reverse() for dynamic paths based on the URL configuration
         order_url = get_site_url() + reverse(
             "order", kwargs={"order_hash": str(order.order_hash)}
         )
