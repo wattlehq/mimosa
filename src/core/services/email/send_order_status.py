@@ -85,7 +85,7 @@ def send_order_status_email(order_id, override_email=None):
         # Send email
         send_mail(
             subject=email_subject,
-            message="",  # Empty string for plain text version
+            message=f"Order update - view it here: {order_url}",
             from_email=council_email,
             recipient_list=[recipient_email],
             html_message=email_body,
