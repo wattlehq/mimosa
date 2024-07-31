@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from core.models.order import Order
-from core.models.settings import Settings
+from core.services.utils.settings import get_settings
 from core.services.utils.site import get_site_url
 
 logger = logging.getLogger(__name__)
@@ -40,15 +40,17 @@ def send_order_status_email(order_id, override_email=None):
             .get(id=order_id)
         )
 
-        # Get the council email from Settings
-        settings_obj = Settings.objects.first()
-        if not settings_obj or not settings_obj.council_email:
-            logger.error(
-                f"Council email not set in Settings for order {order_id}"
-            )
+        try:
+            settings = get_settings()
+            council_email = settings.council_email
+            if not council_email:
+                logger.error(
+                    f"Council email not set in Settings for order {order_id}"
+                )
+                return False
+        except ValueError as e:
+            logger.error(f"Error retrieving settings: {str(e)}")
             return False
-
-        council_email = settings_obj.council_email
 
         order_url = get_site_url() + reverse(
             "order", kwargs={"order_hash": str(order.order_hash)}
