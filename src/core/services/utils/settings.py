@@ -1,4 +1,5 @@
 from django.core.cache import cache
+
 from core.models.settings import Settings
 
 
@@ -13,7 +14,7 @@ def get_settings():
         ValueError: If no Settings object is found in the database.
     """
     # Try to get settings from cache first
-    settings = cache.get('app_settings')
+    settings = cache.get("app_settings")
 
     if not settings:
         # If not in cache, retrieve from database
@@ -23,6 +24,6 @@ def get_settings():
             raise ValueError("Settings object not found")
 
         # Cache the settings for future use (cache for 1 hour)
-        cache.set('app_settings', settings, timeout=3600)
+        cache.set("app_settings", settings, timeout=3600)
 
     return settings
