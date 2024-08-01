@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from core.models.order import Order
-from core.services.utils.settings import get_settings
+from core.services.utils.settings import SettingsCacheService
 from core.services.utils.site import get_site_url
 
 logger = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ def send_order_status_email(order_id, override_email=None):
         )
 
         try:
-            settings = get_settings()
+            settings = SettingsCacheService.get_settings()
             council_email = settings.council_email
             if not council_email:
                 logger.error(

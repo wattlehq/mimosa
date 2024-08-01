@@ -1,6 +1,7 @@
-from django.core.cache import cache
 from django.core.validators import EmailValidator
 from django.db import models
+
+from core.services.utils.settings import SettingsCacheService
 
 
 class Settings(models.Model):
@@ -18,12 +19,8 @@ class Settings(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-
-        # Clear the cache
-        cache.delete("app_settings")
-
-        # Update the cache with new values
-        cache.set("app_settings", self, timeout=3600)
+        SettingsCacheService.invalidate_settings_cache()
+        SettingsCacheService.update_settings_cache(self)
 
     class Meta:
         verbose_name = "Setting"
