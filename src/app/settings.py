@@ -12,9 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 import socket
-from pathlib import Path
-
 from distutils.util import strtobool
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -71,7 +70,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'core.context_processors.settings',
+                "core.context_processors.settings",
             ],
             "loaders": default_loaders if DEBUG else cached_loaders,
         },
@@ -102,22 +101,22 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation"
-                ".UserAttributeSimilarityValidator"
+        ".UserAttributeSimilarityValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation."
-                "MinimumLengthValidator"
+        "MinimumLengthValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation"
-                ".CommonPasswordValidator"
+        ".CommonPasswordValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation"
-                ".NumericPasswordValidator"
+        ".NumericPasswordValidator"
         # noqa: E501
     },
 ]
@@ -184,3 +183,14 @@ STRIPE_CURRENCY = "aud"
 SITE_PROTOCOL = os.environ.get("SITE_PROTOCOL")
 SITE_DOMAIN = os.environ.get("SITE_DOMAIN")
 SITE_PORT = int(os.environ.get("SITE_PORT"))
+
+# Email settings
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ.get("EMAIL_HOST")
+    EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
+    EMAIL_USE_TLS = bool(strtobool(os.environ.get("EMAIL_USE_TLS", "true")))
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
