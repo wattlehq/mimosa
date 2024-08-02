@@ -1,4 +1,5 @@
 import { API } from "./api.js";
+import { StateManager } from "./stateManager.js";
 
 function updateSummary() {
   let total = 0;
@@ -50,8 +51,11 @@ function createOrder() {
     }
   }
 
+  const selectedProperty = StateManager.getState("selectedProperty");
+  const propertyId = selectedProperty ? selectedProperty.id : null;
+
   const data = {
-    property_id: 1,
+    property_id: propertyId,
     lines: selectedCertificates,
   };
 
