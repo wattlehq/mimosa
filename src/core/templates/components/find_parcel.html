@@ -47,7 +47,7 @@
 </section>
 
 {% block extra_js %}
-<script src="{% static 'js/api.js' %}"></script>
-<script src="{% static 'js/stateManager.js' %}"></script>
-<script src="{% static 'js/parcelFinder.js' %}"></script>
+<script type="module" src="{% static 'js/api.js' %}"></script>
+<script type="module" src="{% static 'js/stateManager.js' %}"></script>
+<script type="module" src="{% static 'js/parcelFinder.js' %}"></script>
 {% endblock %}

@@ -1,7 +1,7 @@
 /**
  * StateManager object for managing application state in localStorage.
  */
-const StateManager = {
+export const StateManager = {
     /**
      * Set a state value in localStorage.
      * @param {string} key - The key to identify the state.

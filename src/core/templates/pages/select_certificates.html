@@ -13,8 +13,7 @@
         data-price="{{ certificate.price }}"
       />
       <label for="cert-{{ certificate.id }}">
-        {{ certificate.name }} ${{ certificate.price|floatformat:2 }}
-        {{certificate.id }}<br />
+        {{ certificate.name }} ${{ certificate.price|floatformat:2 }} <br />
       </label>
       <small>{{ certificate.description }}</small>
       <br />
@@ -30,7 +29,7 @@
         value="{{ fee.id }}"
         data-price="{{ fee.price }}"
       />
-      {{ fee.name }} ${{ fee.price|floatformat:2 }} {{ fee.id }} <br />
+      {{ fee.name }} ${{ fee.price|floatformat:2 }} <br />
       {% endfor %} {% endfor %}
     </li>
   </ul>

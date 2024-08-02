@@ -1,3 +1,5 @@
+import { API } from "./api.js";
+
 function updateSummary() {
   let total = 0;
   const selectedCertificates = document.querySelectorAll(
@@ -55,15 +57,7 @@ function createOrder() {
 
   console.log("Data being sent to server:", data);
 
-  fetch("/api/create-order-session/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": getCookie("csrftoken"),
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.json())
+  API.createOrderSession(data)
     .then((data) => {
       if (data.success && data.checkout_url) {
         window.location.href = data.checkout_url;
@@ -75,21 +69,6 @@ function createOrder() {
       console.error("Error creating order:", error);
       alert("An error occurred while creating the order.");
     });
-}
-
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== "") {
-    const cookies = document.cookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.substring(0, name.length + 1) === name + "=") {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
 }
 
 document.addEventListener("DOMContentLoaded", function () {

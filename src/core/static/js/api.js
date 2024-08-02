@@ -1,7 +1,7 @@
 /**
  * API object for making requests to the server.
  */
-const API = {
+export const API = {
     /**
      * Search for properties based on given parameters.
      * @param {Object} searchParams - The search parameters.
@@ -15,6 +15,24 @@ const API = {
             headers: {
                 'X-CSRFToken': getCookie('csrftoken'),
             },
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    },
+    /**
+     * Create an order session with the server.
+     * @param {Object} data - The order data to be sent to the server.
+     * @returns {Promise<Object>} A promise that resolves to the order session details.
+     * @throws {Error} If the network response is not ok.
+     */
+    createOrderSession: async (data) => {
+        const response = await fetch("/api/create-order-session/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: JSON.stringify(data),
         });
         if (!response.ok) throw new Error('Network response was not ok');
         return response.json();

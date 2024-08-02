@@ -1,3 +1,5 @@
+import { API } from './api.js';
+import { StateManager } from './stateManager.js';
 /**
  * ParcelFinder class for handling property search and selection.
  */
