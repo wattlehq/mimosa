@@ -1,0 +1,37 @@
+{% load static %}
+
+<section id="select-certificates">
+  <h2>2. Select certificates</h2>
+  {% csrf_token %}
+  <ul id="list-certificates">
+    {% for certificate in certificates %}
+    <li>
+      <input
+        type="checkbox"
+        name="certificate_{{ forloop.counter }}"
+        value="{{ certificate.id }}"
+        data-price="{{ certificate.price }}"
+      />
+      <label for="cert-{{ certificate.id }}">
+        {{ certificate.name }} ${{ certificate.price|floatformat:2 }}
+        {{certificate.id }}<br />
+      </label>
+      <small>{{ certificate.description }}</small>
+      <br />
+    </li>
+    {% endfor %}
+  </ul>
+  <ul id="list-fees">
+    <li>
+      {% for fee in fees %} {% for i in '12'|make_list %}
+      <input
+        type="checkbox"
+        name="fee_{{ forloop.counter }}"
+        value="{{ fee.id }}"
+        data-price="{{ fee.price }}"
+      />
+      {{ fee.name }} ${{ fee.price|floatformat:2 }} {{ fee.id }} <br />
+      {% endfor %} {% endfor %}
+    </li>
+  </ul>
+</section>

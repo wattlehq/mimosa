@@ -6,6 +6,8 @@ from core.views.home import home
 from core.views.order import order
 from core.views.success import success
 from core.webhooks.stripe import webhook_stripe
+from core.views.api import api_create_order_session
+from core.views.cancel import cancel
 
 urlpatterns = [
     path("", home, name="home"),
@@ -17,4 +19,6 @@ urlpatterns = [
          name="api_property_search"
          ),
     path("order/<uuid:order_hash>/", order, name="order"),
+    path('api/create-order-session/', api_create_order_session, name='api_create_order_session'),
+    path("cancel/", cancel, name="cancel"),
 ]

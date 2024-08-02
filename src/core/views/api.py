@@ -1,3 +1,4 @@
+import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
@@ -7,6 +8,7 @@ from core.services.property.search_properties import search_properties
 from core.services.property.group_properties_by_assessment import (
     group_properties_by_assessment,
     )
+from core.services.certificate.create_order_session import create_order_session
 
 
 @require_http_methods(["GET"])
@@ -52,3 +54,14 @@ def api_property_search(request):
         "isValid": True,
         "results": serialized_grouped_properties
     })
+
+@require_http_methods(["POST"])
+def api_create_order_session(request):
+    try:
+        data = json.loads(request.body)
+        result = create_order_session(data)
+        return JsonResponse(result)
+    except json.JSONDecodeError:
+        return JsonResponse({"success": False, "error": "Invalid JSON in request body"}, status=400)
+    except Exception as e:
+        return JsonResponse({"success": False, "error": str(e)}, status=500)

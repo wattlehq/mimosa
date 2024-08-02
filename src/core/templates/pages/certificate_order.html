@@ -11,17 +11,19 @@
     {% include "components/find_parcel.html" with form=form %}
   </section>
 
-  <!-- Placeholders for other sections -->
-  <section id="select-certificates" style="display:none;">
+  <section id="select-certificates">
     <!-- Content for selecting certificates -->
+    {% include "pages/select_certificates.html" with certificates=certificates fees=fees %}
   </section>
 
-  <section id="your-details" style="display:none;">
+  <section id="your-details">
     <!-- Form for user details -->
+     {% include "pages/your_details.html" %}
   </section>
 
-  <section id="finalise-payment" style="display:none;">
+  <section id="finalise-payment"">
     <!-- Payment form -->
+    {% include "pages/finalise_payment.html" %}
   </section>
 
 {% endblock %}

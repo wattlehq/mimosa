@@ -6,6 +6,8 @@ from django.views.decorators.http import require_http_methods
 from django.utils.decorators import method_decorator
 
 from core.forms.find_parcel import FindParcelForm
+from core.models.certificate import Certificate
+from core.models.fee import Fee
 
 
 @method_decorator(require_http_methods(["GET", "POST"]), name='dispatch')
@@ -27,4 +29,6 @@ class FindParcel(View):
             HttpResponse: Rendered certificate order page with an empty form.
         """
         form = FindParcelForm()
-        return render(request, self.template_name, {"form": form})
+        certificates = Certificate.objects.all()
+        fees = Fee.objects.all()
+        return render(request, self.template_name, {"form": form, "certificates": certificates, "fees": fees})
