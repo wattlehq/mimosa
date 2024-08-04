@@ -58,3 +58,30 @@ input {
 .fee input[type="checkbox"]:checked::before {
   transform: translateX(16px);
 }
+
+.certificate input[type="checkbox"] {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #555;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+}
+
+.certificate input[type="checkbox"]:checked {
+  background-color: #555;
+  position: relative;
+}
+
+.certificate input[type="checkbox"]:checked::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
