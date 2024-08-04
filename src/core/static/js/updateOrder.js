@@ -1,6 +1,9 @@
 import { API } from "./api.js";
 import { StateManager } from "./stateManager.js";
 
+/**
+ * Updates the order summary with the selected certificates and fees.
+ */
 function updateSummary() {
   let total = 0;
   const selectedCertificates = document.querySelectorAll(
@@ -30,6 +33,9 @@ function updateSummary() {
   }
 }
 
+/**
+ * Creates an order session
+ */
 function createOrder() {
   const selectedCertificates = Array.from(
     document.querySelectorAll(
@@ -44,7 +50,9 @@ function createOrder() {
     document.querySelectorAll('#list-fees input[type="checkbox"]:checked')
   ).map((checkbox) => parseInt(checkbox.value));
 
-  // Assign fees to certificates
+  /**
+   * Assign fee_id to each certificate if available
+   */
   for (let i = 0; i < selectedCertificates.length; i++) {
     if (i < selectedFees.length) {
       selectedCertificates[i].fee_id = selectedFees[i];
@@ -61,6 +69,9 @@ function createOrder() {
 
   console.log("Data being sent to server:", data);
 
+  /**
+   * Create the order session
+   */
   API.createOrderSession(data)
     .then((data) => {
       if (data.success && data.checkout_url) {

@@ -6,8 +6,6 @@ from core.models.certificate import Certificate
 from core.models.fee import Fee
 from core.services.utils.site import get_site_url
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
 def create_order_session(request_data):
     try:
         property_obj = Property.objects.get(id=request_data['property_id'])
