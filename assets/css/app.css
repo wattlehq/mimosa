@@ -61,24 +61,20 @@ input {
 
 .certificate input[type="checkbox"] {
   appearance: none;
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   border: 2px solid #555;
   border-radius: 50%;
   outline: none;
   cursor: pointer;
-}
-
-.certificate input[type="checkbox"]:checked {
-  background-color: #555;
   position: relative;
 }
 
 .certificate input[type="checkbox"]:checked::before {
   content: "";
-  width: 10px;
-  height: 10px;
-  background-color: white;
+  width: 16px;
+  height: 16px;
+  background-color: #4cd964;
   border-radius: 50%;
   position: absolute;
   top: 50%;
