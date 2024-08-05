@@ -52,7 +52,7 @@ function createOrder() {
   }));
 
   const selectedFees = Array.from(
-    document.querySelectorAll('#list-fees input[type="checkbox"]:checked')
+    document.querySelectorAll(`${htmlListFees} input[type="checkbox"]:checked`)
   ).map((checkbox) => parseInt(checkbox.value));
 
   /**
