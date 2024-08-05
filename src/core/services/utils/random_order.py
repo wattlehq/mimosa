@@ -1,5 +1,7 @@
 import random
+
 from django.db.models import Count
+
 from core.models.certificate import Certificate
 from core.models.property import Property
 
@@ -21,16 +23,14 @@ def generate_random_request():
           certificates.
     """
     # Get a random property
-    property_id = Property.objects.order_by('?').first().id
+    property_id = Property.objects.order_by("?").first().id
 
     # Get all certificates with their associated fees count
-    certificates = Certificate.objects.annotate(fee_count=Count('fees'))
+    certificates = Certificate.objects.annotate(fee_count=Count("fees"))
 
     # Randomly select between 1 and all certificates
     num_certificates = random.randint(1, certificates.count())
-    selected_certificates = random.sample(
-        list(certificates), num_certificates
-    )
+    selected_certificates = random.sample(list(certificates), num_certificates)
 
     lines = []
     for cert in selected_certificates:
@@ -38,12 +38,9 @@ def generate_random_request():
 
         # Randomly decide to include a fee (if the certificate has fees)
         if cert.fee_count > 0 and random.choice([True, False]):
-            fee = cert.fees.order_by('?').first()
+            fee = cert.fees.order_by("?").first()
             line["fee_id"] = fee.id
 
         lines.append(line)
 
-    return {
-        "property_id": property_id,
-        "lines": lines
-    }
+    return {"property_id": property_id, "lines": lines}

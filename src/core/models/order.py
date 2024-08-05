@@ -171,12 +171,10 @@ class OrderLine(Fulfillable):
         max_digits=10, decimal_places=2, null=True, blank=True
     )
     tax_amount_certificate = models.DecimalField(
-        max_digits=10, decimal_places=2,
-        null=True, blank=True
+        max_digits=10, decimal_places=2, null=True, blank=True
     )
     tax_amount_fee = models.DecimalField(
-        max_digits=10, decimal_places=2,
-        null=True, blank=True
+        max_digits=10, decimal_places=2, null=True, blank=True
     )
 
     def save(self, *args, **kwargs):

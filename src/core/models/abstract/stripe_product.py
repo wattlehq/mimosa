@@ -3,8 +3,8 @@ from decimal import Decimal
 import stripe
 from django.conf import settings
 from django.db import models
-from core.models.tax_rate import TaxRate
 
+from core.models.tax_rate import TaxRate
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -13,10 +13,7 @@ class StripeProduct(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     tax_rate = models.ForeignKey(
-        TaxRate,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
+        TaxRate, on_delete=models.SET_NULL, null=True, blank=True
     )
 
     stripe_product_id = models.CharField(max_length=100, blank=True, null=True)
@@ -44,7 +41,7 @@ class StripeProduct(models.Model):
                 price_new=record_new.price,
                 pk=str(record_new.pk),
                 model_name=record_new.__class__.__name__.lower(),
-                tax_rate=record_new.tax_rate
+                tax_rate=record_new.tax_rate,
             )
         else:
             sync_product_id, sync_price_id = sync_to_stripe_existing(
@@ -55,7 +52,7 @@ class StripeProduct(models.Model):
                 price_new=record_new.price,
                 price_old=record_old.price,
                 tax_rate_new=record_new.tax_rate,
-                tax_rate_old=record_old.tax_rate
+                tax_rate_old=record_old.tax_rate,
             )
 
         self.stripe_product_id = sync_product_id
@@ -73,7 +70,7 @@ def sync_to_stripe_new(
     price_new: Decimal,
     pk: str,
     model_name: str,
-    tax_rate: TaxRate = None
+    tax_rate: TaxRate = None,
 ):
     stripe_product = stripe.Product.create(
         name=name_new, metadata={model_name + "_pk": pk}
@@ -103,7 +100,7 @@ def sync_to_stripe_existing(
     name_new: str,
     name_old: str,
     tax_rate_new: TaxRate = None,
-    tax_rate_old: TaxRate = None
+    tax_rate_old: TaxRate = None,
 ):
     price_id_new = price_id
     price_new_cents = int(price_new * 100)

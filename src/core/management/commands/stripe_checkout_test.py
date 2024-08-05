@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
-from core.services.utils.stripe_service import StripeService
 from core.services.utils.random_order import generate_random_request
+from core.services.utils.stripe_service import StripeService
 
 # Input the "lines" value if you aren't using the --random flag
 manual_request = {
@@ -18,13 +18,14 @@ class Command(BaseCommand):
     either predefined or randomly generated order details.
 
     """
+
     help = "Create a Stripe checkout instance"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--random',
-            action='store_true',
-            help='Use random selection of certificates and fees',
+            "--random",
+            action="store_true",
+            help="Use random selection of certificates and fees",
         )
 
     def handle(self, *args, **options):
@@ -45,7 +46,7 @@ class Command(BaseCommand):
         """
         StripeService.initialise()  # Initialise Stripe API key
 
-        if options['random']:
+        if options["random"]:
             request = generate_random_request()
         else:
             request = manual_request
@@ -55,16 +56,14 @@ class Command(BaseCommand):
         try:
             order_session = StripeService.save_order_session(request)
             stripe_checkout = StripeService.create_stripe_checkout_session(
-                order_session,
-                request
+                order_session, request
             )
             StripeService.update_order_session(
-                order_session,
-                stripe_checkout.stripe_id
+                order_session, stripe_checkout.stripe_id
             )
 
-            self.stdout.write(self.style.SUCCESS(
-                f"Checkout URL: {stripe_checkout.url}")
+            self.stdout.write(
+                self.style.SUCCESS(f"Checkout URL: {stripe_checkout.url}")
             )
 
         except Exception as e:

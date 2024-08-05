@@ -1,6 +1,7 @@
 import stripe
 from django.conf import settings
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 
@@ -12,22 +13,17 @@ class TaxRate(models.Model):
     percentage = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        validators=[
-            MinValueValidator(0),
-            MaxValueValidator(100)
-        ]
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
     )
     stripe_tax_rate_id = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True
+        max_length=100, blank=True, null=True
     )
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
         verbose_name = "Tax Rate"
         verbose_name_plural = "Tax Rates"
 
@@ -51,9 +47,7 @@ class TaxRate(models.Model):
             percentage=float(self.percentage),
             inclusive=False,  # Assuming tax is not included in the price
             active=self.is_active,
-            metadata={
-                'tax_rate_id': str(self.id)
-            }
+            metadata={"tax_rate_id": str(self.id)},
         )
         self.stripe_tax_rate_id = stripe_tax_rate.id
 
@@ -62,9 +56,7 @@ class TaxRate(models.Model):
         stripe.TaxRate.modify(
             self.stripe_tax_rate_id,
             active=self.is_active,
-            metadata={
-                'tax_rate_id': str(self.id)
-            }
+            metadata={"tax_rate_id": str(self.id)},
         )
 
     @classmethod

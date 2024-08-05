@@ -54,15 +54,19 @@ class FeeAdmin(admin.ModelAdmin):
 @admin.register(TaxRate)
 class TaxRateAdmin(admin.ModelAdmin):
     list_display = [
-        'name', 'percentage', 'is_active', 'created_at', 'updated_at'
+        "name",
+        "percentage",
+        "is_active",
+        "created_at",
+        "updated_at",
     ]
-    list_filter = ['is_active']
-    search_fields = ['name']
-    readonly_fields = ['stripe_tax_rate_id', 'created_at', 'updated_at']
+    list_filter = ["is_active"]
+    search_fields = ["name"]
+    readonly_fields = ["stripe_tax_rate_id", "created_at", "updated_at"]
 
     def get_readonly_fields(self, request, obj=None):
         if obj:  # Editing an existing object
-            return self.readonly_fields + ['name', 'percentage']
+            return self.readonly_fields + ["name", "percentage"]
         return self.readonly_fields
 
     def has_delete_permission(self, request, obj=None):

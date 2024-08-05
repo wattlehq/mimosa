@@ -108,17 +108,13 @@ def save_event_order(event: stripe.checkout.Session):
         if session_order_line.certificate.tax_rate:
             tax_rate = session_order_line.certificate.tax_rate
             tax_amount = calculate_tax(
-                session_order_line.cost_certificate,
-                tax_rate
+                session_order_line.cost_certificate, tax_rate
             )
             order_line.tax_amount_certificate = tax_amount
 
         if session_order_line.fee and session_order_line.fee.tax_rate:
             tax_rate = session_order_line.fee.tax_rate
-            tax_amount = calculate_tax(
-                session_order_line.cost_fee,
-                tax_rate
-            )
+            tax_amount = calculate_tax(session_order_line.cost_fee, tax_rate)
             order_line.tax_amount_fee = tax_amount
 
         order_line.save()

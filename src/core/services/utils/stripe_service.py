@@ -1,8 +1,10 @@
 import stripe
 from django.conf import settings
+
 from core.models.certificate import Certificate
 from core.models.fee import Fee
-from core.models.order import OrderSession, OrderSessionLine
+from core.models.order import OrderSession
+from core.models.order import OrderSessionLine
 from core.models.property import Property
 from core.services.utils.site import get_site_url
 
@@ -11,6 +13,7 @@ class StripeService:
     """
     A service class for handling Stripe-related operations.
     """
+
     @classmethod
     def initialise(cls):
         stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -35,10 +38,7 @@ class StripeService:
         for value in request["lines"]:
             certificate_id = value["certificate_id"]
             certificate = Certificate.objects.get(pk=certificate_id)
-            line_item = {
-                "price": certificate.stripe_price_id,
-                "quantity": 1
-            }
+            line_item = {"price": certificate.stripe_price_id, "quantity": 1}
             if certificate.tax_rate:
                 line_item["tax_rates"] = [
                     certificate.tax_rate.stripe_tax_rate_id
@@ -52,7 +52,7 @@ class StripeService:
                     fee = Fee.objects.get(pk=fee_id)
                     fee_line_item = {
                         "price": fee.stripe_price_id,
-                        "quantity": 1
+                        "quantity": 1,
                     }
                     if fee.tax_rate:
                         fee_line_item["tax_rates"] = [
@@ -63,9 +63,7 @@ class StripeService:
 
     @classmethod
     def create_stripe_checkout_session(
-        cls,
-        order_session: OrderSession,
-        request
+        cls, order_session: OrderSession, request
     ):
         """
         Create a Stripe checkout session for the given order session and req.
@@ -133,10 +131,7 @@ class StripeService:
 
     @classmethod
     def update_order_session(
-        
-        cls,
-        order_session: OrderSession,
-        stripe_checkout_id: str
+        cls, order_session: OrderSession, stripe_checkout_id: str
     ):
         """
         Update the given OrderSession with the Stripe checkout ID.
