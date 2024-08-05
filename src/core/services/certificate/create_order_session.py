@@ -29,8 +29,6 @@ def create_order_session(request_data):
                 order_line.cost_fee = fee.price
                 order_line.save()
                 line_items.append({"price": fee.stripe_price_id, "quantity": 1})
-        
-        print('Line items for Stripe:', line_items)
 
         stripe_checkout = stripe.checkout.Session.create(
             line_items=line_items,
