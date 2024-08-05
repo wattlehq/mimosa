@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("user-details-form");
   const displayDetails = document.getElementById("display-details");
   const editButton = document.getElementById("edit-details");
+  const displayFullName = document.getElementById("display-full-name");
+  const displayBusiness = document.getElementById("display-business");
+  const inputFullName = document.getElementById("full-name");
+  const inputBusiness = document.getElementById("business");
 
   /*
   * Display user details on page load
@@ -11,10 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function displayUserDetails() {
     const userDetails = StateManager.getState("userDetails");
     if (userDetails) {
-      document.getElementById("display-full-name").textContent =
-        userDetails.fullName;
-      document.getElementById("display-business").textContent =
-        userDetails.business;
+      displayFullName.textContent = userDetails.fullName;
+      displayBusiness.textContent = userDetails.business;
       form.style.display = "none";
       displayDetails.style.display = "block";
     }
@@ -27,8 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
-    const fullName = document.getElementById("full-name").value;
-    const business = document.getElementById("business").value;
+    const fullName = inputFullName.value;
+    const business = inputBusiness.value;
 
     const userDetails = { fullName, business };
     StateManager.setState("userDetails", userDetails);
