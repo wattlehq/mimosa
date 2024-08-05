@@ -19,8 +19,9 @@
               {{ certificate.name }} {{ certificate.price|money }}<br/>
             </label>
             <small>
-              {% if certificate.description %} {{ certificate.description }}
-              {% else %} No description available {% endif %}
+              {% if certificate.description %}
+                {{ certificate.description }}
+              {% endif %}
             </small>
             {% if certificate.fees.exists %}
               <ul id="list-fees">
