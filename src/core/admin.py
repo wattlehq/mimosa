@@ -9,6 +9,7 @@ from core.models.order import OrderSession
 from core.models.order import OrderSessionLine
 from core.models.property import Property
 from core.models.settings import Settings
+from core.models.tax_rate import TaxRate
 
 
 class OrderLineInline(admin.TabularInline):
@@ -48,6 +49,24 @@ class FeeAdmin(admin.ModelAdmin):
         "stripe_product_id",
         "stripe_price_id",
     )
+
+
+@admin.register(TaxRate)
+class TaxRateAdmin(admin.ModelAdmin):
+    list_display = [
+        'name', 'percentage', 'is_active', 'created_at', 'updated_at'
+    ]
+    list_filter = ['is_active']
+    search_fields = ['name']
+    readonly_fields = ['stripe_tax_rate_id', 'created_at', 'updated_at']
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # Editing an existing object
+            return self.readonly_fields + ['name', 'percentage']
+        return self.readonly_fields
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(Settings)
