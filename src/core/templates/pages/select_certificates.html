@@ -18,7 +18,13 @@
           <label for="cert-{{ certificate.id }}">
             {{ certificate.name }} ${{ certificate.price|floatformat:2 }}<br />
           </label>
-          <small>{{ certificate.description }}</small>
+          <small>
+            {% if certificate.description %}
+              {{ certificate.description }}
+            {% else %}
+              No description available
+            {% endif %}
+          </small>
           <br />
         </div>
       </li>
