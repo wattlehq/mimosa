@@ -10,6 +10,7 @@ from core.models.order import OrderSession
 from core.models.order import OrderSessionLine
 from core.models.order import OrderSessionStatus
 from core.models.property import Property
+from core.models.tax_rate import TaxRate
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
@@ -17,6 +18,19 @@ endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
 @csrf_exempt
 def webhook_stripe(request):
+    """
+    Handle incoming Stripe webhook events.
+
+    This function verifies the webhook signature, processes the event if it's
+    a completed checkout session, and returns an appropriate HTTP response.
+
+    Args:
+        request (HttpRequest): The incoming webhook request.
+
+    Returns:
+        HttpResponse: 200 if the event was processed successfully, 400 for
+                      invalid payloads or unexpected event types.
+    """
     payload = request.body
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
 
@@ -46,6 +60,15 @@ def webhook_stripe(request):
 # Creates an order instance from a Stripe Checkout Session.
 @transaction.atomic
 def save_event_order(event: stripe.checkout.Session):
+    """
+    Create an Order instance from a completed Stripe Checkout Session.
+
+    This function retrieves the OrderSession, creates an Order, and generates
+    associated OrderLines with tax calculations.
+
+    Args:
+        event (stripe.checkout.Session): The completed Stripe Checkout Session.
+    """
     order_session_id = event.metadata["order_session_pk"]
     order_session = OrderSession.objects.get(id=order_session_id)
     property_obj = Property.objects.get(id=order_session.property_id)
@@ -81,6 +104,23 @@ def save_event_order(event: stripe.checkout.Session):
             cost_fee=session_order_line.cost_fee,
         )
 
+        # Calculate and save tax information
+        if session_order_line.certificate.tax_rate:
+            tax_rate = session_order_line.certificate.tax_rate
+            tax_amount = calculate_tax(
+                session_order_line.cost_certificate,
+                tax_rate
+            )
+            order_line.tax_amount_certificate = tax_amount
+
+        if session_order_line.fee and session_order_line.fee.tax_rate:
+            tax_rate = session_order_line.fee.tax_rate
+            tax_amount = calculate_tax(
+                session_order_line.cost_fee,
+                tax_rate
+            )
+            order_line.tax_amount_fee = tax_amount
+
         order_line.save()
 
     order_session.status = OrderSessionStatus.COMPLETED
@@ -88,6 +128,14 @@ def save_event_order(event: stripe.checkout.Session):
 
 
 def save_event_order_error(event: stripe.checkout.Session, e: Exception):
+    """
+    Update OrderSession status to ERROR when an exception occurs.
+
+    Args:
+        event (stripe.checkout.Session): The Stripe Checkout Session that
+                                         caused the error.
+        e (Exception): The exception that occurred during order processing.
+    """
     order_session_id = event.metadata["order_session_pk"]
     order_session = OrderSession.objects.get(id=order_session_id)
     order_session.status_error = str(e)
@@ -97,7 +145,21 @@ def save_event_order_error(event: stripe.checkout.Session, e: Exception):
 
 # Creates an order instance from a certificate and fee PK map.
 def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
+    """
+    Process a completed Stripe Checkout Session.
+
+    This function attempts to save the order and handles any exceptions that
+    may occur during the process.
+
+    Args:
+        event (stripe.checkout.Session): The completed Stripe Checkout Session.
+    """
     try:
         save_event_order(event)
     except Exception as e:
         save_event_order_error(event, e)
+
+
+def calculate_tax(amount: float, tax_rate: TaxRate) -> float:
+    """Calculate tax amount based on the given amount and tax rate."""
+    return amount * (tax_rate.percentage / 100)
