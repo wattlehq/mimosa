@@ -1,5 +1,5 @@
 import { API } from "./api.js";
-import { StateManager, stateKeys } from "./stateManager.js";
+import { stateKeys, StateManager } from "./stateManager.js";
 
 const htmlListCertificates = "#list-certificates";
 const htmlListFees = "#list-fees";
@@ -42,34 +42,35 @@ function updateSummary() {
  * Creates an order session
  */
 function createOrder() {
+  const order = {};
+
   const selectedCertificates = Array.from(
     document.querySelectorAll(
       `${htmlListCertificates} input[type="checkbox"]:checked`
     )
-  ).map((checkbox) => ({
-    certificate_id: parseInt(checkbox.value),
-    fee_id: null,
-  }));
+  );
 
   const selectedFees = Array.from(
     document.querySelectorAll(`${htmlListFees} input[type="checkbox"]:checked`)
-  ).map((checkbox) => parseInt(checkbox.value));
+  );
 
-  /**
-   * Assign fee_id to each certificate if available
-   */
-  for (let i = 0; i < selectedCertificates.length; i++) {
-    if (i < selectedFees.length) {
-      selectedCertificates[i].fee_id = selectedFees[i];
-    }
-  }
+  selectedCertificates.forEach(selectedCertificate => {
+    const certId = parseInt(selectedCertificate.value);
+    order[certId] = { certificate_id: certId, fee_id: null };
+  });
+
+  selectedFees.forEach(selectedFee => {
+    const certId = selectedFee.dataset.certificate;
+    const feeId = parseInt(selectedFee.value);
+    if (certId && order[certId]) order[certId].fee_id = feeId;
+  });
 
   const selectedProperty = StateManager.getState(stateKeys.selectedProperty);
   const propertyId = selectedProperty ? selectedProperty.id : null;
 
   const data = {
     property_id: propertyId,
-    lines: selectedCertificates,
+    lines: Object.values(order)
   };
 
   console.debug("Data being sent to server:", data);
