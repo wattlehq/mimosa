@@ -1,16 +1,21 @@
 import { API } from "./api.js";
 import { StateManager } from "./stateManager.js";
 
+const htmlListCertificates = "#list-certificates";
+const htmlListFees = "#list-fees";
+const htmlOrderSummary = "#order-summary";
+const htmlContinueButton = "#continue-button";
+
 /**
  * Updates the order summary with the selected certificates and fees.
  */
 function updateSummary() {
   let total = 0;
   const selectedCertificates = document.querySelectorAll(
-    '#list-certificates input[type="checkbox"]:checked'
+    `${htmlListCertificates} input[type="checkbox"]:checked`
   );
   const selectedFees = document.querySelectorAll(
-    '#list-fees input[type="checkbox"]:checked'
+    `${htmlListFees} input[type="checkbox"]:checked`
   );
 
   selectedCertificates.forEach((item) => {
@@ -27,9 +32,9 @@ function updateSummary() {
 
   console.debug(`Total calculated: ${total}`);
 
-  const summaryElement = document.getElementById("order-summary");
+  const summaryElement = document.querySelector(htmlOrderSummary);
   if (summaryElement) {
-    summaryElement.textContent = `Total: $${total.toFixed(2)}`;
+    summaryElement.textContent = `Total: ${total.toFixed(2)}`;
   }
 }
 
@@ -39,7 +44,7 @@ function updateSummary() {
 function createOrder() {
   const selectedCertificates = Array.from(
     document.querySelectorAll(
-      '#list-certificates input[type="checkbox"]:checked'
+      `${htmlListCertificates} input[type="checkbox"]:checked`
     )
   ).map((checkbox) => ({
     certificate_id: parseInt(checkbox.value),
@@ -88,7 +93,7 @@ function createOrder() {
 
 document.addEventListener("DOMContentLoaded", function () {
   const checkboxes = document.querySelectorAll(
-    '#list-certificates input[type="checkbox"], #list-fees input[type="checkbox"]'
+    `${htmlListCertificates} input[type="checkbox"], ${htmlListFees} input[type="checkbox"]`
   );
   checkboxes.forEach((checkbox) => {
     checkbox.addEventListener("change", updateSummary);
@@ -96,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   updateSummary();
 
-  const continueButton = document.getElementById("continue-button");
+  const continueButton = document.querySelector(htmlContinueButton);
   if (continueButton) {
     continueButton.addEventListener("click", function (event) {
       event.preventDefault();
