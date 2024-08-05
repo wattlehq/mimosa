@@ -1,5 +1,5 @@
 import { API } from './api.js';
-import { StateManager } from './stateManager.js';
+import { StateManager, stateKeys } from "./stateManager.js";
 /**
  * ParcelFinder class for handling property search and selection.
  */
@@ -229,8 +229,8 @@ class ParcelFinder {
         const selectedPropertyRadio = document.querySelector('input[name="selected_property"]:checked');
         if (selectedPropertyRadio) {
             const selectedProperty = JSON.parse(selectedPropertyRadio.value);
-            StateManager.setState('selectedProperty', selectedProperty);
-            StateManager.clearState('groupedProperties');
+            StateManager.setState(stateKeys.selectedProperty, selectedProperty);
+            StateManager.clearState(stateKeys.groupedProperties);
             console.debug('Property selected and saved locally. Other data cleared.');
             alert('Property selected and saved locally. Other data cleared.');
         } else {

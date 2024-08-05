@@ -1,4 +1,4 @@
-import { StateManager } from "./stateManager.js";
+import { StateManager, stateKeys } from "./stateManager.js";
 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("user-details-form");
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const business = inputBusiness.value;
 
     const userDetails = { fullName, business };
-    StateManager.setState("userDetails", userDetails);
+    StateManager.setState(stateKeys.userDetails, userDetails);
     displayUserDetails();
   });
 
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
    * Clear user details when the page is refreshed
    */
   window.addEventListener("beforeunload", function () {
-    StateManager.clearState("userDetails");
+    StateManager.clearState(stateKeys.userDetails);
   });
 
   /**

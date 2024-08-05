@@ -1,5 +1,5 @@
 import { API } from "./api.js";
-import { StateManager } from "./stateManager.js";
+import { StateManager, stateKeys } from "./stateManager.js";
 
 const htmlListCertificates = "#list-certificates";
 const htmlListFees = "#list-fees";
@@ -64,7 +64,7 @@ function createOrder() {
     }
   }
 
-  const selectedProperty = StateManager.getState("selectedProperty");
+  const selectedProperty = StateManager.getState(stateKeys.selectedProperty);
   const propertyId = selectedProperty ? selectedProperty.id : null;
 
   const data = {

@@ -1,3 +1,9 @@
+export const stateKeys = {
+    userDetails: "userDetails",
+    selectedProperty: "selectedProperty",
+    groupedProperties: "groupedProperties"
+  };
+
 /**
  * StateManager object for managing application state in localStorage.
  */
