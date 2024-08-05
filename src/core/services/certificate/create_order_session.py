@@ -6,15 +6,15 @@ from core.models.certificate import Certificate
 from core.models.fee import Fee
 from core.services.utils.site import get_site_url
 
-def create_order_session(request_data):
+def create_order_session(property_id, order_lines):
     try:
-        property_obj = Property.objects.get(id=request_data['property_id'])
+        property_obj = Property.objects.get(id=property_id)
         order_session = OrderSession(property=property_obj)
         order_session.save()
 
         line_items = []
 
-        for item in request_data['lines']:
+        for item in order_lines:
             certificate = Certificate.objects.get(id=item['certificate_id'])
             order_line = OrderSessionLine.objects.create(
                 order_session=order_session,

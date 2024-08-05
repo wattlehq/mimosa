@@ -59,7 +59,10 @@ def api_property_search(request):
 def api_create_order_session(request):
     try:
         data = json.loads(request.body)
-        result = create_order_session(data)
+        result = create_order_session(
+            property_id=data['property_id'],
+            order_lines=data['lines']
+        )
         return JsonResponse(result)
     except json.JSONDecodeError:
         return JsonResponse({"success": False, "error": "Invalid JSON in request body"}, status=400)
