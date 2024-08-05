@@ -7,8 +7,8 @@
   <div class="certificates-and-fees">
     <ul id="list-certificates">
       {% for certificate in certificates %}
-      <div class="item certificate">
-        <li>
+      <li>
+        <div class="item certificate">
           <input
             type="checkbox"
             name="certificate_{{ forloop.counter }}"
@@ -20,9 +20,8 @@
           </label>
           <small>{{ certificate.description }}</small>
           <br />
-        </li>
-      </div>
-
+        </div>
+      </li>
       {% endfor %}
     </ul>
     <ul id="list-fees">
