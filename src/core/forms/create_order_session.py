@@ -3,6 +3,7 @@ from django import forms
 from core.models.property import Property
 
 
+# @todo Implement customer details
 class CreateOrderSessionForm(forms.Form):
     property_id = forms.IntegerField(widget=forms.HiddenInput())
     lines = forms.JSONField(widget=forms.HiddenInput())
