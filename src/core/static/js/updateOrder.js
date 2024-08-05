@@ -15,17 +15,17 @@ function updateSummary() {
 
   selectedCertificates.forEach((item) => {
     const price = parseFloat(item.dataset.price);
-    console.log(`Selected certificate: ${item.value}, Price: ${price}`);
+    console.debug(`Selected certificate: ${item.value}, Price: ${price}`);
     total += price;
   });
 
   selectedFees.forEach((item) => {
     const price = parseFloat(item.dataset.price);
-    console.log(`Selected fee: ${item.name}, Price: ${price}`);
+    console.debug(`Selected fee: ${item.name}, Price: ${price}`);
     total += price;
   });
 
-  console.log(`Total calculated: ${total}`);
+  console.debug(`Total calculated: ${total}`);
 
   const summaryElement = document.getElementById("order-summary");
   if (summaryElement) {
@@ -67,7 +67,7 @@ function createOrder() {
     lines: selectedCertificates,
   };
 
-  console.log("Data being sent to server:", data);
+  console.debug("Data being sent to server:", data);
 
   /**
    * Create the order session
