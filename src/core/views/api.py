@@ -9,6 +9,7 @@ from core.services.property.group_properties_by_assessment import (
     group_properties_by_assessment,
     )
 from core.services.certificate.create_order_session import create_order_session
+from core.forms.create_order_session import CreateOrderSessionForm
 
 
 @require_http_methods(["GET"])
@@ -58,12 +59,15 @@ def api_property_search(request):
 @require_http_methods(["POST"])
 def api_create_order_session(request):
     try:
-        data = json.loads(request.body)
-        result = create_order_session(
-            property_id=data['property_id'],
-            order_lines=data['lines']
-        )
-        return JsonResponse(result)
+        form = CreateOrderSessionForm(json.loads(request.body))
+        if form.is_valid():
+            result = create_order_session(
+                property_id=form.cleaned_data['property_id'],
+                order_lines=form.cleaned_data['lines']
+            )
+            return JsonResponse(result)
+        else:
+            return JsonResponse({"success": False, "errors": form.errors}, status=400)
     except json.JSONDecodeError:
         return JsonResponse({"success": False, "error": "Invalid JSON in request body"}, status=400)
     except Exception as e:
