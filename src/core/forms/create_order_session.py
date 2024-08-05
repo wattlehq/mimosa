@@ -4,8 +4,8 @@ from core.models.property import Property
 
 
 class CreateOrderSessionForm(forms.Form):
-    property_id = forms.IntegerField()
-    lines = forms.JSONField()
+    property_id = forms.IntegerField(widget=forms.HiddenInput())
+    lines = forms.JSONField(widget=forms.HiddenInput())
 
     def clean_property_id(self):
         property_id = self.cleaned_data['property_id']

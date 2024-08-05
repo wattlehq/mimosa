@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_http_methods
 
+from core.forms.create_order_session import CreateOrderSessionForm
 from core.forms.find_parcel import FindParcelForm
 from core.models.certificate import Certificate
 
@@ -28,9 +29,12 @@ class FindParcel(View):
             HttpResponse: Rendered certificate order page with an empty form.
         """
         form = FindParcelForm()
+        form_create_order_session = CreateOrderSessionForm()
         certificates = Certificate.objects.all()
         return render(
             request,
             self.template_name,
-            {"form": form, "certificates": certificates}
+            {"form": form,
+             "form_create_order_session": form_create_order_session,
+             "certificates": certificates}
         )

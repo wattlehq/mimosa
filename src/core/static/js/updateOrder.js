@@ -1,21 +1,21 @@
-import { API } from "./api.js";
 import { stateKeys, StateManager } from "./stateManager.js";
 
-const htmlListCertificates = "#list-certificates";
-const htmlListFees = "#list-fees";
 const htmlOrderSummary = "#order-summary";
-const htmlContinueButton = "#continue-button";
+const htmlInputProperty = 'input[type="hidden"][name^="property_id"]';
+const htmlInputLines = 'input[type="hidden"][name^="lines"]';
+const htmlOptionsCertificates = 'input[type="checkbox"][id^="certificate"]';
+const htmlOptionsFees = 'input[type="checkbox"][id^="fee"]';
 
-/**
- * Updates the order summary with the selected certificates and fees.
- */
-function updateSummary() {
+// Update totals with selected options.
+function updateTotals() {
   let total = 0;
+
   const selectedCertificates = document.querySelectorAll(
-    `${htmlListCertificates} input[type="checkbox"]:checked`
+    `${htmlOptionsCertificates}:checked`
   );
+
   const selectedFees = document.querySelectorAll(
-    `${htmlListFees} input[type="checkbox"]:checked`
+    `${htmlOptionsFees}:checked`
   );
 
   selectedCertificates.forEach((item) => {
@@ -38,20 +38,18 @@ function updateSummary() {
   }
 }
 
-/**
- * Creates an order session
- */
-function createOrder() {
+// Update order lines with selected options.
+function updateLines() {
   const order = {};
 
   const selectedCertificates = Array.from(
     document.querySelectorAll(
-      `${htmlListCertificates} input[type="checkbox"]:checked`
+      `${htmlOptionsCertificates}:checked`
     )
   );
 
   const selectedFees = Array.from(
-    document.querySelectorAll(`${htmlListFees} input[type="checkbox"]:checked`)
+    document.querySelectorAll(`${htmlOptionsFees}:checked`)
   );
 
   selectedCertificates.forEach(selectedCertificate => {
@@ -65,48 +63,33 @@ function createOrder() {
     if (certId && order[certId]) order[certId].fee_id = feeId;
   });
 
-  const selectedProperty = StateManager.getState(stateKeys.selectedProperty);
-  const propertyId = selectedProperty ? selectedProperty.id : undefined;
 
-  const data = {
-    property_id: propertyId,
-    lines: Object.values(order)
-  };
+  const data = Object.values(order);
+  const linesJson = document.querySelector(htmlInputLines);
+  linesJson.value = JSON.stringify(data);
+}
 
-  console.debug("Data being sent to server:", data);
+function updateProperty() {
+  const value = StateManager.getState(stateKeys.selectedProperty);
 
-  /**
-   * Create the order session
-   */
-  API.createOrderSession(data)
-    .then((data) => {
-      if (data.success && data.checkout_url) {
-        window.location.href = data.checkout_url;
-      } else {
-        throw new Error(data.error || "Unknown error");
-      }
-    })
-    .catch((error) => {
-      console.error("Error creating order:", error);
-      alert("An error occurred while creating the order.");
-    });
+  const input = document.querySelector(
+    `${htmlInputProperty}`
+  );
+
+  if (input && value) input.value = value.id;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  const checkboxes = document.querySelectorAll(
-    `${htmlListCertificates} input[type="checkbox"], ${htmlListFees} input[type="checkbox"]`
+  const optionsAll = document.querySelectorAll(
+    `${htmlOptionsCertificates}, ${htmlOptionsFees}`
   );
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", updateSummary);
+
+  optionsAll.forEach((checkbox) => {
+    checkbox.addEventListener("change", updateTotals);
+    checkbox.addEventListener("change", updateLines);
   });
 
-  updateSummary();
-
-  const continueButton = document.querySelector(htmlContinueButton);
-  if (continueButton) {
-    continueButton.addEventListener("click", function (event) {
-      event.preventDefault();
-      createOrder();
-    });
-  }
+  updateTotals();
+  updateLines();
+  updateProperty();
 });

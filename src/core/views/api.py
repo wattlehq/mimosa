@@ -1,15 +1,12 @@
-import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from core.forms.find_parcel import FindParcelForm
-from core.services.property.serialize_property import serialize_property
-from core.services.property.search_properties import search_properties
 from core.services.property.group_properties_by_assessment import (
     group_properties_by_assessment,
-    )
-from core.services.certificate.create_order_session import create_order_session
-from core.forms.create_order_session import CreateOrderSessionForm
+)
+from core.services.property.search_properties import search_properties
+from core.services.property.serialize_property import serialize_property
 
 
 @require_http_methods(["GET"])
@@ -43,7 +40,7 @@ def api_property_search(request):
         section,
         deposited_plan,
         street_address
-        )
+    )
     grouped_properties = group_properties_by_assessment(properties)
 
     serialized_grouped_properties = {
@@ -55,20 +52,3 @@ def api_property_search(request):
         "isValid": True,
         "results": serialized_grouped_properties
     })
-
-@require_http_methods(["POST"])
-def api_create_order_session(request):
-    try:
-        form = CreateOrderSessionForm(json.loads(request.body))
-        if form.is_valid():
-            result = create_order_session(
-                property_id=form.cleaned_data['property_id'],
-                order_lines=form.cleaned_data['lines']
-            )
-            return JsonResponse(result)
-        else:
-            return JsonResponse({"success": False, "errors": form.errors}, status=400)
-    except json.JSONDecodeError:
-        return JsonResponse({"success": False, "error": "Invalid JSON in request body"}, status=400)
-    except Exception as e:
-        return JsonResponse({"success": False, "error": str(e)}, status=500)

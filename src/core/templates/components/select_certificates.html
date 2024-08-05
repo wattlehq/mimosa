@@ -3,47 +3,52 @@
 <section id="select-certificates">
   <link rel="stylesheet" href="{% static 'css/app.css' %}"/>
   <h2>2. Select certificates</h2>
-  {% csrf_token %}
-  <div class="certificates-and-fees">
-    <ul id="list-certificates">
-      {% for certificate in certificates %}
-        <li>
-          <div class="item certificate">
-            <input
-              type="checkbox"
-              name="certificate_{{ forloop.counter }}"
-              value="{{ certificate.id }}"
-              data-price="{{ certificate.price }}"
-            />
-            <label for="cert-{{ certificate.id }}">
-              {{ certificate.name }} {{ certificate.price|money }}<br/>
-            </label>
-            <small>
-              {% if certificate.description %}
-                {{ certificate.description }}
+  <form method="post" action="{% url 'order_create' %}">
+    {% csrf_token %}
+    {{ form.property_id }}
+    {{ form.lines }}
+    <div class="certificates-and-fees">
+      <ul id="list-certificates">
+        {% for certificate in certificates %}
+          <li>
+            <div class="item certificate">
+              <input
+                type="checkbox"
+                id="certificate_{{ forloop.counter }}"
+                value="{{ certificate.id }}"
+                data-price="{{ certificate.price }}"
+              />
+              <label for="cert-{{ certificate.id }}">
+                {{ certificate.name }} {{ certificate.price|money }}<br/>
+              </label>
+              <small>
+                {% if certificate.description %}
+                  {{ certificate.description }}
+                {% endif %}
+              </small>
+              {% if certificate.fees.exists %}
+                <ul id="list-fees">
+                  {% for fee in certificate.fees.all %}
+                    <li>
+                      <div class="item fee">
+                        <input
+                          type="checkbox"
+                          id="fee_{{ forloop.counter }}"
+                          value="{{ fee.id }}"
+                          data-price="{{ fee.price }}"
+                          data-certificate="{{ certificate.id }}"
+                        />
+                        {{ fee.name }} {{ fee.price|money }}<br/>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
               {% endif %}
-            </small>
-            {% if certificate.fees.exists %}
-              <ul id="list-fees">
-                {% for fee in certificate.fees.all %}
-                  <li>
-                    <div class="item fee">
-                      <input
-                        type="checkbox"
-                        name="fee_{{ forloop.counter }}"
-                        value="{{ fee.id }}"
-                        data-price="{{ fee.price }}"
-                        data-certificate="{{ certificate.id }}"
-                      />
-                      {{ fee.name }} {{ fee.price|money }}<br/>
-                    </div>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <input type="submit" value="Submit"/>
+  </form>
 </section>
