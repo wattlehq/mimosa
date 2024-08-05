@@ -13,17 +13,17 @@
 
   <section id="select-certificates">
     <!-- Content for selecting certificates -->
-    {% include "pages/select_certificates.html" with certificates=certificates %}
+    {% include "components/select_certificates.html" with certificates=certificates %}
   </section>
 
   <section id="your-details">
     <!-- Form for user details -->
-     {% include "pages/your_details.html" %}
+    {% include "components/your_details.html" %}
   </section>
 
   <section id="finalise-payment"">
-    <!-- Payment form -->
-    {% include "pages/finalise_payment.html" %}
+  <!-- Payment form -->
+  {% include "components/finalise_payment.html" %}
   </section>
 
 {% endblock %}
