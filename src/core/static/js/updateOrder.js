@@ -66,7 +66,7 @@ function createOrder() {
   });
 
   const selectedProperty = StateManager.getState(stateKeys.selectedProperty);
-  const propertyId = selectedProperty ? selectedProperty.id : null;
+  const propertyId = selectedProperty ? selectedProperty.id : undefined;
 
   const data = {
     property_id: propertyId,
