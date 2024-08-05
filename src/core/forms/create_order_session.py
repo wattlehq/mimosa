@@ -1,5 +1,7 @@
 from django import forms
+
 from core.models.property import Property
+
 
 class CreateOrderSessionForm(forms.Form):
     property_id = forms.IntegerField()
@@ -18,6 +20,12 @@ class CreateOrderSessionForm(forms.Form):
         if not isinstance(lines, list):
             raise forms.ValidationError("Lines must be a list")
         for line in lines:
-            if not isinstance(line, dict) or 'certificate_id' not in line:
-                raise forms.ValidationError("Each line must be a dictionary with a certificate_id")
+            if not isinstance(line, dict):
+                raise forms.ValidationError("Order line must be a dict")
+            elif 'certificate_id' not in line:
+                raise forms.ValidationError("Order line have a certificate_id")
+            elif not isinstance(line["certificate_id"], int):
+                raise forms.ValidationError("Certificate ID must be a number")
+            elif 'fee_id' in line and not isinstance(line["fee_id"], int):
+                raise forms.ValidationError("Fee ID must be a number")
         return lines

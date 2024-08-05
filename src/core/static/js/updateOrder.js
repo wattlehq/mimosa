@@ -56,7 +56,7 @@ function createOrder() {
 
   selectedCertificates.forEach(selectedCertificate => {
     const certId = parseInt(selectedCertificate.value);
-    order[certId] = { certificate_id: certId, fee_id: null };
+    order[certId] = { certificate_id: certId, fee_id: undefined };
   });
 
   selectedFees.forEach(selectedFee => {
