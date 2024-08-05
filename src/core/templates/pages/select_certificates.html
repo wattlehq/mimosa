@@ -1,4 +1,4 @@
-{% load static %}
+{% load static custom_filters %}
 
 <section id="select-certificates">
   <link rel="stylesheet" href="{% static 'css/app.css' %}" />
@@ -16,14 +16,11 @@
             data-price="{{ certificate.price }}"
           />
           <label for="cert-{{ certificate.id }}">
-            {{ certificate.name }} ${{ certificate.price|floatformat:2 }}<br />
+            {{ certificate.name }} {{ certificate.price|money }}<br />
           </label>
           <small>
-            {% if certificate.description %}
-              {{ certificate.description }}
-            {% else %}
-              No description available
-            {% endif %}
+            {% if certificate.description %} {{ certificate.description }}
+            {% else %} No description available {% endif %}
           </small>
           <br />
         </div>
@@ -40,7 +37,7 @@
             value="{{ fee.id }}"
             data-price="{{ fee.price }}"
           />
-          {{ fee.name }} ${{ fee.price|floatformat:2 }} <br />
+          {{ fee.name }} ${{ fee.price|money }}<br />
         </div>
         {% endfor %}
       </li>
