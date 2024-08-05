@@ -1,4 +1,4 @@
-import { StateManager, stateKeys } from "./stateManager.js";
+import { stateKeys, StateManager } from "./stateManager.js";
 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("user-details-form");
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   * Display user details on page load
   */
   function displayUserDetails() {
-    const userDetails = StateManager.getState("userDetails");
+    const userDetails = StateManager.getState(stateKeys.userDetails);
     if (userDetails) {
       displayFullName.textContent = userDetails.fullName;
       displayBusiness.textContent = userDetails.business;
