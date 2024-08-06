@@ -1,6 +1,6 @@
 {% load static custom_filters %}
 
-<form method="post" action="{% url 'order_create' %}" class="order_form">
+<form method="post" action="{% url 'find_parcel' %}" class="order_form">
   {{ form.property_id }}
   {{ form.lines }}
   {% csrf_token %}

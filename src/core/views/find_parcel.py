@@ -1,16 +1,14 @@
 """Views for handling property searches and certificate orders."""
-
+from django.shortcuts import redirect
 from django.shortcuts import render
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.http import require_http_methods
 
 from core.forms.find_parcel import FindParcelForm
 from core.forms.order.create_order_session import CreateOrderSessionForm
 from core.models.certificate import Certificate
+from core.services.order.create_order_session import create_order_session
 
 
-@method_decorator(require_http_methods(["GET", "POST"]), name="dispatch")
 class FindParcel(View):
     """
     View for handling the find parcel component.
@@ -41,3 +39,24 @@ class FindParcel(View):
                 "certificates": certificates,
             },
         )
+
+    def post(self, request):
+        form = CreateOrderSessionForm(request.POST)
+        if form.is_valid():
+            # @todo Handle customer name & business.
+            result = create_order_session(
+                property_id=form.cleaned_data["property_id"],
+                order_lines=form.cleaned_data["lines"],
+                customer_name=form.cleaned_data["customer_name"],
+                customer_company_name=form.cleaned_data["customer_company_name"]
+            )
+
+            if result and result["success"]:
+                dest = result["checkout_url"]
+                return redirect(dest)
+            else:
+                # @todo Handle
+                pass
+        else:
+            # @todo Handle form.errors
+            pass
