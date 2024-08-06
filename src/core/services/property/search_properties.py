@@ -4,11 +4,8 @@ from core.models.property import Property
 
 
 def search_properties(
-        lot=None,
-        section=None,
-        deposited_plan=None,
-        street_address=None
-        ):
+    lot=None, section=None, deposited_plan=None, street_address=None
+):
     """
     Search for properties based on the provided criteria.
 

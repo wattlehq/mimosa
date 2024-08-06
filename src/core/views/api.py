@@ -25,15 +25,14 @@ def api_property_search(request):
     """
     form = FindParcelForm(request.GET)
     if not form.is_valid():
-        return JsonResponse({
-            "isValid": False,
-            "errors": form.errors.get_json_data()
-        })
+        return JsonResponse(
+            {"isValid": False, "errors": form.errors.get_json_data()}
+        )
 
-    lot = request.GET.get('lot')
-    section = request.GET.get('section')
-    deposited_plan = request.GET.get('deposited_plan')
-    street_address = request.GET.get('street_address')
+    lot = request.GET.get("lot")
+    section = request.GET.get("section")
+    deposited_plan = request.GET.get("deposited_plan")
+    street_address = request.GET.get("street_address")
 
     properties = search_properties(
         lot,
@@ -48,7 +47,6 @@ def api_property_search(request):
         for assessment, props in grouped_properties.items()
     }
 
-    return JsonResponse({
-        "isValid": True,
-        "results": serialized_grouped_properties
-    })
+    return JsonResponse(
+        {"isValid": True, "results": serialized_grouped_properties}
+    )

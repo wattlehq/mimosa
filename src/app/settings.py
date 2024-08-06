@@ -64,13 +64,13 @@ cached_loaders = [("django.template.loaders.cached.Loader", default_loaders)]
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.settings",
             ],
             "loaders": default_loaders if DEBUG else cached_loaders,
         },
@@ -183,3 +183,14 @@ STRIPE_CURRENCY = "aud"
 SITE_PROTOCOL = os.environ.get("SITE_PROTOCOL")
 SITE_DOMAIN = os.environ.get("SITE_DOMAIN")
 SITE_PORT = int(os.environ.get("SITE_PORT"))
+
+# Email settings
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ.get("EMAIL_HOST")
+    EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
+    EMAIL_USE_TLS = bool(strtobool(os.environ.get("EMAIL_USE_TLS", "true")))
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")

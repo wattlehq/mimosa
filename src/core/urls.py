@@ -22,6 +22,10 @@ urlpatterns = [
          api_property_search,
          name="api_property_search"
          ),
+    path(
+        "api/property/search/", api_property_search, name="api_property_search"
+    ),
+
     path("order/<uuid:order_hash>/", order, name="order"),
     path("cancel/", cancel, name="cancel"),
 ]

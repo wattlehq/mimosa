@@ -10,7 +10,7 @@ from core.forms.order.create_order_session import CreateOrderSessionForm
 from core.models.certificate import Certificate
 
 
-@method_decorator(require_http_methods(["GET", "POST"]), name='dispatch')
+@method_decorator(require_http_methods(["GET", "POST"]), name="dispatch")
 class FindParcel(View):
     """
     View for handling the find parcel component.
@@ -18,6 +18,7 @@ class FindParcel(View):
     This view renders the certificate order page and processes
     form submissions for finding parcels.
     """
+
     template_name = "pages/certificate_order.html"
 
     def get(self, request):
