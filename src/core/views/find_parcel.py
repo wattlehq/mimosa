@@ -5,9 +5,9 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_http_methods
 
-from core.forms.create_order_session import CreateOrderSessionForm
 from core.forms.find_parcel import FindParcelForm
 from core.models.certificate import Certificate
+from forms.order.create_order_session import CreateOrderSessionForm
 
 
 @method_decorator(require_http_methods(["GET", "POST"]), name='dispatch')
