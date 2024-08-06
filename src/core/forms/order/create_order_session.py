@@ -11,7 +11,8 @@ class CreateOrderSessionForm(forms.Form):
         widget=forms.HiddenInput(),
         error_messages={
             "required": "A certificate is required",
-        })
+        },
+    )
 
     def clean_customer_name(self):
         data = self.cleaned_data["customer_name"]

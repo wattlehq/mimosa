@@ -1,4 +1,5 @@
 """Views for handling property searches and certificate orders."""
+
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views import View
@@ -48,12 +49,15 @@ class FindParcel(View):
         if form_create_order_session.is_valid():
             result = create_order_session(
                 property_id=form_create_order_session.cleaned_data[
-                    "property_id"],
+                    "property_id"
+                ],
                 order_lines=form_create_order_session.cleaned_data["lines"],
                 customer_name=form_create_order_session.cleaned_data[
-                    "customer_name"],
+                    "customer_name"
+                ],
                 customer_company_name=form_create_order_session.cleaned_data[
-                    "customer_company_name"]
+                    "customer_company_name"
+                ],
             )
 
             if result and result["success"]:
