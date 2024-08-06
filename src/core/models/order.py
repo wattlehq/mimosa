@@ -16,6 +16,8 @@ class OrderSessionStatus(models.IntegerChoices):
 
 
 class OrderSession(OrderBase):
+    stripe_checkout_id = models.CharField(max_length=255)
+    
     status = models.IntegerField(
         choices=OrderSessionStatus.choices, default=OrderSessionStatus.PENDING
     )

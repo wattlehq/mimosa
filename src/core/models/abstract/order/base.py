@@ -13,8 +13,6 @@ class OrderBase(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
-    stripe_checkout_id = models.CharField(max_length=255)
-
     customer_name = models.CharField(max_length=254, null=True, blank=True)
 
     customer_company_name = models.CharField(
