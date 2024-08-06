@@ -8,12 +8,21 @@ from core.models.property import Property
 from core.services.utils.site import get_site_url
 
 
-def create_order_session(property_id, order_lines):
+def create_order_session(
+        property_id,
+        order_lines,
+        customer_name,
+        customer_company_name
+):
     try:
         property_obj = Property.objects.get(id=property_id)
-        order_session = OrderSession(property=property_obj)
-        order_session.save()
+        order_session = OrderSession(
+            property=property_obj,
+            customer_name=customer_name,
+            customer_company_name=customer_company_name
+        )
 
+        order_session.save()
         line_items = []
 
         for item in order_lines:

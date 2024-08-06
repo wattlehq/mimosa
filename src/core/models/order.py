@@ -2,12 +2,11 @@ import uuid
 from decimal import Decimal
 
 from django.db import models
-from django.utils import timezone
 
-from core.models.abstract.fulfillable import Fulfillable
+from core.models.abstract.order.base import OrderBase
+from core.models.abstract.order.fulfillable import OrderFulfillable
 from core.models.certificate import Certificate
 from core.models.fee import Fee
-from core.models.property import Property
 
 
 class OrderSessionStatus(models.IntegerChoices):
@@ -16,25 +15,15 @@ class OrderSessionStatus(models.IntegerChoices):
     ERROR = 3, "Error"
 
 
-class OrderSession(models.Model):
-    created_at = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(auto_now=True)
-    stripe_checkout_id = models.CharField(max_length=255)
-
+class OrderSession(OrderBase):
     status = models.IntegerField(
         choices=OrderSessionStatus.choices, default=OrderSessionStatus.PENDING
     )
 
     status_error = models.CharField(max_length=255, null=True, blank=True)
 
-    property = models.ForeignKey(
-        Property,
-        on_delete=models.CASCADE,
-    )
-
     lines = models.ManyToManyField(Certificate, through="OrderSessionLine")
 
-    # @todo Implement customer details when available
     def __str__(self):
         return str(self.property) + " - " + str(self.created_at)
 
@@ -63,52 +52,10 @@ class OrderSessionLine(models.Model):
         return str(self.certificate) + " " + str(self.fee)
 
 
-class Order(Fulfillable):
-    created_at = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(auto_now=True)
-
+class Order(OrderBase, OrderFulfillable):
     order_hash = models.UUIDField(default=uuid.uuid4, unique=True)
 
-    customer_name = models.CharField(max_length=254, null=True, blank=True)
     customer_email = models.EmailField(max_length=254)
-    customer_phone = models.CharField(max_length=15, null=True, blank=True)
-
-    customer_company_name = models.CharField(
-        max_length=200, null=True, blank=True
-    )
-
-    customer_company_ref = models.CharField(
-        max_length=200, null=True, blank=True
-    )
-
-    customer_address_street_line_1 = models.CharField(
-        max_length=200, null=True, blank=True
-    )
-
-    customer_address_street_line_2 = models.CharField(
-        max_length=200, null=True, blank=True
-    )
-
-    customer_address_suburb = models.CharField(
-        max_length=50, null=True, blank=True
-    )
-
-    customer_address_state = models.CharField(
-        max_length=3, null=True, blank=True
-    )
-
-    customer_address_post_code = models.CharField(
-        max_length=4, null=True, blank=True
-    )
-
-    customer_address_country = models.CharField(
-        max_length=3, null=True, blank=True
-    )
-
-    property = models.ForeignKey(
-        Property,
-        on_delete=models.CASCADE,
-    )
 
     lines = models.ManyToManyField(Certificate, through="OrderLine")
 
@@ -147,7 +94,7 @@ def certificate_file_directory_path(instance, filename):
     )
 
 
-class OrderLine(Fulfillable):
+class OrderLine(OrderFulfillable):
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
