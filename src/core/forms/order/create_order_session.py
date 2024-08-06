@@ -5,22 +5,20 @@ from core.models.property import Property
 
 class CreateOrderSessionForm(forms.Form):
     customer_name = forms.CharField(max_length=254, label="Full Name")
-
     customer_company_name = forms.CharField(max_length=200, label="Business")
-
     property_id = forms.IntegerField(widget=forms.HiddenInput())
-    lines = forms.JSONField(widget=forms.HiddenInput())
+    lines = forms.JSONField(
+        widget=forms.HiddenInput(),
+        error_messages={
+            "required": "A certificate is required",
+        })
 
     def clean_customer_name(self):
         data = self.cleaned_data["customer_name"]
-        if not data:
-            raise forms.ValidationError("Name is required.")
         return data
 
     def clean_customer_company_name(self):
         data = self.cleaned_data["customer_company_name"]
-        if not data:
-            raise forms.ValidationError("Company name is required.")
         return data
 
     def clean_property_id(self):

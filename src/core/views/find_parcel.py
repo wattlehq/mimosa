@@ -41,21 +41,32 @@ class FindParcel(View):
         )
 
     def post(self, request):
-        form = CreateOrderSessionForm(request.POST)
-        if form.is_valid():
+        form_find_parcel = FindParcelForm()
+        certificates = Certificate.objects.all()
+        form_create_order_session = CreateOrderSessionForm(request.POST)
+
+        if form_create_order_session.is_valid():
             result = create_order_session(
-                property_id=form.cleaned_data["property_id"],
-                order_lines=form.cleaned_data["lines"],
-                customer_name=form.cleaned_data["customer_name"],
-                customer_company_name=form.cleaned_data["customer_company_name"]
+                property_id=form_create_order_session.cleaned_data[
+                    "property_id"],
+                order_lines=form_create_order_session.cleaned_data["lines"],
+                customer_name=form_create_order_session.cleaned_data[
+                    "customer_name"],
+                customer_company_name=form_create_order_session.cleaned_data[
+                    "customer_company_name"]
             )
 
             if result and result["success"]:
                 dest = result["checkout_url"]
                 return redirect(dest)
-            else:
-                # @todo Handle
-                pass
-        else:
-            # @todo Handle form.errors
-            pass
+            elif result and result["error"]:
+                form_create_order_session.add_error(None, result["error"])
+        return render(
+            request,
+            self.template_name,
+            {
+                "form_find_parcel": form_find_parcel,
+                "form_create_order_session": form_create_order_session,
+                "certificates": certificates,
+            },
+        )

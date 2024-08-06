@@ -1,6 +1,18 @@
 {% load static custom_filters %}
 
 <form method="post" action="{% url 'find_parcel' %}" class="order_form">
+  {% for error in form.non_field_errors %}
+    <div class="order_form__error">{{ error }}</div>
+  {% endfor %}
+  {% for field in form %}
+    {% if field.errors %}
+      {% for error in field.errors %}
+        <div class="order_form__error">
+          {{ error }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
   {{ form.property_id }}
   {{ form.lines }}
   {% csrf_token %}
