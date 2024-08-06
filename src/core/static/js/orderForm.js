@@ -1,10 +1,11 @@
 import { stateKeys, StateManager } from "./stateManager.js";
 
-const htmlOrderSummary = "#order-summary";
-const htmlInputProperty = 'input[type="hidden"][name^="property_id"]';
-const htmlInputLines = 'input[type="hidden"][name^="lines"]';
-const htmlOptionsCertificates = 'input[type="checkbox"][id^="certificate"]';
-const htmlOptionsFees = 'input[type="checkbox"][id^="fee"]';
+const htmlContainer = ".order_form";
+const htmlOrderSummary = `${htmlContainer} .order_form__totals`;
+const htmlInputProperty = `${htmlContainer} input[type="hidden"][name^="property_id"]`;
+const htmlInputLines = `${htmlContainer} input[type="hidden"][name^="lines"]`;
+const htmlOptionsCertificates = `${htmlContainer} input[type="checkbox"][id^="certificate"]`;
+const htmlOptionsFees = `${htmlContainer} input[type="checkbox"][id^="fee"]`;
 
 // Update totals with selected options.
 function updateTotals() {

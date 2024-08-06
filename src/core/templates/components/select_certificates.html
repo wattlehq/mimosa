@@ -1,55 +1,50 @@
 {% load static custom_filters %}
 
-<form method="post" action="{% url 'order_create' %}">
+<form method="post" action="{% url 'order_create' %}" class="order_form">
   {{ form.property_id }}
   {{ form.lines }}
   {% csrf_token %}
-  <section id="select-certificates">
+  <section class="order_form__section order_form__section-certificates">
     <h2>2. Select certificates</h2>
-    <div class="certificates-and-fees">
-      <ul id="list-certificates">
-        {% for certificate in certificates %}
-          <li>
-            <div class="item certificate">
-              <input
-                type="checkbox"
-                id="certificate_{{ forloop.counter }}"
-                value="{{ certificate.id }}"
-                data-price="{{ certificate.price }}"
-              />
-              <label for="cert-{{ certificate.id }}">
-                {{ certificate.name }} {{ certificate.price|money }}<br/>
-              </label>
-              <small>
-                {% if certificate.description %}
-                  {{ certificate.description }}
-                {% endif %}
-              </small>
-              {% if certificate.fees.exists %}
-                <ul id="list-fees">
-                  {% for fee in certificate.fees.all %}
-                    <li>
-                      <div class="item fee">
-                        <input
-                          type="checkbox"
-                          id="fee_{{ forloop.counter }}"
-                          value="{{ fee.id }}"
-                          data-price="{{ fee.price }}"
-                          data-certificate="{{ certificate.id }}"
-                        />
-                        {{ fee.name }} {{ fee.price|money }}<br/>
-                      </div>
-                    </li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
+    <ul>
+      {% for certificate in certificates %}
+        <li>
+          <input
+            type="checkbox"
+            id="certificate_{{ forloop.counter }}"
+            value="{{ certificate.id }}"
+            data-price="{{ certificate.price }}"
+          />
+          <label for="cert-{{ certificate.id }}">
+            {{ certificate.name }} {{ certificate.price|money }}<br/>
+          </label>
+          <p>
+            {% if certificate.description %}
+              {{ certificate.description }}
+            {% endif %}
+          </p>
+          {% if certificate.fees.exists %}
+            <ul>
+              {% for fee in certificate.fees.all %}
+                <li>
+                  <input
+                    type="checkbox"
+                    id="fee_{{ forloop.counter }}"
+                    value="{{ fee.id }}"
+                    data-price="{{ fee.price }}"
+                    data-certificate="{{ certificate.id }}"
+                  />
+                  {{ fee.name }} {{ fee.price|money }}<br/>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
   </section>
-  <section id="your-details">
+  <section class="order_form__section order_form__section-customer">
     <h2>3. Your Details</h2>
     <ul>
       <li>
@@ -66,8 +61,10 @@
       </li>
     </ul>
   </section>
-  <section id="finalise-payment">
-    {% include "components/finalise_payment.html" %}
-  </section>
-  <input type="submit" value="Submit"/>
+  <section class="order_form__section order_form__section-finalise">
+    <h2>4. Finalise</h2>
+    <div class="order_form__totals"></div>
+    <input type="submit" value="Submit"/>
 </form>
+
+<script type="module" src="{% static 'js/orderForm.js' %}"></script>
