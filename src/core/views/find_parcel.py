@@ -27,14 +27,14 @@ class FindParcel(View):
         Returns:
             HttpResponse: Rendered certificate order page with an empty form.
         """
-        form = FindParcelForm()
+        form_find_parcel = FindParcelForm()
         form_create_order_session = CreateOrderSessionForm()
         certificates = Certificate.objects.all()
         return render(
             request,
             self.template_name,
             {
-                "form": form,
+                "form_find_parcel": form_find_parcel,
                 "form_create_order_session": form_create_order_session,
                 "certificates": certificates,
             },
@@ -43,7 +43,6 @@ class FindParcel(View):
     def post(self, request):
         form = CreateOrderSessionForm(request.POST)
         if form.is_valid():
-            # @todo Handle customer name & business.
             result = create_order_session(
                 property_id=form.cleaned_data["property_id"],
                 order_lines=form.cleaned_data["lines"],
