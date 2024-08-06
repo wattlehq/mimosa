@@ -1,6 +1,5 @@
 export const stateKeys = {
-  selectedProperty: "selectedProperty",
-  groupedProperties: "groupedProperties"
+  selectedProperty: "selectedProperty"
 };
 
 /**
