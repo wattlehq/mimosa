@@ -2,7 +2,7 @@ from django.shortcuts import redirect
 from django.views import View
 
 from core.forms.create_order_session import CreateOrderSessionForm
-from core.services.certificate.create_order_session import create_order_session
+from core.services.order.create_order_session import create_order_session
 
 
 class OrderCreate(View):
