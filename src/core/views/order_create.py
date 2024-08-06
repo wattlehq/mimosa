@@ -9,9 +9,10 @@ class OrderCreate(View):
     def post(self, request):
         form = CreateOrderSessionForm(request.POST)
         if form.is_valid():
+            # @todo Handle customer name & business.
             result = create_order_session(
                 property_id=form.cleaned_data['property_id'],
-                order_lines=form.cleaned_data['lines']
+                order_lines=form.cleaned_data['lines'],
             )
 
             if result and result['success']:

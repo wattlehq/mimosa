@@ -1,10 +1,11 @@
 import stripe
-from django.conf import settings
-from core.models.order import OrderSession, OrderSessionLine
-from core.models.property import Property
+
 from core.models.certificate import Certificate
 from core.models.fee import Fee
+from core.models.order import OrderSession, OrderSessionLine
+from core.models.property import Property
 from core.services.utils.site import get_site_url
+
 
 def create_order_session(property_id, order_lines):
     try:
@@ -21,7 +22,8 @@ def create_order_session(property_id, order_lines):
                 certificate=certificate,
                 cost_certificate=certificate.price,
             )
-            line_items.append({"price": certificate.stripe_price_id, "quantity": 1})
+            line_items.append(
+                {"price": certificate.stripe_price_id, "quantity": 1})
 
             if item.get('fee_id'):
                 fee = Fee.objects.get(id=item['fee_id'])
@@ -35,7 +37,7 @@ def create_order_session(property_id, order_lines):
             metadata={"order_session_pk": order_session.id},
             mode="payment",
             success_url=get_site_url() + "/success",
-            cancel_url=get_site_url() + "/cancel",
+            cancel_url=get_site_url() + "/cancel"
         )
 
         order_session.stripe_checkout_id = stripe_checkout.id
