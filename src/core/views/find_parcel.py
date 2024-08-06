@@ -35,7 +35,9 @@ class FindParcel(View):
         return render(
             request,
             self.template_name,
-            {"form": form,
-             "form_create_order_session": form_create_order_session,
-             "certificates": certificates}
+            {
+                "form": form,
+                "form_create_order_session": form_create_order_session,
+                "certificates": certificates,
+            },
         )

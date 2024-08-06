@@ -35,10 +35,7 @@ def api_property_search(request):
     street_address = request.GET.get("street_address")
 
     properties = search_properties(
-        lot,
-        section,
-        deposited_plan,
-        street_address
+        lot, section, deposited_plan, street_address
     )
     grouped_properties = group_properties_by_assessment(properties)
 
