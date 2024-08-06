@@ -3,7 +3,6 @@ from django import forms
 from core.models.property import Property
 
 
-# @todo Implement customer details
 class CreateOrderSessionForm(forms.Form):
     customer_name = forms.CharField(
         max_length=254,
