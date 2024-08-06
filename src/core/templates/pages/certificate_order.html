@@ -11,10 +11,8 @@
     {% include "components/find_parcel.html" with form=form %}
   </section>
 
-  <section id="select-certificates">
-    <!-- Content for selecting certificates -->
-    {% include "components/order_form.html" with certificates=certificates form=form_create_order_session %}
-  </section>
+  <!-- Content for selecting certificates -->
+  {% include "components/order_form.html" with certificates=certificates form=form_create_order_session %}
 
 {% endblock %}
 
