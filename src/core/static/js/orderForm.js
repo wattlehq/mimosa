@@ -1,7 +1,7 @@
 import { stateKeys, StateManager } from "./stateManager.js";
 
-const htmlContainer = ".order_form";
-const htmlOrderSummary = `${htmlContainer} .order_form__totals`;
+const htmlContainer = ".order-form";
+const htmlOrderSummary = `${htmlContainer} .order-form__totals`;
 const htmlInputProperty = `${htmlContainer} input[type="hidden"][name^="property_id"]`;
 const htmlInputLines = `${htmlContainer} input[type="hidden"][name^="lines"]`;
 const htmlOptionsCertificates = `${htmlContainer} input[type="checkbox"][id^="certificate"]`;

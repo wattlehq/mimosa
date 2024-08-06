@@ -1,13 +1,13 @@
 {% load static custom_filters %}
 
-<form method="post" action="{% url 'find_parcel' %}" class="order_form">
+<form method="post" action="{% url 'find_parcel' %}" class="order-form">
   {% for error in form.non_field_errors %}
-    <div class="order_form__error">{{ error }}</div>
+    <div class="order-form__error">{{ error }}</div>
   {% endfor %}
   {% for field in form %}
     {% if field.errors %}
       {% for error in field.errors %}
-        <div class="order_form__error">
+        <div class="order-form__error">
           {{ error }}
         </div>
       {% endfor %}
@@ -16,7 +16,7 @@
   {{ form.property_id }}
   {{ form.lines }}
   {% csrf_token %}
-  <section class="order_form__section order_form__section-certificates">
+  <section class="order-form__section order-form__section-certificates">
     <h2>2. Select certificates</h2>
     <ul>
       {% for certificate in certificates %}
@@ -56,7 +56,7 @@
       {% endfor %}
     </ul>
   </section>
-  <section class="order_form__section order_form__section-customer">
+  <section class="order-form__section order-form__section-customer">
     <h2>3. Your Details</h2>
     <ul>
       <li>
@@ -73,9 +73,9 @@
       </li>
     </ul>
   </section>
-  <section class="order_form__section order_form__section-finalise">
+  <section class="order-form__section order-form__section-finalise">
     <h2>4. Finalise</h2>
-    <div class="order_form__totals"></div>
+    <div class="order-form__totals"></div>
     <input type="submit" value="Submit"/>
 </form>
 
