@@ -8,6 +8,7 @@ from core.models.property import Property
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
+# Merges common fields between order and order_session.
 class OrderBase(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
