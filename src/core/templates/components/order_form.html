@@ -1,0 +1,81 @@
+{% load static custom_filters %}
+
+<form method="post" action="{% url 'find_parcel' %}" class="order-form">
+  {% for error in form.non_field_errors %}
+    <div class="order-form__error">{{ error }}</div>
+  {% endfor %}
+  {% for field in form %}
+    {% if field.errors %}
+      {% for error in field.errors %}
+        <div class="order-form__error">
+          {{ error }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+  {{ form.property_id }}
+  {{ form.lines }}
+  {% csrf_token %}
+  <section class="order-form__section order-form__section-certificates">
+    <h2>2. Select certificates</h2>
+    <ul>
+      {% for certificate in certificates %}
+        <li>
+          <input
+            type="checkbox"
+            id="certificate_{{ forloop.counter }}"
+            value="{{ certificate.id }}"
+            data-price="{{ certificate.price }}"
+          />
+          <label for="cert-{{ certificate.id }}">
+            {{ certificate.name }} {{ certificate.price|money }}<br/>
+          </label>
+          <p>
+            {% if certificate.description %}
+              {{ certificate.description }}
+            {% endif %}
+          </p>
+          {% if certificate.fees.exists %}
+            <ul>
+              {% for fee in certificate.fees.all %}
+                <li>
+                  <input
+                    type="checkbox"
+                    id="fee_{{ forloop.counter }}"
+                    value="{{ fee.id }}"
+                    data-price="{{ fee.price }}"
+                    data-certificate="{{ certificate.id }}"
+                  />
+                  {{ fee.name }} {{ fee.price|money }}<br/>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+  <section class="order-form__section order-form__section-customer">
+    <h2>3. Your Details</h2>
+    <ul>
+      <li>
+        <label for="{{ form.customer_name.id_for_label }}">
+          {{ form.customer_name.label }}
+        </label>
+        {{ form.customer_name }}
+      </li>
+      <li>
+        <label for="{{ form.customer_company_name.id_for_label }}">
+          {{ form.customer_company_name.label }}
+        </label>
+        {{ form.customer_company_name }}
+      </li>
+    </ul>
+  </section>
+  <section class="order-form__section order-form__section-finalise">
+    <h2>4. Finalise</h2>
+    <div class="order-form__totals"></div>
+    <input type="submit" value="Submit"/>
+</form>
+

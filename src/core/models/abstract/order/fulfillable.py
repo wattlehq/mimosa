@@ -6,7 +6,7 @@ from django.utils import timezone
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-class Fulfillable(models.Model):
+class OrderFulfillable(models.Model):
     fulfilled_at = models.DateTimeField(null=True, blank=True, default=None)
     is_fulfilled = models.BooleanField(default=False)
 
@@ -20,4 +20,4 @@ class Fulfillable(models.Model):
             record_old = manager.get(pk=self.pk)
             if not record_old.is_fulfilled and self.is_fulfilled:
                 self.fulfilled_at = timezone.now()
-        super(Fulfillable, self).save(*args, **kwargs)
+        super(OrderFulfillable, self).save(*args, **kwargs)

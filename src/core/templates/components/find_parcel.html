@@ -1,53 +1,48 @@
 {% load static %}
 
 <section id="find-parcel">
-    <h2>1. Find a parcel</h2>
-    <form method="post" id="parcel-search-form">
-        {% csrf_token %}
-        <div class="search-options">
-            <div class="lot-section-dp-fields">
-                <div class="input-group">
-                    <label for="{{ form.lot.id_for_label }}">Lot</label>
-                    {{ form.lot }}
-                </div>
-                <div class="input-group">
-                    <label for="{{ form.section.id_for_label }}">Section</label>
-                    {{ form.section }}
-                </div>
-                <div class="input-group">
-                    <label for="{{ form.deposited_plan.id_for_label }}">Deposited Plan</label>
-                    {{ form.deposited_plan }}
-                </div>
-            </div>
-            <div class="or-divider">OR</div>
-            <div class="address-field">
-                <div class="input-group">
-                    <label for="{{ form.street_address.id_for_label }}">Street Address</label>
-                    {{ form.street_address }}
-                </div>
-            </div>
+  <h2>1. Find a parcel</h2>
+  <form method="post" id="parcel-search-form">
+    {% csrf_token %}
+    <div class="search-options">
+      <div class="lot-section-dp-fields">
+        <div class="input-group">
+          <label for="{{ form.lot.id_for_label }}">Lot</label>
+          {{ form.lot }}
         </div>
-        <button type="submit" class="find-button">Find <span class="arrow">→</span></button>
-        <strong id="search-errors"></strong>
-    </form>
+        <div class="input-group">
+          <label for="{{ form.section.id_for_label }}">Section</label>
+          {{ form.section }}
+        </div>
+        <div class="input-group">
+          <label for="{{ form.deposited_plan.id_for_label }}">Deposited Plan</label>
+          {{ form.deposited_plan }}
+        </div>
+      </div>
+      <div class="or-divider">OR</div>
+      <div class="address-field">
+        <div class="input-group">
+          <label for="{{ form.street_address.id_for_label }}">Street Address</label>
+          {{ form.street_address }}
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="find-button">Find <span class="arrow">→</span>
+    </button>
+    <strong id="search-errors"></strong>
+  </form>
 </section>
 
 <section id="matching-assessments" style="display:none;">
-    <h2>2. Matching Assessments</h2>
-    <form id="assessment-form">
-        <div id="assessment-list"></div>
-        <button type="submit">Next</button>
-    </form>
+  <h2>2. Matching Assessments</h2>
+  <form id="assessment-form">
+    <div id="assessment-list"></div>
+    <button type="submit">Next</button>
+  </form>
 </section>
 
 <section id="property-details" style="display:none;">
-    <h2>3. Selected Property Details</h2>
-    <h3 id="selected-assessment-title"></h3>
-    <ul id="selected-properties-list"></ul>
+  <h2>3. Selected Property Details</h2>
+  <h3 id="selected-assessment-title"></h3>
+  <ul id="selected-properties-list"></ul>
 </section>
-
-{% block extra_js %}
-<script src="{% static 'js/api.js' %}"></script>
-<script src="{% static 'js/stateManager.js' %}"></script>
-<script src="{% static 'js/parcelFinder.js' %}"></script>
-{% endblock %}

@@ -8,20 +8,17 @@
   <hr>
 
   <section id="find-parcel">
-    {% include "components/find_parcel.html" with form=form %}
+    {% include "components/find_parcel.html" with form=form_find_parcel %}
   </section>
 
-  <!-- Placeholders for other sections -->
-  <section id="select-certificates" style="display:none;">
-    <!-- Content for selecting certificates -->
-  </section>
+  <!-- Content for selecting certificates -->
+  {% include "components/order_form.html" with certificates=certificates form=form_create_order_session %}
 
-  <section id="your-details" style="display:none;">
-    <!-- Form for user details -->
-  </section>
+{% endblock %}
 
-  <section id="finalise-payment" style="display:none;">
-    <!-- Payment form -->
-  </section>
-
+{% block extra_js %}
+  <script type="module" src="{% static 'js/api.js' %}"></script>
+  <script type="module" src="{% static 'js/stateManager.js' %}"></script>
+  <script type="module" src="{% static 'js/parcelFinder.js' %}"></script>
+  <script type="module" src="{% static 'js/orderForm.js' %}"></script>
 {% endblock %}
