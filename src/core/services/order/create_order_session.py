@@ -1,4 +1,5 @@
 import stripe
+from django.urls import reverse
 
 from core.models.certificate import Certificate
 from core.models.order import OrderSession
@@ -56,8 +57,8 @@ def create_order_session(
             line_items=line_items,
             metadata={"order_session_pk": order_session.id},
             mode="payment",
-            success_url=get_site_url() + "/success",
-            cancel_url=get_site_url() + "/cancel",
+            success_url=get_site_url() + reverse("success"),
+            cancel_url=get_site_url() + reverse("cancel"),
         )
 
         order_session.stripe_checkout_id = stripe_checkout.id
