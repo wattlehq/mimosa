@@ -58,7 +58,7 @@ def create_order_session(
             metadata={"order_session_pk": order_session.id},
             mode="payment",
             success_url=get_site_url() + reverse("success"),
-            cancel_url=get_site_url() + reverse("cancel"),
+            cancel_url=get_site_url() + reverse("find_parcel"),
         )
 
         order_session.stripe_checkout_id = stripe_checkout.id
