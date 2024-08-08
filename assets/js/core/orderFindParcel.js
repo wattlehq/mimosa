@@ -1,15 +1,15 @@
 import { API } from './api.js';
 
 /**
- * FindParcel class for handling property search and selection.
+ * OrderFindParcel class for handling property search and selection.
  */
-export class FindParcel {
+export class OrderFindParcel {
   /**
    * Create a FindParcel instance.
    * Initialises DOM elements and sets up event listeners.
    */
   constructor(inputSelectionTargetSel) {
-    console.debug('FindParcel constructor called');
+    console.debug('OrdFindParcel constructor called');
     this.searchForm = null;
     this.assessmentSection = null;
     this.assessmentList = null;
@@ -251,5 +251,5 @@ export class FindParcel {
   }
 }
 
-console.debug('FindParcel class defined');
+console.debug('OrdFindParcel class defined');
 

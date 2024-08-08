@@ -1,6 +1,5 @@
 const htmlContainer = ".order-form";
 const htmlOrderSummary = `${htmlContainer} .order-form__totals`;
-const htmlInputProperty = `${htmlContainer} input[type="hidden"][name^="property_id"]`;
 const htmlInputLines = `${htmlContainer} input[type="hidden"][name^="lines"]`;
 const htmlOptionsCertificates = `${htmlContainer} input[type="checkbox"][id^="certificate"]`;
 const htmlOptionsFees = `${htmlContainer} input[type="checkbox"][id^="fee"]`;
