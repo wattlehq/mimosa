@@ -9,7 +9,7 @@ from core.models.order import Order
 from core.models.order import OrderLine
 
 
-def order(request, order_hash):
+def order_status(request, order_hash):
     order_obj = get_object_or_404(Order, order_hash=order_hash)
     order_lines = OrderLine.objects.filter(order=order_obj.pk)
 
