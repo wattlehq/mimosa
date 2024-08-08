@@ -75,7 +75,8 @@ def save_event_order(event: stripe.checkout.Session):
     customer = event.customer_details
 
     order = Order(
-        customer_name=customer.name,
+        customer_name=order_session.customer_name,
+        customer_company_name=order_session.customer_company_name,
         customer_email=customer.email,
         customer_phone=customer.phone,
         customer_address_street_line_1=customer.address.line1,
