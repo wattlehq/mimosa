@@ -3,6 +3,7 @@ from django.core.cache import cache
 from core.constants.settings import SETTINGS_CACHE_TIMEOUT
 
 
+# @todo Move to services/settings
 class SettingsCacheService:
     SETTINGS_CACHE_KEY = "app_settings"
 

@@ -2,23 +2,23 @@ import { API } from './api.js';
 import { stateKeys, StateManager } from "./stateManager.js";
 
 /**
- * ParcelFinder class for handling property search and selection.
+ * FindParcel class for handling property search and selection.
  */
-class ParcelFinder {
+class FindParcel {
   /**
-   * Create a ParcelFinder instance.
+   * Create a FindParcel instance.
    * Initialises DOM elements and sets up event listeners.
    */
   constructor() {
-    console.debug('ParcelFinder constructor called');
-    this.form = null;
-    this.resultsSection = null;
+    console.debug('FindParcel constructor called');
+    this.searchForm = null;
+    this.assessmentSection = null;
     this.assessmentList = null;
     this.assessmentForm = null;
-    this.detailsSection = null;
-    this.selectedAssessmentTitle = null;
-    this.selectedPropertiesList = null;
-    this.errorContainer = document.getElementById('search-errors');
+    this.propertySection = null;
+    this.propertyTitle = null;
+    this.propertyList = null;
+    this.error = null;
 
     this.initialiseElements();
   }
@@ -28,17 +28,18 @@ class ParcelFinder {
    */
   initialiseElements() {
     console.debug('Initialising elements');
-    this.form = document.querySelector('#parcel-search-form');
-    this.resultsSection = document.querySelector('#matching-assessments');
-    this.assessmentList = document.querySelector('#assessment-list');
-    this.assessmentForm = document.querySelector('#assessment-form');
-    this.detailsSection = document.querySelector('#property-details');
-    this.selectedAssessmentTitle = document.querySelector('#selected-assessment-title');
-    this.selectedPropertiesList = document.querySelector('#selected-properties-list');
+    this.searchForm = document.querySelector('.find-parcel__search form');
+    this.assessmentSection = document.querySelector('.find_parcel__assessment');
+    this.assessmentList = document.querySelector('.find_parcel__assessment-list');
+    this.assessmentForm = document.querySelector('.find_parcel__assessment form');
+    this.propertySection = document.querySelector('.find_parcel__property');
+    this.propertyTitle = document.querySelector('.find_parcel__property-title');
+    this.propertyList = document.querySelector('.find_parcel__property-list');
+    this.error = document.querySelector('.find-parcel__search-errors');
 
-    if (this.form) {
+    if (this.searchForm) {
       console.debug('Search form found, adding event listener');
-      this.form.addEventListener('submit', this.handleSearch.bind(this));
+      this.searchForm.addEventListener('submit', this.handleSearch.bind(this));
     } else {
       console.error('Search form not found');
     }
@@ -63,14 +64,14 @@ class ParcelFinder {
     console.debug('handleSearch called');
     event.preventDefault();
 
-    const formData = new FormData(this.form);
+    const formData = new FormData(this.searchForm);
     const searchParams = Object.fromEntries(formData.entries());
     console.debug('Search params:', searchParams);
 
     try {
       const result = await API.searchProperties(searchParams);
-      if (result.isValid) {
-        this.errorContainer.innerHTML = '';
+      if (result && result.isValid) {
+        this.error.innerHTML = '';
         this.displaySearchResults(result.results);
       } else {
         this.displayValidationErrors(result.errors);
@@ -88,15 +89,14 @@ class ParcelFinder {
    */
   displayValidationErrors(errors) {
     const displayedErrors = new Set(); // To track unique error messages
-    this.errorContainer.innerHTML = '';
+    this.error.innerHTML = '';
     for (const field in errors) {
       const errorMessages = errors[field];
       for (const message of errorMessages) {
         if (!displayedErrors.has(message.message)) {
           const errorElement = document.createElement('p');
           errorElement.textContent = message.message;
-          errorElement.classList.add('error-message');
-          this.errorContainer.appendChild(errorElement);
+          this.error.appendChild(errorElement);
           displayedErrors.add(message.message);
         }
       }
@@ -109,8 +109,8 @@ class ParcelFinder {
    * @param {string} message - The error message to display.
    */
   displayError(message) {
-    const errorContainer = document.getElementById('search-errors');
-    errorContainer.innerHTML = `<p class="error-message">${message}</p>`;
+    const errorContainer = this.error;
+    errorContainer.innerHTML = `<p>${message}</p>`;
   }
 
   /**
@@ -170,8 +170,8 @@ class ParcelFinder {
       this.displayError('No properties found matching the search criteria.');
     } else {
       this.assessmentList.appendChild(ul);
-      this.resultsSection.style.display = 'block';
-      this.detailsSection.style.display = 'none';
+      this.assessmentSection.style.display = 'block';
+      this.propertySection.style.display = 'none';
     }
   }
 
@@ -183,11 +183,10 @@ class ParcelFinder {
    */
   displaySelectedProperties(selectedProperties, selectedAssessment) {
     console.debug('Displaying selected properties');
-    this.selectedAssessmentTitle.textContent = `Assessment: ${selectedAssessment}`;
-    this.selectedPropertiesList.innerHTML = '';
+    this.propertyTitle.textContent = `Assessment: ${selectedAssessment}`;
+    this.propertyList.innerHTML = '';
 
     const form = document.createElement('form');
-    form.id = 'property-selection-form';
 
     selectedProperties.forEach((property, index) => {
       const li = document.createElement('li');
@@ -213,8 +212,8 @@ class ParcelFinder {
     submitButton.textContent = 'Select Property';
     form.appendChild(submitButton);
 
-    this.selectedPropertiesList.appendChild(form);
-    this.detailsSection.style.display = 'block';
+    this.propertyList.appendChild(form);
+    this.propertySection.style.display = 'block';
 
     form.addEventListener('submit', this.handlePropertySelection.bind(this));
   }
@@ -247,5 +246,5 @@ console.debug('ParcelFinder class defined');
  */
 document.addEventListener('DOMContentLoaded', () => {
   console.debug('DOM content loaded in parcelFinder.js');
-  new ParcelFinder();
+  new FindParcel();
 });
