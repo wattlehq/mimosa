@@ -205,6 +205,7 @@ class FindParcel {
 
       li.appendChild(input);
       li.appendChild(label);
+      li.addEventListener('click', this.handlePropertySelection.bind(this));
       form.appendChild(li);
     });
 
@@ -216,16 +217,17 @@ class FindParcel {
     this.propertyList.appendChild(form);
     this.propertySection.style.display = 'block';
 
-    form.addEventListener('submit', this.handlePropertySelection.bind(this));
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      this.handlePropertySelection();
+    });
   }
 
   /**
    * Handle the property selection form submission.
-   * @param {Event} event - The submit event.
    */
-  handlePropertySelection(event) {
+  handlePropertySelection() {
     console.debug('handlePropertySelection called');
-    event.preventDefault();
     const selectedPropertyRadio = document.querySelector('input[name="selected_property"]:checked');
     const selection = JSON.parse(selectedPropertyRadio.value);
 
