@@ -9,7 +9,7 @@ from core.services.utils.site import get_site_url
 
 
 def create_order_session(
-        property_id, order_lines, customer_name, customer_company_name
+    property_id, order_lines, customer_name, customer_company_name
 ):
     try:
         property_obj = Property.objects.get(id=property_id)
