@@ -3,12 +3,12 @@ import { API } from './api.js';
 /**
  * FindParcel class for handling property search and selection.
  */
-class FindParcel {
+export class FindParcel {
   /**
    * Create a FindParcel instance.
    * Initialises DOM elements and sets up event listeners.
    */
-  constructor() {
+  constructor(inputSelectionTargetSel) {
     console.debug('FindParcel constructor called');
     this.searchForm = null;
     this.assessmentSection = null;
@@ -19,6 +19,7 @@ class FindParcel {
     this.propertyList = null;
     this.error = null;
     this.inputSelectionTarget = null;
+    this.inputSelectionTargetSel = inputSelectionTargetSel;
 
     this.initialiseElements();
   }
@@ -35,7 +36,7 @@ class FindParcel {
     this.propertySection = document.querySelector('.find_parcel__property');
     this.propertyTitle = document.querySelector('.find_parcel__property-title');
     this.propertyList = document.querySelector('.find_parcel__property-list');
-    this.inputSelectionTarget = document.querySelector('.order-form input[name="property_id"]');
+    this.inputSelectionTarget = document.querySelector(this.inputSelectionTargetSel);
     this.error = document.querySelector('.find-parcel__search-errors');
 
     if (this.searchForm) {
@@ -252,10 +253,3 @@ class FindParcel {
 
 console.debug('FindParcel class defined');
 
-/**
- * Initialise the FindParcel when the DOM is fully loaded.
- */
-document.addEventListener('DOMContentLoaded', () => {
-  console.debug('DOM content loaded in findParcel.js');
-  new FindParcel();
-});

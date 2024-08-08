@@ -68,16 +68,18 @@ function updateLines() {
   linesJson.value = JSON.stringify(data);
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  const optionsAll = document.querySelectorAll(
-    `${htmlOptionsCertificates}, ${htmlOptionsFees}`
-  );
+export class OrderForm {
+  constructor() {
+    const optionsAll = document.querySelectorAll(
+      `${htmlOptionsCertificates}, ${htmlOptionsFees}`
+    );
 
-  optionsAll.forEach((checkbox) => {
-    checkbox.addEventListener("change", updateTotals);
-    checkbox.addEventListener("change", updateLines);
-  });
+    optionsAll.forEach((checkbox) => {
+      checkbox.addEventListener("change", updateTotals);
+      checkbox.addEventListener("change", updateLines);
+    });
 
-  updateTotals();
-  updateLines();
-});
+    updateTotals();
+    updateLines();
+  }
+}
