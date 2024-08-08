@@ -1,42 +1,44 @@
 {% load static %}
 
-<section class="find-parcel__search">
-  <h2>1. Find a parcel</h2>
-  <form>
-    {% csrf_token %}
-    <div>
-      <label for="{{ form.lot.id_for_label }}">Lot</label>
-      {{ form.lot }}
-    </div>
-    <div>
-      <label for="{{ form.section.id_for_label }}">Section</label>
-      {{ form.section }}
-    </div>
-    <div>
-      <label for="{{ form.deposited_plan.id_for_label }}">Deposited Plan</label>
-      {{ form.deposited_plan }}
-    </div>
-    <div>OR</div>
-    <div>
-      <label for="{{ form.street_address.id_for_label }}">Street Address</label>
-      {{ form.street_address }}
-    </div>
-    <button type="submit">Find <span class="arrow">→</span>
-    </button>
-    <strong class="find-parcel__search-errors"></strong>
-  </form>
-</section>
+<div class="find-parcel">
+  <section class="find-parcel__search">
+    <h2>1. Find a parcel</h2>
+    <form>
+      {% csrf_token %}
+      <div>
+        <label for="{{ form.lot.id_for_label }}">Lot</label>
+        {{ form.lot }}
+      </div>
+      <div>
+        <label for="{{ form.section.id_for_label }}">Section</label>
+        {{ form.section }}
+      </div>
+      <div>
+        <label for="{{ form.deposited_plan.id_for_label }}">Deposited Plan</label>
+        {{ form.deposited_plan }}
+      </div>
+      <div>OR</div>
+      <div>
+        <label for="{{ form.street_address.id_for_label }}">Street Address</label>
+        {{ form.street_address }}
+      </div>
+      <button type="submit">Find <span class="arrow">→</span>
+      </button>
+      <strong class="find-parcel__search-errors"></strong>
+    </form>
+  </section>
 
-<section class="find_parcel__assessment" style="display:none;">
-  <h2>2. Matching Assessments</h2>
-  <form>
-    <div class="find_parcel__assessment-list"></div>
-    <button type="submit">Next</button>
-  </form>
-</section>
+  <section class="find_parcel__assessment" style="display:none;">
+    <h2>2. Matching Assessments</h2>
+    <form>
+      <div class="find_parcel__assessment-list"></div>
+      <button type="submit">Next</button>
+    </form>
+  </section>
 
-<section class="find_parcel__property" style="display:none;">
-  <h2>3. Selected Property Details</h2>
-  <h3 class="find_parcel__property-title"></h3>
-  <ul class="find_parcel__property-list"></ul>
-</section>
+  <section class="find_parcel__property" style="display:none;">
+    <h2>3. Selected Property Details</h2>
+    <h3 class="find_parcel__property-title"></h3>
+    <ul class="find_parcel__property-list"></ul>
+  </section>
+</div>
