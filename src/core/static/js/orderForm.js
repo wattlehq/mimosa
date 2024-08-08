@@ -1,5 +1,3 @@
-import { stateKeys, StateManager } from "./stateManager.js";
-
 const htmlContainer = ".order-form";
 const htmlOrderSummary = `${htmlContainer} .order-form__totals`;
 const htmlInputProperty = `${htmlContainer} input[type="hidden"][name^="property_id"]`;
@@ -70,16 +68,6 @@ function updateLines() {
   linesJson.value = JSON.stringify(data);
 }
 
-function updateProperty() {
-  const value = StateManager.getState(stateKeys.selectedProperty);
-
-  const input = document.querySelector(
-    `${htmlInputProperty}`
-  );
-
-  if (input && value) input.value = value.id;
-}
-
 document.addEventListener("DOMContentLoaded", function () {
   const optionsAll = document.querySelectorAll(
     `${htmlOptionsCertificates}, ${htmlOptionsFees}`
@@ -92,5 +80,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
   updateTotals();
   updateLines();
-  updateProperty();
 });

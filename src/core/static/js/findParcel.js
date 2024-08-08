@@ -1,5 +1,4 @@
 import { API } from './api.js';
-import { stateKeys, StateManager } from "./stateManager.js";
 
 /**
  * FindParcel class for handling property search and selection.
@@ -19,6 +18,7 @@ class FindParcel {
     this.propertyTitle = null;
     this.propertyList = null;
     this.error = null;
+    this.inputSelectionTarget = null;
 
     this.initialiseElements();
   }
@@ -35,6 +35,7 @@ class FindParcel {
     this.propertySection = document.querySelector('.find_parcel__property');
     this.propertyTitle = document.querySelector('.find_parcel__property-title');
     this.propertyList = document.querySelector('.find_parcel__property-list');
+    this.inputSelectionTarget = document.querySelector('.order-form input[name="property_id"]');
     this.error = document.querySelector('.find-parcel__search-errors');
 
     if (this.searchForm) {
@@ -220,21 +221,23 @@ class FindParcel {
 
   /**
    * Handle the property selection form submission.
-   * Saves the selected property to the StateManager and clears unnecessary data.
    * @param {Event} event - The submit event.
    */
   handlePropertySelection(event) {
     console.debug('handlePropertySelection called');
     event.preventDefault();
     const selectedPropertyRadio = document.querySelector('input[name="selected_property"]:checked');
-    if (selectedPropertyRadio) {
-      const selectedProperty = JSON.parse(selectedPropertyRadio.value);
-      StateManager.setState(stateKeys.selectedProperty, selectedProperty);
-      console.debug('Property selected and saved locally. Other data cleared.');
-      alert('Property selected and saved locally. Other data cleared.');
+    const selection = JSON.parse(selectedPropertyRadio.value);
+
+    if (this.inputSelectionTarget) {
+      if (selectedPropertyRadio) {
+        this.inputSelectionTarget.value = selection.id;
+      } else {
+        console.debug('No property selected');
+        alert('Please select a property.');
+      }
     } else {
-      console.debug('No property selected');
-      alert('Please select a property.');
+      console.debug('No property selection target');
     }
   }
 }
