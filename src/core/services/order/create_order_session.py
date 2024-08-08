@@ -9,7 +9,7 @@ from core.services.utils.site import get_site_url
 
 
 def create_order_session(
-    property_id, order_lines, customer_name, customer_company_name
+        property_id, order_lines, customer_name, customer_company_name
 ):
     try:
         property_obj = Property.objects.get(id=property_id)
@@ -56,7 +56,7 @@ def create_order_session(
             metadata={"order_session_pk": order_session.id},
             mode="payment",
             success_url=get_site_url() + reverse("success"),
-            cancel_url=get_site_url() + reverse("find_parcel"),
+            cancel_url=get_site_url() + reverse("order_form"),
         )
 
         order_session.stripe_checkout_id = stripe_checkout.id

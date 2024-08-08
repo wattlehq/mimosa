@@ -10,7 +10,7 @@ from core.models.certificate import Certificate
 from core.services.order.create_order_session import create_order_session
 
 
-class FindParcel(View):
+class OrderForm(View):
     """
     View for handling the find parcel component.
 

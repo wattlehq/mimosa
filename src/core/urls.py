@@ -2,13 +2,13 @@ from django.urls import path
 
 from core.views.api import api_property_search
 from core.views.cancel import cancel
-from core.views.find_parcel import FindParcel
 from core.views.order import order
+from core.views.order_form import OrderForm
 from core.views.success import success
 from core.webhooks.stripe import webhook_stripe
 
 urlpatterns = [
-    path("", FindParcel.as_view(), name="find_parcel"),
+    path("", OrderForm.as_view(), name="order_form"),
     path("order/<uuid:order_hash>/", order, name="order"),
     # Payment:
     path("success/", success, name="success"),
