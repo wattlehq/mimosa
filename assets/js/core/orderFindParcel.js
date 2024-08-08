@@ -9,7 +9,7 @@ export class OrderFindParcel {
    * Initialises DOM elements and sets up event listeners.
    */
   constructor(inputSelectionTargetSel) {
-    console.debug('OrdFindParcel constructor called');
+    console.debug('OrderFindParcel constructor called');
     this.searchForm = null;
     this.assessmentSection = null;
     this.assessmentList = null;
