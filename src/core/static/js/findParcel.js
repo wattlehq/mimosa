@@ -47,7 +47,7 @@ class FindParcel {
 
     if (this.assessmentForm) {
       console.debug('Assessment form found, adding event listener');
-      this.assessmentForm.addEventListener('submit', this.handleAssessmentSelection.bind(this));
+      this.assessmentForm.addEventListener('submit', this.handleAssessmentSubmit.bind(this));
     } else {
       console.error('Assessment form not found');
     }
@@ -120,7 +120,7 @@ class FindParcel {
    * and displays the selected properties.
    * @param {Event} event - The submit event.
    */
-  handleAssessmentSelection(event) {
+  handleAssessmentSubmit(event) {
     console.debug('handleAssessmentSelection called');
     event.preventDefault();
 
@@ -132,7 +132,8 @@ class FindParcel {
 
     const selectedProperties = groupedProperties[selectedAssessment] || [];
 
-    this.displaySelectedProperties(selectedProperties, selectedAssessment);
+    this.displayAssessmentProperties(selectedProperties, selectedAssessment);
+    this.handlePropertyReset();
   }
 
   /**
@@ -177,13 +178,12 @@ class FindParcel {
   }
 
   /**
-   * Display the selected properties for a chosen assessment.
-   * Creates and populates a form with the selected properties.
+   * Display the assessment properties form for a chosen assessment.
    * @param {Array} selectedProperties - The properties selected for the assessment.
    * @param {string} selectedAssessment - The selected assessment identifier.
    */
-  displaySelectedProperties(selectedProperties, selectedAssessment) {
-    console.debug('Displaying selected properties');
+  displayAssessmentProperties(selectedProperties, selectedAssessment) {
+    console.debug('Displaying assessment properties');
     this.propertyTitle.textContent = `Assessment: ${selectedAssessment}`;
     this.propertyList.innerHTML = '';
 
@@ -205,7 +205,7 @@ class FindParcel {
 
       li.appendChild(input);
       li.appendChild(label);
-      li.addEventListener('click', this.handlePropertySelection.bind(this));
+      li.addEventListener('click', this.handlePropertySubmit.bind(this));
       form.appendChild(li);
     });
 
@@ -219,15 +219,12 @@ class FindParcel {
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      this.handlePropertySelection();
+      this.handlePropertySubmit();
     });
   }
 
-  /**
-   * Handle the property selection form submission.
-   */
-  handlePropertySelection() {
-    console.debug('handlePropertySelection called');
+  handlePropertySubmit() {
+    console.debug('updatePropertySelection called');
     const selectedPropertyRadio = document.querySelector('input[name="selected_property"]:checked');
     const selection = JSON.parse(selectedPropertyRadio.value);
 
@@ -242,14 +239,23 @@ class FindParcel {
       console.debug('No property selection target');
     }
   }
+
+  handlePropertyReset() {
+    console.debug('handlePropertyReset called');
+    if (this.inputSelectionTarget) {
+      this.inputSelectionTarget.value = null;
+    } else {
+      console.debug('No property selection target');
+    }
+  }
 }
 
-console.debug('ParcelFinder class defined');
+console.debug('FindParcel class defined');
 
 /**
- * Initialise the ParcelFinder when the DOM is fully loaded.
+ * Initialise the FindParcel when the DOM is fully loaded.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  console.debug('DOM content loaded in parcelFinder.js');
+  console.debug('DOM content loaded in findParcel.js');
   new FindParcel();
 });
