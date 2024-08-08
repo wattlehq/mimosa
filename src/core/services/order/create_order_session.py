@@ -55,7 +55,7 @@ def create_order_session(
             line_items=line_items,
             metadata={"order_session_pk": order_session.id},
             mode="payment",
-            success_url=get_site_url() + reverse("success"),
+            success_url=get_site_url() + reverse("order_success"),
             cancel_url=get_site_url() + reverse("order_form"),
         )
 

@@ -18,7 +18,7 @@ class OrderForm(View):
     form submissions for finding parcels.
     """
 
-    template_name = "pages/certificate_order.html"
+    template_name = "pages/order_form.html"
 
     def get(self, request):
         """

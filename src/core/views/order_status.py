@@ -21,4 +21,4 @@ def order_status(request, order_hash):
         "order_lines": order_lines,
     }
 
-    return render(request, "pages/order.html", context)
+    return render(request, "pages/order_status.html", context)
