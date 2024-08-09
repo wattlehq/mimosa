@@ -6,7 +6,7 @@ from core.models.certificate import Certificate
 from core.models.property import Property
 
 
-def generate_random_request():
+def generate_random_order():
     """
     Generate a random order request for testing purposes.
 
@@ -32,7 +32,7 @@ def generate_random_request():
     num_certificates = random.randint(1, certificates.count())
     selected_certificates = random.sample(list(certificates), num_certificates)
 
-    lines = []
+    order_lines = []
     for cert in selected_certificates:
         line = {"certificate_id": cert.id}
 
@@ -41,6 +41,14 @@ def generate_random_request():
             fee = cert.fees.order_by("?").first()
             line["fee_id"] = fee.id
 
-        lines.append(line)
+        order_lines.append(line)
 
-    return {"property_id": property_id, "lines": lines}
+    customer_name = "John Doe"
+    customer_company_name = "Company"
+
+    return {
+        "property_id": property_id,
+        "order_lines": order_lines,
+        "customer_name": customer_name,
+        "customer_company_name": customer_company_name,
+    }
