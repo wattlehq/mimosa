@@ -1,24 +1,25 @@
 import { API } from './api.js';
-import { stateKeys, StateManager } from "./stateManager.js";
 
 /**
- * ParcelFinder class for handling property search and selection.
+ * OrderFindParcel class for handling property search and selection.
  */
-class ParcelFinder {
+export class OrderFindParcel {
   /**
-   * Create a ParcelFinder instance.
+   * Create a FindParcel instance.
    * Initialises DOM elements and sets up event listeners.
    */
-  constructor() {
-    console.debug('ParcelFinder constructor called');
-    this.form = null;
-    this.resultsSection = null;
+  constructor(inputSelectionTargetSel) {
+    console.debug('OrderFindParcel constructor called');
+    this.searchForm = null;
+    this.assessmentSection = null;
     this.assessmentList = null;
     this.assessmentForm = null;
-    this.detailsSection = null;
-    this.selectedAssessmentTitle = null;
-    this.selectedPropertiesList = null;
-    this.errorContainer = document.getElementById('search-errors');
+    this.propertySection = null;
+    this.propertyTitle = null;
+    this.propertyList = null;
+    this.error = null;
+    this.inputSelectionTarget = null;
+    this.inputSelectionTargetSel = inputSelectionTargetSel;
 
     this.initialiseElements();
   }
@@ -28,24 +29,26 @@ class ParcelFinder {
    */
   initialiseElements() {
     console.debug('Initialising elements');
-    this.form = document.querySelector('#parcel-search-form');
-    this.resultsSection = document.querySelector('#matching-assessments');
-    this.assessmentList = document.querySelector('#assessment-list');
-    this.assessmentForm = document.querySelector('#assessment-form');
-    this.detailsSection = document.querySelector('#property-details');
-    this.selectedAssessmentTitle = document.querySelector('#selected-assessment-title');
-    this.selectedPropertiesList = document.querySelector('#selected-properties-list');
+    this.searchForm = document.querySelector('.find-parcel__search form');
+    this.assessmentSection = document.querySelector('.find_parcel__assessment');
+    this.assessmentList = document.querySelector('.find_parcel__assessment-list');
+    this.assessmentForm = document.querySelector('.find_parcel__assessment form');
+    this.propertySection = document.querySelector('.find_parcel__property');
+    this.propertyTitle = document.querySelector('.find_parcel__property-title');
+    this.propertyList = document.querySelector('.find_parcel__property-list');
+    this.inputSelectionTarget = document.querySelector(this.inputSelectionTargetSel);
+    this.error = document.querySelector('.find-parcel__search-errors');
 
-    if (this.form) {
+    if (this.searchForm) {
       console.debug('Search form found, adding event listener');
-      this.form.addEventListener('submit', this.handleSearch.bind(this));
+      this.searchForm.addEventListener('submit', this.handleSearch.bind(this));
     } else {
       console.error('Search form not found');
     }
 
     if (this.assessmentForm) {
       console.debug('Assessment form found, adding event listener');
-      this.assessmentForm.addEventListener('submit', this.handleAssessmentSelection.bind(this));
+      this.assessmentForm.addEventListener('submit', this.handleAssessmentSubmit.bind(this));
     } else {
       console.error('Assessment form not found');
     }
@@ -63,14 +66,14 @@ class ParcelFinder {
     console.debug('handleSearch called');
     event.preventDefault();
 
-    const formData = new FormData(this.form);
+    const formData = new FormData(this.searchForm);
     const searchParams = Object.fromEntries(formData.entries());
     console.debug('Search params:', searchParams);
 
     try {
       const result = await API.searchProperties(searchParams);
-      if (result.isValid) {
-        this.errorContainer.innerHTML = '';
+      if (result && result.isValid) {
+        this.error.innerHTML = '';
         this.displaySearchResults(result.results);
       } else {
         this.displayValidationErrors(result.errors);
@@ -88,15 +91,14 @@ class ParcelFinder {
    */
   displayValidationErrors(errors) {
     const displayedErrors = new Set(); // To track unique error messages
-    this.errorContainer.innerHTML = '';
+    this.error.innerHTML = '';
     for (const field in errors) {
       const errorMessages = errors[field];
       for (const message of errorMessages) {
         if (!displayedErrors.has(message.message)) {
           const errorElement = document.createElement('p');
           errorElement.textContent = message.message;
-          errorElement.classList.add('error-message');
-          this.errorContainer.appendChild(errorElement);
+          this.error.appendChild(errorElement);
           displayedErrors.add(message.message);
         }
       }
@@ -109,8 +111,8 @@ class ParcelFinder {
    * @param {string} message - The error message to display.
    */
   displayError(message) {
-    const errorContainer = document.getElementById('search-errors');
-    errorContainer.innerHTML = `<p class="error-message">${message}</p>`;
+    const errorContainer = this.error;
+    errorContainer.innerHTML = `<p>${message}</p>`;
   }
 
   /**
@@ -119,7 +121,7 @@ class ParcelFinder {
    * and displays the selected properties.
    * @param {Event} event - The submit event.
    */
-  handleAssessmentSelection(event) {
+  handleAssessmentSubmit(event) {
     console.debug('handleAssessmentSelection called');
     event.preventDefault();
 
@@ -131,7 +133,8 @@ class ParcelFinder {
 
     const selectedProperties = groupedProperties[selectedAssessment] || [];
 
-    this.displaySelectedProperties(selectedProperties, selectedAssessment);
+    this.displayAssessmentProperties(selectedProperties, selectedAssessment);
+    this.handlePropertyReset();
   }
 
   /**
@@ -170,24 +173,22 @@ class ParcelFinder {
       this.displayError('No properties found matching the search criteria.');
     } else {
       this.assessmentList.appendChild(ul);
-      this.resultsSection.style.display = 'block';
-      this.detailsSection.style.display = 'none';
+      this.assessmentSection.style.display = 'block';
+      this.propertySection.style.display = 'none';
     }
   }
 
   /**
-   * Display the selected properties for a chosen assessment.
-   * Creates and populates a form with the selected properties.
+   * Display the assessment properties form for a chosen assessment.
    * @param {Array} selectedProperties - The properties selected for the assessment.
    * @param {string} selectedAssessment - The selected assessment identifier.
    */
-  displaySelectedProperties(selectedProperties, selectedAssessment) {
-    console.debug('Displaying selected properties');
-    this.selectedAssessmentTitle.textContent = `Assessment: ${selectedAssessment}`;
-    this.selectedPropertiesList.innerHTML = '';
+  displayAssessmentProperties(selectedProperties, selectedAssessment) {
+    console.debug('Displaying assessment properties');
+    this.propertyTitle.textContent = `Assessment: ${selectedAssessment}`;
+    this.propertyList.innerHTML = '';
 
     const form = document.createElement('form');
-    form.id = 'property-selection-form';
 
     selectedProperties.forEach((property, index) => {
       const li = document.createElement('li');
@@ -205,6 +206,7 @@ class ParcelFinder {
 
       li.appendChild(input);
       li.appendChild(label);
+      li.addEventListener('click', this.handlePropertySubmit.bind(this));
       form.appendChild(li);
     });
 
@@ -213,39 +215,41 @@ class ParcelFinder {
     submitButton.textContent = 'Select Property';
     form.appendChild(submitButton);
 
-    this.selectedPropertiesList.appendChild(form);
-    this.detailsSection.style.display = 'block';
+    this.propertyList.appendChild(form);
+    this.propertySection.style.display = 'block';
 
-    form.addEventListener('submit', this.handlePropertySelection.bind(this));
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      this.handlePropertySubmit();
+    });
   }
 
-  /**
-   * Handle the property selection form submission.
-   * Saves the selected property to the StateManager and clears unnecessary data.
-   * @param {Event} event - The submit event.
-   */
-  handlePropertySelection(event) {
-    console.debug('handlePropertySelection called');
-    event.preventDefault();
+  handlePropertySubmit() {
+    console.debug('updatePropertySelection called');
     const selectedPropertyRadio = document.querySelector('input[name="selected_property"]:checked');
-    if (selectedPropertyRadio) {
-      const selectedProperty = JSON.parse(selectedPropertyRadio.value);
-      StateManager.setState(stateKeys.selectedProperty, selectedProperty);
-      console.debug('Property selected and saved locally. Other data cleared.');
-      alert('Property selected and saved locally. Other data cleared.');
+    const selection = JSON.parse(selectedPropertyRadio.value);
+
+    if (this.inputSelectionTarget) {
+      if (selectedPropertyRadio) {
+        this.inputSelectionTarget.value = selection.id;
+      } else {
+        console.debug('No property selected');
+        alert('Please select a property.');
+      }
     } else {
-      console.debug('No property selected');
-      alert('Please select a property.');
+      console.debug('No property selection target');
+    }
+  }
+
+  handlePropertyReset() {
+    console.debug('handlePropertyReset called');
+    if (this.inputSelectionTarget) {
+      this.inputSelectionTarget.value = null;
+    } else {
+      console.debug('No property selection target');
     }
   }
 }
 
-console.debug('ParcelFinder class defined');
+console.debug('OrdFindParcel class defined');
 
-/**
- * Initialise the ParcelFinder when the DOM is fully loaded.
- */
-document.addEventListener('DOMContentLoaded', () => {
-  console.debug('DOM content loaded in parcelFinder.js');
-  new ParcelFinder();
-});

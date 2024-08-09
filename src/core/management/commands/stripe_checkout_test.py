@@ -1,6 +1,7 @@
 import stripe
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.urls import reverse
 
 from core.models.certificate import Certificate
 from core.models.fee import Fee
@@ -46,8 +47,8 @@ def create_stripe_checkout_session(order_session: OrderSession):
         line_items=line_items,
         metadata={"order_session_pk": order_session.id},
         mode="payment",
-        success_url=get_site_url() + "/success",
-        cancel_url=get_site_url() + "/cancel",
+        success_url=get_site_url() + reverse("order_success"),
+        cancel_url=get_site_url() + reverse("order_form"),
     )
 
 

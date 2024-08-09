@@ -5,11 +5,11 @@ from django.conf import settings
 from django.shortcuts import render
 
 
-def home(request):
-    """Render the home page with debug information."""
+def cancel(request):
     context = {
         "debug": settings.DEBUG,
         "django_ver": get_version(),
         "python_ver": os.environ["PYTHON_VERSION"],
     }
-    return render(request, "pages/home.html", context)
+
+    return render(request, "pages/order_cancel.html", context)

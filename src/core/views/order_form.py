@@ -4,13 +4,13 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views import View
 
-from core.forms.find_parcel import FindParcelForm
 from core.forms.order.create_order_session import CreateOrderSessionForm
+from core.forms.order.find_parcel import FindParcelForm
 from core.models.certificate import Certificate
 from core.services.order.create_order_session import create_order_session
 
 
-class FindParcel(View):
+class OrderForm(View):
     """
     View for handling the find parcel component.
 
@@ -18,7 +18,7 @@ class FindParcel(View):
     form submissions for finding parcels.
     """
 
-    template_name = "pages/certificate_order.html"
+    template_name = "pages/order_form.html"
 
     def get(self, request):
         """

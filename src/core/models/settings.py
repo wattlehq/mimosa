@@ -1,7 +1,7 @@
 from django.core.validators import EmailValidator
 from django.db import models
 
-from core.services.utils.settings import SettingsCacheService
+from core.services.settings.cache import SettingsCache
 
 
 class Settings(models.Model):
@@ -19,8 +19,8 @@ class Settings(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        SettingsCacheService.invalidate_settings_cache()
-        SettingsCacheService.update_settings_cache(self)
+        SettingsCache.invalidate()
+        SettingsCache.update(self)
 
     class Meta:
         verbose_name = "Setting"

@@ -1,8 +1,5 @@
-import { stateKeys, StateManager } from "./stateManager.js";
-
 const htmlContainer = ".order-form";
 const htmlOrderSummary = `${htmlContainer} .order-form__totals`;
-const htmlInputProperty = `${htmlContainer} input[type="hidden"][name^="property_id"]`;
 const htmlInputLines = `${htmlContainer} input[type="hidden"][name^="lines"]`;
 const htmlOptionsCertificates = `${htmlContainer} input[type="checkbox"][id^="certificate"]`;
 const htmlOptionsFees = `${htmlContainer} input[type="checkbox"][id^="fee"]`;
@@ -70,27 +67,18 @@ function updateLines() {
   linesJson.value = JSON.stringify(data);
 }
 
-function updateProperty() {
-  const value = StateManager.getState(stateKeys.selectedProperty);
+export class OrderForm {
+  constructor() {
+    const optionsAll = document.querySelectorAll(
+      `${htmlOptionsCertificates}, ${htmlOptionsFees}`
+    );
 
-  const input = document.querySelector(
-    `${htmlInputProperty}`
-  );
+    optionsAll.forEach((checkbox) => {
+      checkbox.addEventListener("change", updateTotals);
+      checkbox.addEventListener("change", updateLines);
+    });
 
-  if (input && value) input.value = value.id;
+    updateTotals();
+    updateLines();
+  }
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-  const optionsAll = document.querySelectorAll(
-    `${htmlOptionsCertificates}, ${htmlOptionsFees}`
-  );
-
-  optionsAll.forEach((checkbox) => {
-    checkbox.addEventListener("change", updateTotals);
-    checkbox.addEventListener("change", updateLines);
-  });
-
-  updateTotals();
-  updateLines();
-  updateProperty();
-});
