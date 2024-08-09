@@ -1,11 +1,14 @@
 from django.core.management.base import BaseCommand
 
-from core.services.test.generate_random_order import generate_random_order
 from core.services.order.create_order_session import create_order_session
+from core.services.test.generate_random_order import generate_random_order
 
 manual_request = {
     "property_id": 1,
-    "order_lines": [{"certificate_id": 13, "fee_id": 1}, {"certificate_id": 12}],
+    "order_lines": [
+        {"certificate_id": 13, "fee_id": 1},
+        {"certificate_id": 12},
+    ],
     "customer_name": "Vitalik Buterin",
     "customer_company_name": "ETH Inc.",
 }
@@ -38,9 +41,15 @@ class Command(BaseCommand):
             )
 
             if result["success"]:
-                self.stdout.write(self.style.SUCCESS(f"Checkout URL: {result['checkout_url']}"))
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"Checkout URL: {result['checkout_url']}"
+                    )
+                )
             else:
-                self.stdout.write(self.style.ERROR(f"Error: {result['error']}"))
+                self.stdout.write(
+                    self.style.ERROR(f"Error: {result['error']}")
+                )
 
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"An error occurred: {str(e)}"))
