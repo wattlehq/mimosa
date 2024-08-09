@@ -37,9 +37,11 @@ def create_order_session(
                 certificate=certificate,
                 cost_certificate=certificate.price,
             )
-            line_items.append(
-                {"price": certificate.stripe_price_id, "quantity": 1}
-            )
+            
+            line_item = {"price": certificate.stripe_price_id, "quantity": 1}
+            if certificate.tax_rate:
+                line_item["tax_rates"] = [certificate.tax_rate.stripe_tax_rate_id]
+            line_items.append(line_item)
 
             if item.get("fee_id"):
                 fee = certificate.fees.filter(id=item["fee_id"]).first()
@@ -47,9 +49,11 @@ def create_order_session(
                     order_line.fee = fee
                     order_line.cost_fee = fee.price
                     order_line.save()
-                    line_items.append(
-                        {"price": fee.stripe_price_id, "quantity": 1}
-                    )
+                    
+                    fee_line_item = {"price": fee.stripe_price_id, "quantity": 1}
+                    if fee.tax_rate:
+                        fee_line_item["tax_rates"] = [fee.tax_rate.stripe_tax_rate_id]
+                    line_items.append(fee_line_item)
 
         stripe_checkout = stripe.checkout.Session.create(
             line_items=line_items,
