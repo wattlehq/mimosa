@@ -26,6 +26,7 @@
             id="certificate_{{ forloop.counter }}"
             value="{{ certificate.id }}"
             data-price="{{ certificate.price }}"
+            data-tax-rate="{{ certificate.tax_rate.percentage|default:0 }}"
           />
           <label for="cert-{{ certificate.id }}">
             {{ certificate.name }} {{ certificate.price|money }}<br/>
@@ -44,6 +45,7 @@
                     id="fee_{{ forloop.counter }}"
                     value="{{ fee.id }}"
                     data-price="{{ fee.price }}"
+                    data-tax-rate="{{ fee.tax_rate.percentage|default:0 }}"
                     data-certificate="{{ certificate.id }}"
                   />
                   {{ fee.name }} {{ fee.price|money }}<br/>

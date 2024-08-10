@@ -30,7 +30,10 @@ class OrderForm(View):
         """
         form_find_parcel = FindParcelForm()
         form_create_order_session = CreateOrderSessionForm()
-        certificates = Certificate.objects.all()
+        certificates = Certificate.objects.all().prefetch_related(
+            'fees',
+            'tax_rate'
+        )
         return render(
             request,
             self.template_name,

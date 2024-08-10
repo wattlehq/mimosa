@@ -6,7 +6,8 @@ const htmlOptionsFees = `${htmlContainer} input[type="checkbox"][id^="fee"]`;
 
 // Update totals with selected options.
 function updateTotals() {
-  let total = 0;
+  let subtotal = 0;
+  let taxTotal = 0;
 
   const selectedCertificates = document.querySelectorAll(
     `${htmlOptionsCertificates}:checked`
@@ -18,21 +19,49 @@ function updateTotals() {
 
   selectedCertificates.forEach((item) => {
     const price = parseFloat(item.dataset.price);
-    console.debug(`Selected certificate: ${item.value}, Price: ${price}`);
-    total += price;
+    const taxRate = parseFloat(item.dataset.taxRate) / 100;
+    const itemTax = price * taxRate;
+    console.debug(`Selected certificate: ${item.value}, Price: ${price}, Tax Rate: ${taxRate}, Tax: ${itemTax}`);
+    subtotal += price;
+    taxTotal += itemTax;
   });
 
   selectedFees.forEach((item) => {
     const price = parseFloat(item.dataset.price);
-    console.debug(`Selected fee: ${item.name}, Price: ${price}`);
-    total += price;
+    const taxRate = parseFloat(item.dataset.taxRate) / 100;
+    const itemTax = price * taxRate;
+    console.debug(`Selected fee: ${item.name}, Price: ${price}, Tax Rate: ${taxRate}, Tax: ${itemTax}`);
+    subtotal += price;
+    taxTotal += itemTax;
   });
 
-  console.debug(`Total calculated: ${total}`);
+  const total = subtotal + taxTotal;
+  console.debug(`Subtotal: ${subtotal}, Tax: ${taxTotal}, Total: ${total}`);
 
+  updateSummary(subtotal, taxTotal, total);
+}
+
+function updateSummary(subtotal, taxTotal, total) {
   const summaryElement = document.querySelector(htmlOrderSummary);
   if (summaryElement) {
-    summaryElement.textContent = `Total: ${total.toFixed(2)}`;
+    // Clear existing content
+    summaryElement.textContent = '';
+
+    // Create and append subtotal
+    const subtotalElement = document.createElement('p');
+    subtotalElement.textContent = `Subtotal: $${subtotal.toFixed(2)}`;
+    summaryElement.appendChild(subtotalElement);
+
+    // Create and append tax
+    const taxElement = document.createElement('p');
+    taxElement.textContent = `Tax: $${taxTotal.toFixed(2)}`;
+    summaryElement.appendChild(taxElement);
+
+    // Create and append total
+    const totalElement = document.createElement('p');
+    totalElement.textContent = `Total: $${total.toFixed(2)}`;
+    totalElement.style.fontWeight = 'bold';
+    summaryElement.appendChild(totalElement);
   }
 }
 
