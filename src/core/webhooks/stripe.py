@@ -10,7 +10,7 @@ from core.models.order import OrderSession
 from core.models.order import OrderSessionLine
 from core.models.order import OrderSessionStatus
 from core.models.property import Property
-from core.models.tax_rate import TaxRate
+from core.services.tax_rate.calculate_tax import calculate_tax
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
@@ -155,8 +155,3 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
         save_event_order(event)
     except Exception as e:
         save_event_order_error(event, e)
-
-
-def calculate_tax(amount: float, tax_rate: TaxRate) -> float:
-    """Calculate tax amount based on the given amount and tax rate."""
-    return amount * (tax_rate.percentage / 100)
