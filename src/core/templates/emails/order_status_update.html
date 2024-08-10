@@ -15,6 +15,7 @@
         th { background-color: #f4f4f4; }
         .certificate-list { margin-bottom: 20px; }
         .certificate-list ul { padding-left: 20px; }
+        .total-section { margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -60,7 +61,8 @@
                         <th>Certificate</th>
                         <th>Fee</th>
                         <th>Certificate Cost</th>
-                        <th>Fee Cost</th>
+                        <th>GST</th>
+                        <th>Total</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -68,16 +70,34 @@
                     {% for line in order_lines %}
                     <tr>
                         <td>{{ line.certificate.name }}</td>
-                        <td>{% if line.fee %}{{ line.fee.name }}{% else %}N/A{% endif %}</td>
+                        <td>
+                            {% if line.fee %}
+                                {{ line.fee.name }} (${{ line.cost_fee|default:"0.00" }})
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
                         <td>${{ line.cost_certificate }}</td>
-                        <td>{% if line.cost_fee %}${{ line.cost_fee }}{% else %}N/A{% endif %}</td>
+                        <td>
+                            {% if line.gst > 0 %}
+                                ${{ line.gst }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>${{ line.total }}</td>
                         <td>{% if line.is_fulfilled %}<a href="{{ order_url }}">Ready</a>{% else %}Pending{% endif %}</td>
                     </tr>
                     {% endfor %}
-                </tbody>
+                </tbody>               
             </table>
+
            
-            <p><strong>Total Order Cost:</strong> ${{ order.cost_total }}</p>
+            <div class="total-section">
+                <p><strong>Subtotal:</strong> ${{ order.cost_subtotal }}</p>
+                <p><strong>GST:</strong> ${{ order.cost_tax }}</p>
+                <p><strong>Total Order Cost:</strong> ${{ order.cost_total }}</p>
+            </div>
            
             <p>To view the full details of your order, please click on the following link:</p>
             <p><a href="{{ order_url }}">View Order Details</a></p>

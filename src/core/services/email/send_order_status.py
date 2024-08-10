@@ -54,11 +54,20 @@ def send_order_status_email(order_id, override_email=None):
 
         # reverse() for dynamic paths based on the URL configuration
         order_url = get_site_url() + reverse(
-            "order", kwargs={"order_hash": str(order.order_hash)}
+            "order_status", kwargs={"order_hash": str(order.order_hash)}
         )
 
         # Prepare lists for ready and pending certificates
         order_lines = list(order.orderline_set.all())
+        for line in order_lines:
+            # Calculate GST and total for each line
+            line.gst = (line.tax_amount_certificate or 0) + (
+                line.tax_amount_fee or 0
+            )
+            line.total = (
+                (line.cost_certificate or 0) + (line.cost_fee or 0) + line.gst
+            )
+
         ready_certificates = [
             line for line in order_lines if line.is_fulfilled
         ]
