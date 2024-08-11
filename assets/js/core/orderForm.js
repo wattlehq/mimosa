@@ -1,3 +1,5 @@
+import { getCookie } from './api.js';
+
 const htmlContainer = ".order-form";
 const htmlOrderSummary = `${htmlContainer} .order-form__totals`;
 const htmlInputLines = `${htmlContainer} input[type="hidden"][name^="lines"]`;
@@ -65,7 +67,39 @@ function updateLines() {
   const data = Object.values(order);
   const linesJson = document.querySelector(htmlInputLines);
   linesJson.value = JSON.stringify(data);
+
+  validateCertificates();
 }
+
+async function validateCertificates() {
+  const selectedCertificates = document.querySelectorAll(`${htmlOptionsCertificates}:checked`);
+  const selectedCertificateIds = Array.from(selectedCertificates).map(cert => parseInt(cert.value));
+
+  // Fetch the certificate bundles
+  const response = await fetch('/api/get-certificate-bundles/', {
+      method: 'GET',
+      headers: {
+          'X-CSRFToken': getCookie('csrftoken')
+      }
+  });
+
+  if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const bundles = await response.json();
+
+  // Check if any selected certificates are redundant
+  for (const bundle of bundles) {
+      if (selectedCertificateIds.includes(bundle.parent_certificate) && selectedCertificateIds.includes(bundle.child_certificate)) {
+          alert(`Please select either ${bundle.parent_certificate_name} or ${bundle.child_certificate_name}, but not both.`);
+          selectedCertificates[selectedCertificates.length - 1].checked = false;
+          updateLines();
+          return;
+      }
+  }
+}
+
 
 export class OrderForm {
   constructor() {

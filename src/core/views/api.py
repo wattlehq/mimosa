@@ -7,6 +7,7 @@ from core.services.property.group_properties_by_assessment import (
 )
 from core.services.property.search_properties import search_properties
 from core.services.property.serialize_property import serialize_property
+from core.models.certificate_bundle import CertificateBundle
 
 
 @require_http_methods(["GET"])
@@ -47,3 +48,16 @@ def api_property_search(request):
     return JsonResponse(
         {"isValid": True, "results": serialized_grouped_properties}
     )
+
+def get_certificate_bundles(request):
+    bundles = CertificateBundle.objects.all().select_related('parent_certificate', 'child_certificate')
+    bundle_list = [
+        {
+            'parent_certificate': bundle.parent_certificate.id,
+            'parent_certificate_name': bundle.parent_certificate.name,
+            'child_certificate': bundle.child_certificate.id,
+            'child_certificate_name': bundle.child_certificate.name,
+        }
+        for bundle in bundles
+    ]
+    return JsonResponse(bundle_list, safe=False)

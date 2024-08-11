@@ -6,6 +6,7 @@ from core.views.order_form import OrderForm
 from core.views.order_status import order_status
 from core.views.order_success import success
 from core.webhooks.stripe import webhook_stripe
+from core.views.api import get_certificate_bundles
 
 urlpatterns = [
     path("", OrderForm.as_view(), name="order_form"),
@@ -19,4 +20,5 @@ urlpatterns = [
     path(
         "api/property/search/", api_property_search, name="api_property_search"
     ),
+    path('api/get-certificate-bundles/', get_certificate_bundles, name='get_certificate_bundles'),
 ]
