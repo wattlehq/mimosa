@@ -60,7 +60,6 @@ function updateSummary(subtotal, taxTotal, total) {
     // Create and append total
     const totalElement = document.createElement('p');
     totalElement.textContent = `Total: $${total.toFixed(2)}`;
-    totalElement.style.fontWeight = 'bold';
     summaryElement.appendChild(totalElement);
   }
 }
