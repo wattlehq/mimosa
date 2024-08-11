@@ -66,7 +66,9 @@ function updateLines() {
 
   const data = Object.values(order);
   const linesJson = document.querySelector(htmlInputLines);
-  linesJson.value = JSON.stringify(data);
+  if (linesJson) {
+    linesJson.value = JSON.stringify(data);
+  }
 
   validateCertificates();
 }
