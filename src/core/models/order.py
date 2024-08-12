@@ -6,9 +6,6 @@ from core.models.abstract.order.base import OrderBase
 from core.models.abstract.order.fulfillable import OrderFulfillable
 from core.models.certificate import Certificate
 from core.models.fee import Fee
-from core.services.order.calculations import calculate_order_subtotal
-from core.services.order.calculations import calculate_order_tax
-from core.services.order.calculations import calculate_order_total
 
 
 class OrderSessionStatus(models.IntegerChoices):
@@ -75,15 +72,6 @@ class Order(OrderBase, OrderFulfillable):
         null=True,
         blank=True,
     )
-
-    def cost_subtotal(self):
-        return calculate_order_subtotal(self)
-
-    def cost_tax(self):
-        return calculate_order_tax(self)
-
-    def cost_total(self):
-        return calculate_order_total(self)
 
     def save(self, *args, **kwargs):
         super(Order, self).fulfilled_save(*args, **kwargs)

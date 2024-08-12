@@ -1,3 +1,5 @@
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,9 +96,9 @@
 
            
             <div class="total-section">
-                <p><strong>Subtotal:</strong> ${{ order.cost_subtotal }}</p>
-                <p><strong>GST:</strong> ${{ order.cost_tax }}</p>
-                <p><strong>Total Order Cost:</strong> ${{ order.cost_total }}</p>
+                <p><strong>Subtotal:</strong> ${{ order|order_subtotal }}</p>
+                <p><strong>GST:</strong> ${{ order|order_tax }}</p>
+                <p><strong>Total Order Cost:</strong> ${{ order|order_total }}</p>
             </div>
            
             <p>To view the full details of your order, please click on the following link:</p>
