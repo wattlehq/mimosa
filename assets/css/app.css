@@ -1,11 +1,209 @@
-/*
- * Your custom CSS goes here but before adding a lot of CSS check this out:
- *   https://tailwindcss.com/docs/extracting-components
-*/
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import url("./normalise.css");
+@import url("./base.css");
 
-input {
-  border: 1px solid #ccc;
+label {
+  font-weight: 400;
+  color: #515151;
+}
+
+input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], select, textarea {
+  width: 100%;
+}
+
+.button-next {
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 1.25rem;
+  cursor: pointer;
+  vertical-align: middle;
+  font-weight: 300;
+  color: #515151;
+}
+
+.button-next:after {
+  content: "";
+  background: url("/static/images/icons/arrow-right-circle-fill.svg");
+  width: 1.25rem;
+  height: 1.25rem;
+  background-size: cover;
+  display: inline-block;
+  margin-left: 0.25rem;
+  vertical-align: middle;
+  position: relative;
+  top: -3px;
+}
+
+.button-next:hover,
+.button-next:focus {
+  color: #7ED321;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 43rem;
+  padding: 3rem 1.5rem 6rem;
+}
+
+.form-item {
+  margin: 1rem 0;
+}
+
+.form-item:first-child {
+  margin-top: 0;
+}
+
+.form-item:last-child {
+  margin-bottom: 0;
+}
+
+.form-item--submit {
+  text-align: right;
+}
+
+.form-item--list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.form-item--list input[type='radio'] {
+  margin-right: 0.5rem;
+}
+
+.form-item--list li {
+  margin: 0.5rem 0;
+}
+
+.form-item--list li * {
+  vertical-align: middle;
+}
+
+.form-item--list li:first-child {
+  margin-top: 0;
+}
+
+.form-item--list li:last-child {
+  margin-bottom: 0;
+}
+
+.form-item--list label {
+  display: inline-block;
+  margin: 0;
+}
+
+.logo {
+  max-width: 10.5rem;
+  margin: 3rem auto;
+}
+
+.logo:first-child {
+  margin-top: 0;
+}
+
+.logo:last-child {
+  margin-bottom: 0;
+}
+
+.logo-summary {
+  margin: 2rem auto;
+}
+
+.logo-summary:first-child {
+  margin-top: 0;
+}
+
+.logo-summary:last-child {
+  margin-bottom: 0;
+}
+
+.logo-summary h1 {
+  margin: 0;
+}
+
+.logo-summary p {
+  margin-top: 0.25rem;
+  color: #757575;
+}
+
+.find-parcel {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.find-parcel:first-child {
+  margin-top: 0;
+}
+
+.find-parcel:last-child {
+  margin-bottom: 0;
+}
+
+.find-parcel section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.find-parcel section:first-child {
+  margin-top: 0;
+}
+
+.find-parcel section:last-child {
+  margin-bottom: 0;
+}
+
+.find-parcel__search .form-item--or {
+  text-align: center;
+  font-weight: 700;
+}
+
+.order-form__section {
+  margin: 3rem 0;
+}
+
+.order-form__section:first-child {
+  margin-top: 0;
+}
+
+.order-form__section:last-child {
+  margin-bottom: 0;
+}
+
+.order-form__section-certificates .form-item--list > ul > li > label {
+  font-weight: 600;
+}
+
+.order-form__section-certificates .form-item--list p {
+  margin: 0.125rem 0 0 0;
+  color: #757575;
+  font-size: .66667rem;
+  line-height: 1.5;
+}
+
+.order-form__section-certificates .form-item--list li {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-form__section-certificates .form-item--list li li {
+  color: #757575;
+  font-size: .83333rem;
+  line-height: 1.2;
+  margin: 0.25rem 0 0 0;
+}
+
+.order-form__totals p {
+  margin: 0.5rem 0;
+}
+
+.tax-rate {
+  color: #757575;
+  font-size: .66667rem;
+  line-height: 1;
+  font-weight: 400;
+  background: #F9F9F9;
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  border: 1px solid #EBEBEB;
 }

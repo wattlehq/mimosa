@@ -23,10 +23,14 @@
 </head>
 <body>
 <main>
-  {% if settings.logo %}
-    <img src="{{ settings.logo.url }}" alt="Logo">
-  {% endif %}
-  {% block body %}{% endblock %}
+  <div class="container">
+    {% if settings.logo %}
+      <div class="logo">
+        <img src="{{ settings.logo.url }}" alt="Logo">
+      </div>
+    {% endif %}
+    {% block body %}{% endblock %}
+  </div>
   {% block extra_js %}{% endblock %}
 </main>
 </body>

@@ -5,40 +5,59 @@
     <h2>1. Find a parcel</h2>
     <form>
       {% csrf_token %}
-      <div>
-        <label for="{{ form.lot.id_for_label }}">Lot</label>
-        {{ form.lot }}
+      <div class="find-parcel__section--specific">
+        <div class="form-item">
+          <label for="{{ form.lot.id_for_label }}">Lot</label>
+          {{ form.lot }}
+        </div>
+        <div class="form-item">
+          <label for="{{ form.section.id_for_label }}">Section</label>
+          {{ form.section }}
+        </div>
+        <div class="form-item">
+          <label for="{{ form.deposited_plan.id_for_label }}">Deposited Plan</label>
+          {{ form.deposited_plan }}
+        </div>
       </div>
-      <div>
-        <label for="{{ form.section.id_for_label }}">Section</label>
-        {{ form.section }}
+      <div class="form-item form-item--or">
+        <div>OR</div>
       </div>
-      <div>
-        <label for="{{ form.deposited_plan.id_for_label }}">Deposited Plan</label>
-        {{ form.deposited_plan }}
+      <div class="find-parcel__section--address">
+        <div class="form-item">
+          <label for="{{ form.street_address.id_for_label }}">Street Address</label>
+          {{ form.street_address }}
+        </div>
       </div>
-      <div>OR</div>
-      <div>
-        <label for="{{ form.street_address.id_for_label }}">Street Address</label>
-        {{ form.street_address }}
+      <div class="form-item form-item--submit">
+        <button type="submit" class="button-next">
+          Find
+        </button>
       </div>
-      <button type="submit">Find <span class="arrow">→</span>
-      </button>
       <strong class="find-parcel__search-errors"></strong>
     </form>
   </section>
 
-  <section class="find_parcel__assessment" style="display:none;">
-    <h2>2. Matching Assessments</h2>
+  <section class="find-parcel__assessment" style="display:none;">
+    <h3>Matching Assessments</h3>
     <form>
-      <div class="find_parcel__assessment-list"></div>
-      <button type="submit">Next</button>
+      <div class="form-item form-item--list find-parcel__assessment-list"></div>
+      <div class="form-item form-item--submit">
+        <button type="submit" class="button-next">
+          Next
+        </button>
+      </div>
     </form>
   </section>
 
-  <section class="find_parcel__property" style="display:none;">
-    <h2>3. Selected Property Details</h2>
-    <h3 class="find_parcel__property-title"></h3>
-    <ul class="find_parcel__property-list"></ul>
+  <section class="find-parcel__property" style="display:none;">
+    <h3>Matching Lot, Section, Deposited Plans</h3>
+    <form>
+      <div class="form-item form-item--list find-parcel__property-list"></div>
+      <div class="form-item form-item--submit">
+        <button type="submit" class="button-next">
+          Next
+        </button>
+      </div>
+    </form>
   </section>
 </div>
