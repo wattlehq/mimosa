@@ -13,6 +13,8 @@ from core.models.tax_rate import TaxRate
 
 
 class OrderLineInline(admin.TabularInline):
+    readonly_fields = ["certificate", "fee", "cost_certificate", "cost_fee",
+                       "tax_amount_certificate", "tax_amount_fee"]
     model = OrderLine
     extra = 1
     exclude = ("fulfilled_at",)
