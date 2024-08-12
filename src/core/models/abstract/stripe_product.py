@@ -123,10 +123,6 @@ def sync_to_stripe_existing(
                 "tax_rate": tax_rate_new.stripe_tax_rate_id
             }
 
-        price_id_new = stripe.Price.create(
-            product=product_id,
-            unit_amount=price_new_cents,
-            currency=settings.STRIPE_CURRENCY,
-        ).stripe_id
+        price_id_new = stripe.Price.create(**price_data).stripe_id
 
     return product_id, price_id_new
