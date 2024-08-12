@@ -10,7 +10,6 @@ from core.models.order import OrderSession
 from core.models.order import OrderSessionLine
 from core.models.order import OrderSessionStatus
 from core.models.property import Property
-from core.services.tax_rate.calculations import calculate_cost_with_tax
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
@@ -103,23 +102,9 @@ def save_event_order(event: stripe.checkout.Session):
             fee=session_order_line.fee,
             cost_certificate=session_order_line.cost_certificate,
             cost_fee=session_order_line.cost_fee,
+            tax_amount_certificate=session_order_line.tax_amount_certificate,
+            tax_amount_fee=session_order_line.tax_amount_fee,
         )
-
-        # Calculate and save tax information
-        if session_order_line.certificate.tax_rate:
-            tax_rate = session_order_line.certificate.tax_rate
-            tax_amount = calculate_cost_with_tax(
-                session_order_line.cost_certificate, tax_rate
-            )
-            order_line.tax_amount_certificate = tax_amount
-
-        if session_order_line.fee and session_order_line.fee.tax_rate:
-            tax_rate = session_order_line.fee.tax_rate
-            tax_amount = calculate_cost_with_tax(
-                session_order_line.cost_fee,
-                tax_rate
-            )
-            order_line.tax_amount_fee = tax_amount
 
         order_line.save()
 

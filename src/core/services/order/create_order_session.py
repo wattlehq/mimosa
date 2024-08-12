@@ -5,6 +5,7 @@ from core.models.certificate import Certificate
 from core.models.order import OrderSession
 from core.models.order import OrderSessionLine
 from core.models.property import Property
+from core.services.tax_rate.calculations import calculate_cost_with_tax
 from core.services.utils.site import get_site_url
 
 
@@ -38,6 +39,13 @@ def create_order_session(
                 cost_certificate=certificate.price,
             )
 
+            # Calculate tax for certificate
+            if certificate.tax_rate:
+                tax_amount = calculate_cost_with_tax(
+                    certificate.price, certificate.tax_rate
+                )
+                order_line.tax_amount_certificate = tax_amount
+
             line_item = {"price": certificate.stripe_price_id, "quantity": 1}
             if certificate.tax_rate:
                 line_item["tax_rates"] = [
@@ -50,16 +58,22 @@ def create_order_session(
                 if fee:
                     order_line.fee = fee
                     order_line.cost_fee = fee.price
-                    order_line.save()
 
                     fee_line_item = {
                         "price": fee.stripe_price_id,
                         "quantity": 1,
                     }
+
                     if fee.tax_rate:
+                        tax_amount = calculate_cost_with_tax(
+                            fee.price, fee.tax_rate
+                        )
+                        order_line.tax_amount_fee = tax_amount
                         fee_line_item["tax_rates"] = [
                             fee.tax_rate.stripe_tax_rate_id
                         ]
+
+                    order_line.save()
                     line_items.append(fee_line_item)
 
         stripe_checkout = stripe.checkout.Session.create(
