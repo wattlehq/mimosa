@@ -69,7 +69,9 @@
     <div class="order-line">
       <div class="order-line__header">
         <div class="order-line__name">{{ line.certificate.name }}</div>
-        <div class="order-line__cost">{{ line.cost_certificate|add_decimals:line.cost_fee|money }}</div>
+        <div class="order-line__cost">
+          {{ line.cost_certificate|add_decimals:line.cost_fee|add_decimals:line.tax_amount_certificate|add_decimals:line.tax_amount_fee|money }}
+        </div>
       </div>
       <div class="order-line__delivered">
         {% if line.is_fulfilled %}
