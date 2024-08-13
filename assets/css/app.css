@@ -90,18 +90,6 @@ input[type='radio'] {
   margin-right: 0.5rem;
 }
 
-.form-item--list li {
-  margin: 0.5rem 0;
-}
-
-.form-item--list li:first-child {
-  margin-top: 0;
-}
-
-.form-item--list li:last-child {
-  margin-bottom: 0;
-}
-
 /**
  * Component: Logo.
  */
