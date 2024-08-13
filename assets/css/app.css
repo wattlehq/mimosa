@@ -10,6 +10,10 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
   width: 100%;
 }
 
+input[type='radio'] {
+  display: inline-block;
+}
+
 .button-next {
   appearance: none;
   padding: 0;
@@ -76,21 +80,12 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
   margin: 0.5rem 0;
 }
 
-.form-item--list li * {
-  vertical-align: middle;
-}
-
 .form-item--list li:first-child {
   margin-top: 0;
 }
 
 .form-item--list li:last-child {
   margin-bottom: 0;
-}
-
-.form-item--list label {
-  display: inline-block;
-  margin: 0;
 }
 
 .logo {
@@ -132,6 +127,10 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
   margin-bottom: 3rem;
 }
 
+.find-parcel label {
+  display: inline-block;
+}
+
 .find-parcel:first-child {
   margin-top: 0;
 }
@@ -158,6 +157,24 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
   font-weight: 700;
 }
 
+.find-parcel__property-list {
+  line-height: 1.6rem;
+}
+
+.find-parcel__property-list label {
+  margin: 0;
+}
+
+.find-parcel__property-list li {
+  display: inline-flex;
+  align-items: flex-start;
+}
+
+.find-parcel__property-list input {
+  margin-top: 0.5rem;
+  min-width: 1rem;
+}
+
 .order-form__section {
   margin: 3rem 0;
 }
@@ -181,6 +198,10 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
 
 .cert-li:last-child {
   margin-bottom: 0;
+}
+
+.cert-li label {
+  display: inline-block;
 }
 
 .cert-li input {
