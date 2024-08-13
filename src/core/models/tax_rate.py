@@ -20,7 +20,7 @@ class TaxRate(models.Model):
     percentage = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        validators=[MinValueValidator(1), MaxValueValidator(100)],
     )
     stripe_tax_rate_id = models.CharField(
         max_length=100, blank=True, null=True
