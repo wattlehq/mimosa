@@ -8,6 +8,8 @@ label {
 
 input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], select, textarea {
   width: 100%;
+  border-radius: 8px;
+  background-color: #f9f9f9;
 }
 
 input[type='radio'] {
@@ -155,6 +157,8 @@ input[type='radio'] {
 .find-parcel__search .form-item--or {
   text-align: center;
   font-weight: 700;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .find-parcel__property-list {
@@ -173,6 +177,18 @@ input[type='radio'] {
 .find-parcel__property-list input {
   margin-top: 0.5rem;
   min-width: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .find-parcel__section--specific {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-gap: 2rem;
+  }
+
+  .find-parcel__section--specific .form-item {
+    margin-top: 0;
+  }
 }
 
 .order-form__section {
