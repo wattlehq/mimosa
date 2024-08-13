@@ -22,42 +22,66 @@
       <ul>
         {% for certificate in certificates %}
           <li>
-            <input
-              type="checkbox"
-              id="certificate_{{ forloop.counter }}"
-              value="{{ certificate.id }}"
-              data-price="{{ certificate.price }}"
-              data-tax-rate="{{ certificate.tax_rate.percentage|default:0 }}"
-            />
-            <label for="cert-{{ certificate.id }}">
-              {{ certificate.name }} {{ certificate.price|money }}
-            </label>
-            {% if certificate.tax_rate %}
-              <span class="tax-rate">{{ certificate.tax_rate.name }}</span>
-            {% endif %}
-            {% if certificate.description %}
-              <p>
-                {{ certificate.description }}
-              </p>
-            {% endif %}
+            <div class="cert-li cert-li--cert">
+              <div class="cert-li__details">
+                <div class="cert-li__title">
+                  <input
+                    type="checkbox"
+                    id="certificate_{{ forloop.counter }}"
+                    value="{{ certificate.id }}"
+                    data-price="{{ certificate.price }}"
+                    data-tax-rate="{{ certificate.tax_rate.percentage|default:0 }}"
+                  />
+                  <label for="cert-{{ certificate.id }}">
+                    {{ certificate.name }}
+                  </label>
+                </div>
+                {% if certificate.description %}
+                  <div class="cert-li__description">
+                    <p>
+                      {{ certificate.description }}
+                    </p>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="cert-li__cost">
+                <div class="cert-li__price">
+                  <p>
+                    {{ certificate.price|money }}
+                  </p>
+                </div>
+                {% if certificate.tax_rate %}
+                  <span class="tax-rate">{{ certificate.tax_rate.name }}</span>
+                {% endif %}
+              </div>
+            </div>
             {% if certificate.fees.exists %}
               <ul>
                 {% for fee in certificate.fees.all %}
                   <li>
-                    <input
-                      type="checkbox"
-                      id="fee_{{ forloop.counter }}"
-                      value="{{ fee.id }}"
-                      data-price="{{ fee.price }}"
-                      data-tax-rate="{{ fee.tax_rate.percentage|default:0 }}"
-                      data-certificate="{{ certificate.id }}"
-                    />
-                    <label for="fee-{{ fee.id }}">
-                      {{ fee.name }} {{ fee.price|money }}
-                    </label>
-                    {% if fee.tax_rate %}
-                      <span class="tax-rate">{{ fee.tax_rate.name }}</span>
-                    {% endif %}
+                    <div class="cert-li cert-li--fee">
+                      <div class="cert-li__title">
+                        <input
+                          type="checkbox"
+                          id="fee_{{ forloop.counter }}"
+                          value="{{ fee.id }}"
+                          data-price="{{ fee.price }}"
+                          data-tax-rate="{{ fee.tax_rate.percentage|default:0 }}"
+                          data-certificate="{{ certificate.id }}"
+                        />
+                        <label for="fee-{{ fee.id }}">
+                          {{ fee.name }}
+                        </label>
+                      </div>
+                      <div class="cert-li__cost">
+                        <div class="cert-li__price">
+                          {{ fee.price|money }}
+                        </div>
+                        {% if fee.tax_rate %}
+                          <span class="tax-rate">{{ fee.tax_rate.name }}</span>
+                        {% endif %}
+                      </div>
+                    </div>
                   </li>
                 {% endfor %}
               </ul>
