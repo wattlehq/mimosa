@@ -26,9 +26,11 @@
             id="certificate_{{ forloop.counter }}"
             value="{{ certificate.id }}"
             data-price="{{ certificate.price }}"
+            data-tax-rate="{{ certificate.tax_rate.percentage|default:0 }}"
           />
           <label for="cert-{{ certificate.id }}">
-            {{ certificate.name }} {{ certificate.price|money }}<br/>
+            {{ certificate.name }} {{ certificate.price|money }}
+            <span class="tax-rate">(Tax: {{ certificate.tax_rate.name|default:"None" }})</span><br/>
           </label>
           <p>
             {% if certificate.description %}
@@ -44,10 +46,11 @@
                     id="fee_{{ forloop.counter }}"
                     value="{{ fee.id }}"
                     data-price="{{ fee.price }}"
+                    data-tax-rate="{{ fee.tax_rate.percentage|default:0 }}"
                     data-certificate="{{ certificate.id }}"
                   />
-                  {{ fee.name }} {{ fee.price|money }}<br/>
-                  </div>
+                  {{ fee.name }} {{ fee.price|money }}
+                  <span class="tax-rate">(Tax: {{ fee.tax_rate.name|default:"None" }})</span><br/>
                 </li>
               {% endfor %}
             </ul>
@@ -56,6 +59,7 @@
       {% endfor %}
     </ul>
   </section>
+  
   <section class="order-form__section order-form__section-customer">
     <h2>3. Your Details</h2>
     <ul>
