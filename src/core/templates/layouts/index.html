@@ -26,7 +26,9 @@
   <div class="container">
     {% if settings.logo %}
       <div class="logo">
-        <img src="{{ settings.logo.url }}" alt="Logo">
+        <a href="/">
+          <img src="{{ settings.logo.url }}" alt="Logo">
+        </a>
       </div>
     {% endif %}
     {% block body %}{% endblock %}
