@@ -157,8 +157,6 @@ input[type='radio'] {
 .find-parcel__search .form-item--or {
   text-align: center;
   font-weight: 700;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
 }
 
 .find-parcel__property-list {
@@ -180,6 +178,11 @@ input[type='radio'] {
 }
 
 @media (min-width: 48rem) {
+  .find-parcel__search .form-item--or {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
   .find-parcel__section--specific {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
