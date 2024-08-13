@@ -60,12 +60,12 @@ def send_order_status_email(order_id, override_email=None):
         # Prepare lists for ready and pending certificates
         order_lines = list(order.orderline_set.all())
         for line in order_lines:
-            # Calculate GST and total for each line
-            line.gst = (line.tax_amount_certificate or 0) + (
+            # Calculate tax and total for each line
+            line.tax = (line.tax_amount_certificate or 0) + (
                 line.tax_amount_fee or 0
             )
             line.total = (
-                (line.cost_certificate or 0) + (line.cost_fee or 0) + line.gst
+                (line.cost_certificate or 0) + (line.cost_fee or 0) + line.tax
             )
 
         ready_certificates = [

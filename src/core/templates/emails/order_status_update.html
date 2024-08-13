@@ -63,7 +63,7 @@
                         <th>Certificate</th>
                         <th>Fee</th>
                         <th>Certificate Cost</th>
-                        <th>GST</th>
+                        <th>Tax</th>
                         <th>Total</th>
                         <th>Status</th>
                     </tr>
@@ -81,8 +81,8 @@
                         </td>
                         <td>${{ line.cost_certificate }}</td>
                         <td>
-                            {% if line.gst > 0 %}
-                                ${{ line.gst }}
+                            {% if line.tax > 0 %}
+                                ${{ line.tax }}
                             {% else %}
                                 N/A
                             {% endif %}
@@ -97,7 +97,7 @@
            
             <div class="total-section">
                 <p><strong>Subtotal:</strong> ${{ order|order_subtotal }}</p>
-                <p><strong>GST:</strong> ${{ order|order_tax }}</p>
+                <p><strong>Tax:</strong> ${{ order|order_tax }}</p>
                 <p><strong>Total Order Cost:</strong> ${{ order|order_total }}</p>
             </div>
            
