@@ -4,7 +4,7 @@
 
 html {
   font-size: 24px;
-  line-height: 1.16667em
+  line-height: 1.41667em
 }
 
 *, *:before, *:after {
@@ -28,7 +28,7 @@ body {
   -webkit-font-smoothing: antialiased;
   background-color: #fff;
   color: #353535;
-  font-family: Helvetica Neue, Helvetica, Arial, serif
+  font-family: Helvetica, Arial, serif
 }
 
 form, label, fieldset, legend, input, select, textarea, button {
@@ -423,42 +423,42 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:la
   margin-bottom: 0
 }
 
-h1 {
+h1, .h1 {
   font-size: 1.83333rem;
   line-height: 1.18182;
   margin-top: 1rem;
   margin-bottom: 1rem
 }
 
-h2 {
-  font-size: 1.83333rem;
-  line-height: 1.18182;
+h2, .h2 {
+  font-size: 1.58333rem;
+  line-height: 1.15789;
   margin-top: 1rem;
   margin-bottom: 1rem
 }
 
-h3 {
+h3, .h3 {
   font-size: 1.25rem;
   line-height: 1.13333;
   margin-top: 1rem;
   margin-bottom: 1rem
 }
 
-h4 {
+h4, .h4 {
   font-size: 1rem;
   line-height: 1.58333;
   margin-top: 1rem;
   margin-bottom: 1rem
 }
 
-h5 {
+h5, .h5 {
   font-size: .83333rem;
   line-height: 1.2;
   margin-top: 1rem;
   margin-bottom: 1rem
 }
 
-h6 {
+h6, .h6 {
   font-size: .66667rem;
   line-height: 1.5;
   margin-top: 1rem;

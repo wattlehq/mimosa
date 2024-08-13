@@ -6,79 +6,100 @@
 
 {% block body %}
   {{ order_debug }}
-  <h1>Building & Property Certificate Request</h1>
-  <h2>Order Number {{ order.id }}</h2>
-  <section>
-    <ul>
-      <li>{{ order.customer_company_name|default:"" }}</li>
-      <li>{{ order.customer_name|default:"" }}</li>
-      <li>{{ order.customer_address_street_line_2|default:"" }}</li>
-      <li>{{ order.customer_address_suburb|default:"" }}</li>
-      <li>{{ order.customer_address_state|default:"" }}</li>
-      <li>{{ order.customer_address_post_code|default:"" }}</li>
-      <li>{{ order.customer_email|default:"" }}</li>
-    </ul>
-  </section>
-  <section>
-    <ul>
-      <li>
-        <strong>Ordered</strong> {{ order.created_at|date:"jS F Y" }}
-      </li>
-      {% if order.fulfilled_at %}
-        <li>
-          <strong>Delivered</strong> {{ order.fulfilled_at|date:"jS F Y" }}
-        </li>
-      {% endif %}
-    </ul>
-  </section>
-  <br/>
-  <section>
-    <h2>Assessment {{ order.property.assessment }}</h2>
-    <p>{{ order.cost_total|money }}</p>
-    <ul>
-      <li>{{ order.property.lot }}</li>
-      <li>{{ order.property.section }}</li>
-      <li>{{ order.property.deposited_plan }}</li>
-      <li>{{ order.property.address_street }}</li>
-      <li>{{ order.property.address_suburb }}</li>
-      <li>{{ order.property.address_state }}</li>
-      <li>{{ order.property.address_post_code }}</li>
-    </ul>
-  </section>
-  <br/>
-  {% for line in order_lines %}
-    <section>
-      <ul>
-        <li>{{ line.certificate.name }}</li>
-        {% if line.fulfilled_at %}
-          <li>
-            Delivered on {{ line.fulfilled_at|date:"jS F Y" }}
-          </li>
-        {% endif %}
-        <li>{{ line.cost_certificate|add_decimals:line.cost_fee|money }}</li>
-        <li>
-          {% if line.is_fulfilled %}
-            Fulfilled
-          {% else %}
-            Pending
+  <div class="logo-summary">
+    <h1>Building & Property Certificate Request</h1>
+    <p>Order Number {{ order.id }}</p>
+  </div>
+  <div class="order-details">
+    <div class="order-details__meta">
+      <div class="order-customer">
+        <ul>
+          {% if order.customer_company_name %}
+            <li class="order-customer__company_name">{{ order.customer_company_name }}</li>
           {% endif %}
-        </li>
-        {% if line.certificate_file %}
+          <li class="order-customer__cus_name">{{ order.customer_name }}</li>
+          {% if order.customer_address_street_line_1 %}
+            <li class="order-customer__cus_address">
+              {{ order.customer_address_street_line_1|default:"" }}
+              {{ order.customer_address_street_line_2|default:"" }}
+              {{ order.customer_address_suburb|default:"" }}
+              {{ order.customer_address_state|default:"" }}
+              {{ order.customer_address_post_code|default:"" }}
+            </li>
+          {% endif %}
+          <li class="order-customer__cus_email">
+            {{ order.customer_email }}
+          </li>
+        </ul>
+      </div>
+      <div class="order-status">
+        <ul>
           <li>
-            <a href="{{ line.certificate_file.url }}">
-              {{ line.certificate_file.name|filename }}
+            <strong>Ordered</strong> {{ order.created_at|date:"jS F Y" }}
+          </li>
+          {% if order.fulfilled_at %}
+            <li>
+              <strong>Delivered</strong> {{ order.fulfilled_at|date:"jS F Y" }}
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="order-assessment">
+    <div class="order-assessment__details">
+      <h2>Assessment {{ order.property.assessment }}</h2>
+      <p>{{ order|order_total|money }}</p>
+    </div>
+    <ul class="order-assessment__address">
+      <li>
+        <span>{{ order.property.lot }} </span>
+        <span>{{ order.property.section }} </span>
+        <span>{{ order.property.deposited_plan }}</span>
+      </li>
+      <li>
+        <span>{{ order.property.address_street }} </span>
+        <span>{{ order.property.address_suburb }} </span>
+        <span>{{ order.property.address_state }} </span>
+        <span>{{ order.property.address_post_code }}</span>
+      </li>
+    </ul>
+  </div>
+  {% for line in order_lines %}
+    <div class="order-line">
+      <div class="order-line__header">
+        <div class="order-line__name">{{ line.certificate.name }}</div>
+        <div class="order-line__cost">{{ line.cost_certificate|add_decimals:line.cost_fee|money }}</div>
+      </div>
+      <div class="order-line__delivered">
+        {% if line.is_fulfilled %}
+          Fulfilled
+        {% else %}
+          Pending
+        {% endif %}
+        {% if line.fulfilled_at %}
+          - Delivered on {{ line.fulfilled_at|date:"jS F Y" }}
+        {% endif %}
+      </div>
+      {% if line.fee %}
+        <div class="order-line__fee">
+          {{ line.fee.name }}
+        </div>
+      {% endif %}
+      {% if line.certificate_file %}
+        <div class="order-line__file">
+          <ul>
+            <li>
+              <a href="{{ line.certificate_file.url }}">
+                {{ line.certificate_file.name|filename }}
+              </a>
+            </li>
+            <li class="order-line__file__size">
               {{ line.certificate_file.size|filesize_kb|floatformat:2 }} KB
-            </a>
-          </li>
-        {% endif %}
-        {% if line.fee %}
-          <li>
-            {{ line.fee.name }}
-          </li>
-        {% endif %}
-
-      </ul>
-    </section>
-    <br/>
+            </li>
+          </ul>
+        </div>
+      {% endif %}
+    </div>
   {% endfor %}
 {% endblock %}

@@ -16,6 +16,10 @@ input[type='radio'] {
   display: inline-block;
 }
 
+/**
+ * Component: Button Next.
+ */
+
 .button-next {
   appearance: none;
   padding: 0;
@@ -46,11 +50,19 @@ input[type='radio'] {
   color: #7ED321;
 }
 
+/**
+ * Component: Container.
+ */
+
 .container {
   margin: 0 auto;
   max-width: 43rem;
   padding: 3rem 1.5rem 6rem;
 }
+
+/**
+ * Component: Form Item.
+ */
 
 .form-item {
   margin: 1rem 0;
@@ -90,6 +102,10 @@ input[type='radio'] {
   margin-bottom: 0;
 }
 
+/**
+ * Component: Logo.
+ */
+
 .logo {
   max-width: 10.5rem;
   margin: 3rem auto;
@@ -102,6 +118,10 @@ input[type='radio'] {
 .logo:last-child {
   margin-bottom: 0;
 }
+
+/**
+ * Component: Logo Summary.
+ */
 
 .logo-summary {
   margin: 2rem auto;
@@ -122,7 +142,12 @@ input[type='radio'] {
 .logo-summary p {
   margin-top: 0.25rem;
   color: #757575;
+  font-size: 1.25rem;
 }
+
+/**
+ * Component: Find Parcel.
+ */
 
 .find-parcel {
   margin-top: 3rem;
@@ -194,6 +219,10 @@ input[type='radio'] {
   }
 }
 
+/**
+ * Component: Order Form.
+ */
+
 .order-form__section {
   margin: 3rem 0;
 }
@@ -205,6 +234,28 @@ input[type='radio'] {
 .order-form__section:last-child {
   margin-bottom: 0;
 }
+
+.order-form__section-certificates .form-item--list li {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.order-form__section-certificates .form-item--list li li {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/**
+ * Component: Order Form Totals.
+ */
+
+.order-form__totals p {
+  margin: 0.5rem 0;
+}
+
+/**
+ * Component: Certificate List Item.
+ */
 
 .cert-li {
   margin-bottom: 0.25rem;
@@ -280,19 +331,9 @@ input[type='radio'] {
   }
 }
 
-.order-form__section-certificates .form-item--list li {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-.order-form__section-certificates .form-item--list li li {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.order-form__totals p {
-  margin: 0.5rem 0;
-}
+/**
+ * Component: Tax Rate.
+ */
 
 .tax-rate {
   color: #757575;
@@ -306,4 +347,252 @@ input[type='radio'] {
   white-space: nowrap;
   margin: 0.125rem;
   display: inline-block;
+}
+
+/**
+ * Component: Order Customer.
+ */
+
+.order-customer {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.order-customer:first-child {
+  margin-top: 0;
+}
+
+.order-customer:last-child {
+  margin-bottom: 0;
+}
+
+.order-customer ul {
+  margin-left: 0;
+  padding: 0;
+}
+
+.order-customer li {
+  display: block;
+}
+
+.order-customer__company_name {
+  font-size: 1.25rem;
+  line-height: 1.13333;
+  font-weight: 700;
+}
+
+.order-customer__cus_email {
+  color: #757575;
+}
+
+/**
+ * Component: Order Status.
+ */
+
+.order-status {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.order-status:first-child {
+  margin-top: 0;
+}
+
+.order-status:last-child {
+  margin-bottom: 0;
+}
+
+.order-status ul {
+  margin-left: 0;
+  background: #252525;
+  display: inline-flex;
+  color: #FFF;
+  font-size: 0.833rem;
+  border-radius: 8px;
+  padding: 0.75rem 0;
+  line-height: 1.4;
+}
+
+.order-status strong {
+  display: block;
+}
+
+.order-status li {
+  display: block;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.order-status li:not(:first-child):before {
+  content: "";
+  height: 100%;
+  width: 1px;
+  background: #979797;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/**
+ * Component: Order Details.
+ */
+
+.order-assessment {
+  border-bottom: 1px solid #EBEBEB;
+  padding-bottom: 0.75rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.order-assessment ul {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.order-assessment li {
+  display: block;
+}
+
+.order-assessment__details h2,
+.order-assessment__details p {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.13333;
+  font-weight: 700;
+}
+
+@media (min-width: 48rem) {
+  .order-assessment__details {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .order-assessment__details > *:last-child {
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
+/**
+ * Component: Order Line.
+ */
+
+.order-line {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.order-line:first-child {
+  margin-top: 0;
+}
+
+.order-line:last-child {
+  margin-bottom: 0;
+}
+
+.order-line__name {
+  font-size: 1.58333rem;
+  line-height: 1.15789;
+  font-weight: 700;
+}
+
+.order-line__cost {
+  font-size: 1.25rem;
+  line-height: 1.13333;
+  font-weight: 700;
+}
+
+.order-line__header {
+  margin-bottom: 0.25rem;
+}
+
+.order-line__file {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.order-line__file:first-child {
+  margin-top: 0;
+}
+
+.order-line__file:last-child {
+  margin-bottom: 0;
+}
+
+.order-line__file ul {
+  margin: 0;
+  padding: 0 0 0 2rem;
+  position: relative;
+}
+
+.order-line__file ul:before {
+  content: "";
+  background: url("/static/images/icons/file.svg");
+  width: 1.25rem;
+  height: 1.7rem;
+  background-size: cover;
+  position: absolute;
+  top: 0.25rem;
+  left: 0;
+}
+
+.order-line__file li {
+  display: block;
+}
+
+.order-line__file a {
+  color: #2B2B2B;
+}
+
+.order-line__file a:hover,
+.order-line__file a:focus {
+  color: #7ED321;
+}
+
+.order-line__file__size {
+  font-size: .83333rem;
+  line-height: 1.2;
+  color: #757575;
+}
+
+@media (min-width: 48rem) {
+  .order-line__header {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .order-line__header > * {
+    margin-top: 0;
+  }
+
+  .order-line__header > *:last-child {
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
+.order-line__fee {
+  color: #757575;
+}
+
+
+/**
+ * Component: Order Details.
+ */
+
+@media (min-width: 64rem) {
+  .order-details__meta {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .order-details__meta > * {
+    margin-top: 0;
+  }
+
+  .order-details__meta > *:last-child {
+    margin-left: auto;
+    margin-right: 0;
+  }
 }
