@@ -15,7 +15,6 @@ export class OrderFindParcel {
     this.assessmentList = null;
     this.assessmentForm = null;
     this.propertySection = null;
-    this.propertyTitle = null;
     this.propertyList = null;
     this.error = null;
     this.inputSelectionTarget = null;
@@ -30,12 +29,12 @@ export class OrderFindParcel {
   initialiseElements() {
     console.debug('Initialising elements');
     this.searchForm = document.querySelector('.find-parcel__search form');
-    this.assessmentSection = document.querySelector('.find_parcel__assessment');
-    this.assessmentList = document.querySelector('.find_parcel__assessment-list');
-    this.assessmentForm = document.querySelector('.find_parcel__assessment form');
-    this.propertySection = document.querySelector('.find_parcel__property');
-    this.propertyTitle = document.querySelector('.find_parcel__property-title');
-    this.propertyList = document.querySelector('.find_parcel__property-list');
+    this.assessmentSection = document.querySelector('.find-parcel__assessment');
+    this.assessmentList = document.querySelector('.find-parcel__assessment-list');
+    this.assessmentForm = document.querySelector('.find-parcel__assessment form');
+    this.propertySection = document.querySelector('.find-parcel__property');
+    this.propertyList = document.querySelector('.find-parcel__property-list');
+    this.propertyForm = document.querySelector('.find-parcel__property form');
     this.inputSelectionTarget = document.querySelector(this.inputSelectionTargetSel);
     this.error = document.querySelector('.find-parcel__search-errors');
 
@@ -49,6 +48,16 @@ export class OrderFindParcel {
     if (this.assessmentForm) {
       console.debug('Assessment form found, adding event listener');
       this.assessmentForm.addEventListener('submit', this.handleAssessmentSubmit.bind(this));
+    } else {
+      console.error('Assessment form not found');
+    }
+
+    if (this.propertyForm) {
+      console.debug('Property form found, adding event listener');
+      this.propertyForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        this.handlePropertySubmit();
+      });
     } else {
       console.error('Assessment form not found');
     }
@@ -185,10 +194,9 @@ export class OrderFindParcel {
    */
   displayAssessmentProperties(selectedProperties, selectedAssessment) {
     console.debug('Displaying assessment properties');
-    this.propertyTitle.textContent = `Assessment: ${selectedAssessment}`;
     this.propertyList.innerHTML = '';
 
-    const form = document.createElement('form');
+    const ul = document.createElement('ul');
 
     selectedProperties.forEach((property, index) => {
       const li = document.createElement('li');
@@ -202,26 +210,22 @@ export class OrderFindParcel {
 
       const label = document.createElement('label');
       label.htmlFor = `property-${index}`;
-      label.textContent = `Lot ${property.lot} Section ${property.section} Deposited Plan ${property.deposited_plan} - ${property.address_street}, ${property.address_suburb} ${property.address_state} ${property.address_post_code}`;
+
+      const items = [
+        `Lot ${property.lot} Section ${property.section} Deposited Plan ${property.deposited_plan}`,
+        `${property.address_street}, ${property.address_suburb} ${property.address_state} ${property.address_post_code}`
+      ];
+
+      label.innerHTML = items.join("<br />");
 
       li.appendChild(input);
       li.appendChild(label);
       li.addEventListener('click', this.handlePropertySubmit.bind(this));
-      form.appendChild(li);
+      ul.appendChild(li);
     });
 
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.textContent = 'Select Property';
-    form.appendChild(submitButton);
-
-    this.propertyList.appendChild(form);
+    this.propertyList.appendChild(ul);
     this.propertySection.style.display = 'block';
-
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      this.handlePropertySubmit();
-    });
   }
 
   handlePropertySubmit() {
