@@ -33,6 +33,11 @@ function cmd {
   _dc web "${@}"
 }
 
+function cmd-js {
+  # Run any command you want in the js container
+  _dc js "${@}"
+}
+
 function manage {
   # Run any manage.py commands
 
@@ -53,6 +58,7 @@ function lint:dockerfile {
 function lint {
   # Lint Python code
   cmd flake8 "${@}"
+  cmd-js yarn lint
 }
 
 function format:imports {
