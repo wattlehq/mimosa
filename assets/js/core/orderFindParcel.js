@@ -1,4 +1,4 @@
-import { API } from './api.js';
+import { API } from './api.js'
 
 /**
  * OrderFindParcel class for handling property search and selection.
@@ -8,58 +8,58 @@ export class OrderFindParcel {
    * Create a FindParcel instance.
    * Initialises DOM elements and sets up event listeners.
    */
-  constructor(inputSelectionTargetSel) {
-    console.debug('OrderFindParcel constructor called');
-    this.searchForm = null;
-    this.assessmentSection = null;
-    this.assessmentList = null;
-    this.assessmentForm = null;
-    this.propertySection = null;
-    this.propertyList = null;
-    this.error = null;
-    this.inputSelectionTarget = null;
-    this.inputSelectionTargetSel = inputSelectionTargetSel;
+  constructor (inputSelectionTargetSel) {
+    console.debug('OrderFindParcel constructor called')
+    this.searchForm = null
+    this.assessmentSection = null
+    this.assessmentList = null
+    this.assessmentForm = null
+    this.propertySection = null
+    this.propertyList = null
+    this.error = null
+    this.inputSelectionTarget = null
+    this.inputSelectionTargetSel = inputSelectionTargetSel
 
-    this.initialiseElements();
+    this.initialiseElements()
   }
 
   /**
    * Initialise DOM elements and set up event listeners.
    */
-  initialiseElements() {
-    console.debug('Initialising elements');
-    this.searchForm = document.querySelector('.find-parcel__search form');
-    this.assessmentSection = document.querySelector('.find-parcel__assessment');
-    this.assessmentList = document.querySelector('.find-parcel__assessment-list');
-    this.assessmentForm = document.querySelector('.find-parcel__assessment form');
-    this.propertySection = document.querySelector('.find-parcel__property');
-    this.propertyList = document.querySelector('.find-parcel__property-list');
-    this.propertyForm = document.querySelector('.find-parcel__property form');
-    this.inputSelectionTarget = document.querySelector(this.inputSelectionTargetSel);
-    this.error = document.querySelector('.find-parcel__search-errors');
+  initialiseElements () {
+    console.debug('Initialising elements')
+    this.searchForm = document.querySelector('.find-parcel__search form')
+    this.assessmentSection = document.querySelector('.find-parcel__assessment')
+    this.assessmentList = document.querySelector('.find-parcel__assessment-list')
+    this.assessmentForm = document.querySelector('.find-parcel__assessment form')
+    this.propertySection = document.querySelector('.find-parcel__property')
+    this.propertyList = document.querySelector('.find-parcel__property-list')
+    this.propertyForm = document.querySelector('.find-parcel__property form')
+    this.inputSelectionTarget = document.querySelector(this.inputSelectionTargetSel)
+    this.error = document.querySelector('.find-parcel__search-errors')
 
     if (this.searchForm) {
-      console.debug('Search form found, adding event listener');
-      this.searchForm.addEventListener('submit', this.handleSearch.bind(this));
+      console.debug('Search form found, adding event listener')
+      this.searchForm.addEventListener('submit', this.handleSearch.bind(this))
     } else {
-      console.error('Search form not found');
+      console.error('Search form not found')
     }
 
     if (this.assessmentForm) {
-      console.debug('Assessment form found, adding event listener');
-      this.assessmentForm.addEventListener('submit', this.handleAssessmentSubmit.bind(this));
+      console.debug('Assessment form found, adding event listener')
+      this.assessmentForm.addEventListener('submit', this.handleAssessmentSubmit.bind(this))
     } else {
-      console.error('Assessment form not found');
+      console.error('Assessment form not found')
     }
 
     if (this.propertyForm) {
-      console.debug('Property form found, adding event listener');
+      console.debug('Property form found, adding event listener')
       this.propertyForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        this.handlePropertySubmit();
-      });
+        event.preventDefault()
+        this.handlePropertySubmit()
+      })
     } else {
-      console.error('Assessment form not found');
+      console.error('Assessment form not found')
     }
   }
 
@@ -71,25 +71,25 @@ export class OrderFindParcel {
    * @param {Event} event - The form submission event.
    * @returns {Promise<void>}
    */
-  async handleSearch(event) {
-    console.debug('handleSearch called');
-    event.preventDefault();
+  async handleSearch (event) {
+    console.debug('handleSearch called')
+    event.preventDefault()
 
-    const formData = new FormData(this.searchForm);
-    const searchParams = Object.fromEntries(formData.entries());
-    console.debug('Search params:', searchParams);
+    const formData = new FormData(this.searchForm)
+    const searchParams = Object.fromEntries(formData.entries())
+    console.debug('Search params:', searchParams)
 
     try {
-      const result = await API.searchProperties(searchParams);
+      const result = await API.searchProperties(searchParams)
       if (result && result.isValid) {
-        this.error.innerHTML = '';
-        this.displaySearchResults(result.results);
+        this.error.innerHTML = ''
+        this.displaySearchResults(result.results)
       } else {
-        this.displayValidationErrors(result.errors);
+        this.displayValidationErrors(result.errors)
       }
     } catch (error) {
-      console.error('Error during search:', error);
-      this.displayError('An error occurred while searching for properties.');
+      console.error('Error during search:', error)
+      this.displayError('An error occurred while searching for properties.')
     }
   }
 
@@ -98,17 +98,17 @@ export class OrderFindParcel {
    *
    * @param {Object} errors - An object containing validation errors.
    */
-  displayValidationErrors(errors) {
-    const displayedErrors = new Set(); // To track unique error messages
-    this.error.innerHTML = '';
+  displayValidationErrors (errors) {
+    const displayedErrors = new Set() // To track unique error messages
+    this.error.innerHTML = ''
     for (const field in errors) {
-      const errorMessages = errors[field];
+      const errorMessages = errors[field]
       for (const message of errorMessages) {
         if (!displayedErrors.has(message.message)) {
-          const errorElement = document.createElement('p');
-          errorElement.textContent = message.message;
-          this.error.appendChild(errorElement);
-          displayedErrors.add(message.message);
+          const errorElement = document.createElement('p')
+          errorElement.textContent = message.message
+          this.error.appendChild(errorElement)
+          displayedErrors.add(message.message)
         }
       }
     }
@@ -119,9 +119,9 @@ export class OrderFindParcel {
    *
    * @param {string} message - The error message to display.
    */
-  displayError(message) {
-    const errorContainer = this.error;
-    errorContainer.innerHTML = `<p>${message}</p>`;
+  displayError (message) {
+    const errorContainer = this.error
+    errorContainer.innerHTML = `<p>${message}</p>`
   }
 
   /**
@@ -130,20 +130,20 @@ export class OrderFindParcel {
    * and displays the selected properties.
    * @param {Event} event - The submit event.
    */
-  handleAssessmentSubmit(event) {
-    console.debug('handleAssessmentSelection called');
-    event.preventDefault();
+  handleAssessmentSubmit (event) {
+    console.debug('handleAssessmentSelection called')
+    event.preventDefault()
 
-    const selectedAssessment = document.querySelector('input[name="selected_assessment"]:checked').value;
-    const groupedProperties = JSON.parse(this.assessmentList.dataset.groupedProperties);
+    const selectedAssessment = document.querySelector('input[name="selected_assessment"]:checked').value
+    const groupedProperties = JSON.parse(this.assessmentList.dataset.groupedProperties)
 
-    console.debug('Selected assessment:', selectedAssessment);
-    console.debug('Grouped properties:', groupedProperties);
+    console.debug('Selected assessment:', selectedAssessment)
+    console.debug('Grouped properties:', groupedProperties)
 
-    const selectedProperties = groupedProperties[selectedAssessment] || [];
+    const selectedProperties = groupedProperties[selectedAssessment] || []
 
-    this.displayAssessmentProperties(selectedProperties, selectedAssessment);
-    this.handlePropertyReset();
+    this.displayAssessmentProperties(selectedProperties, selectedAssessment)
+    this.handlePropertyReset()
   }
 
   /**
@@ -151,39 +151,39 @@ export class OrderFindParcel {
    * Creates and populates the list of assessments based on the grouped properties.
    * @param {Object} groupedProperties - The properties grouped by assessment.
    */
-  displaySearchResults(groupedProperties) {
-    console.debug('Displaying search results', groupedProperties);
-    this.assessmentList.innerHTML = '';
-    this.assessmentList.dataset.groupedProperties = JSON.stringify(groupedProperties);
+  displaySearchResults (groupedProperties) {
+    console.debug('Displaying search results', groupedProperties)
+    this.assessmentList.innerHTML = ''
+    this.assessmentList.dataset.groupedProperties = JSON.stringify(groupedProperties)
 
-    const ul = document.createElement('ul');
+    const ul = document.createElement('ul')
 
     for (const [assessment, properties] of Object.entries(groupedProperties)) {
-      const property = properties[0];
-      const li = document.createElement('li');
+      const property = properties[0]
+      const li = document.createElement('li')
 
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = 'selected_assessment';
-      input.value = assessment;
-      input.required = true;
-      input.id = `assessment-${assessment}`;
+      const input = document.createElement('input')
+      input.type = 'radio'
+      input.name = 'selected_assessment'
+      input.value = assessment
+      input.required = true
+      input.id = `assessment-${assessment}`
 
-      const label = document.createElement('label');
-      label.htmlFor = `assessment-${assessment}`;
-      label.textContent = `${assessment} ${property.address_street}, ${property.address_suburb} ${property.address_state} ${property.address_post_code}`;
+      const label = document.createElement('label')
+      label.htmlFor = `assessment-${assessment}`
+      label.textContent = `${assessment} ${property.address_street}, ${property.address_suburb} ${property.address_state} ${property.address_post_code}`
 
-      li.appendChild(input);
-      li.appendChild(label);
-      ul.appendChild(li);
+      li.appendChild(input)
+      li.appendChild(label)
+      ul.appendChild(li)
     }
 
     if (ul.children.length === 0) {
-      this.displayError('No properties found matching the search criteria.');
+      this.displayError('No properties found matching the search criteria.')
     } else {
-      this.assessmentList.appendChild(ul);
-      this.assessmentSection.style.display = 'block';
-      this.propertySection.style.display = 'none';
+      this.assessmentList.appendChild(ul)
+      this.assessmentSection.style.display = 'block'
+      this.propertySection.style.display = 'none'
     }
   }
 
@@ -192,68 +192,67 @@ export class OrderFindParcel {
    * @param {Array} selectedProperties - The properties selected for the assessment.
    * @param {string} selectedAssessment - The selected assessment identifier.
    */
-  displayAssessmentProperties(selectedProperties, selectedAssessment) {
-    console.debug('Displaying assessment properties');
-    this.propertyList.innerHTML = '';
+  displayAssessmentProperties (selectedProperties, selectedAssessment) {
+    console.debug('Displaying assessment properties')
+    this.propertyList.innerHTML = ''
 
-    const ul = document.createElement('ul');
+    const ul = document.createElement('ul')
 
     selectedProperties.forEach((property, index) => {
-      const li = document.createElement('li');
+      const li = document.createElement('li')
 
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = 'selected_property';
-      input.value = JSON.stringify(property);
-      input.id = `property-${index}`;
-      input.required = true;
+      const input = document.createElement('input')
+      input.type = 'radio'
+      input.name = 'selected_property'
+      input.value = JSON.stringify(property)
+      input.id = `property-${index}`
+      input.required = true
 
-      const label = document.createElement('label');
-      label.htmlFor = `property-${index}`;
+      const label = document.createElement('label')
+      label.htmlFor = `property-${index}`
 
       const items = [
         `Lot ${property.lot} Section ${property.section} Deposited Plan ${property.deposited_plan}`,
         `${property.address_street}, ${property.address_suburb} ${property.address_state} ${property.address_post_code}`
-      ];
+      ]
 
-      label.innerHTML = items.join("<br />");
+      label.innerHTML = items.join('<br />')
 
-      li.appendChild(input);
-      li.appendChild(label);
-      li.addEventListener('click', this.handlePropertySubmit.bind(this));
-      ul.appendChild(li);
-    });
+      li.appendChild(input)
+      li.appendChild(label)
+      li.addEventListener('click', this.handlePropertySubmit.bind(this))
+      ul.appendChild(li)
+    })
 
-    this.propertyList.appendChild(ul);
-    this.propertySection.style.display = 'block';
+    this.propertyList.appendChild(ul)
+    this.propertySection.style.display = 'block'
   }
 
-  handlePropertySubmit() {
-    console.debug('updatePropertySelection called');
-    const selectedPropertyRadio = document.querySelector('input[name="selected_property"]:checked');
-    const selection = JSON.parse(selectedPropertyRadio.value);
+  handlePropertySubmit () {
+    console.debug('updatePropertySelection called')
+    const selectedPropertyRadio = document.querySelector('input[name="selected_property"]:checked')
+    const selection = JSON.parse(selectedPropertyRadio.value)
 
     if (this.inputSelectionTarget) {
       if (selectedPropertyRadio) {
-        this.inputSelectionTarget.value = selection.id;
+        this.inputSelectionTarget.value = selection.id
       } else {
-        console.debug('No property selected');
-        alert('Please select a property.');
+        console.debug('No property selected')
+        window.alert('Please select a property.')
       }
     } else {
-      console.debug('No property selection target');
+      console.debug('No property selection target')
     }
   }
 
-  handlePropertyReset() {
-    console.debug('handlePropertyReset called');
+  handlePropertyReset () {
+    console.debug('handlePropertyReset called')
     if (this.inputSelectionTarget) {
-      this.inputSelectionTarget.value = null;
+      this.inputSelectionTarget.value = null
     } else {
-      console.debug('No property selection target');
+      console.debug('No property selection target')
     }
   }
 }
 
-console.debug('OrdFindParcel class defined');
-
+console.debug('OrdFindParcel class defined')
