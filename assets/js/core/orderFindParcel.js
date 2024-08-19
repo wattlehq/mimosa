@@ -238,7 +238,7 @@ export class OrderFindParcel {
         this.inputSelectionTarget.value = selection.id;
       } else {
         console.debug('No property selected');
-        alert('Please select a property.');
+        window.alert('Please select a property.');
       }
     } else {
       console.debug('No property selection target');
