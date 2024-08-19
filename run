@@ -58,7 +58,14 @@ function lint:dockerfile {
 function lint {
   # Lint Python code
   cmd flake8 "${@}"
-  cmd-js yarn lint:fix
+}
+
+function lint-js {
+  if [ "$1" == "fix" ]; then
+    cmd-js yarn lint:fix
+  else
+    cmd-js yarn
+  fi
 }
 
 function format:imports {
@@ -76,6 +83,7 @@ function quality {
   format:imports
   format
   lint
+  lint-js fix
 }
 
 function secret {
@@ -190,6 +198,7 @@ function ci:test {
   docker compose logs
 
   lint "${@}"
+  lint-js
   format:imports --check --diff
   format --check --diff
   manage migrate
@@ -207,3 +216,5 @@ function help {
 # This idea is heavily inspired by: https://github.com/adriancooney/Taskfile
 TIMEFORMAT=$'\nTask completed in %3lR'
 time "${@:-help}"
+
+}
