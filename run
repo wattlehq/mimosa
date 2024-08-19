@@ -64,7 +64,7 @@ function lint-js {
   if [ "$1" == "fix" ]; then
     cmd-js yarn lint:fix
   else
-    cmd-js yarn
+    cmd-js yarn lint
   fi
 }
 
