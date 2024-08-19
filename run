@@ -58,7 +58,7 @@ function lint:dockerfile {
 function lint {
   # Lint Python code
   cmd flake8 "${@}"
-  cmd-js yarn lint
+  cmd-js yarn lint:fix
 }
 
 function format:imports {

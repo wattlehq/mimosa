@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "lint": "standard ./js",
-    "lint:fix": "eslint ./js --fix"
+    "lint:fix": "standard ./js --fix"
   },
   "dependencies": {
     "autoprefixer": "10.4.18",
