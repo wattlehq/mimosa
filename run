@@ -62,7 +62,6 @@ function manage {
 
   # We need to collectstatic before we run our tests.
   if [ "${1-''}" == "test" ]; then
-    docker-compose down
     test-create-env
     cmd-test python3 manage.py collectstatic --no-input
     cmd-test python3 manage.py "${@}"
@@ -217,7 +216,7 @@ function ci:test {
   test-create-env
 
   docker compose build
-  docker compose up -d
+  docker compose up web-test -d
 
   # shellcheck disable=SC1091
   . .env
