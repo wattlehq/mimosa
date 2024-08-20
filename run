@@ -64,7 +64,8 @@ function manage {
   if [ "${1-''}" == "test" ]; then
     test-create-env
     cmd-test python3 manage.py collectstatic --no-input
-    cmd-test python3 manage.py "${@}"
+    cmd-test python3 manage.py "${@}" || _dc down web-test
+    _dc down web-test
   else
     cmd python3 manage.py "${@}"
   fi

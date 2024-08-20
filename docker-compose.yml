@@ -86,6 +86,9 @@ services:
   web:
     <<: *default-app
     depends_on:
+      stripe:
+        condition: "service_started"
+        required: false
       postgres:
         condition: "service_started"
         required: false
@@ -110,6 +113,9 @@ services:
   web-test:
     <<: *default-app
     depends_on:
+      stripe:
+        condition: "service_started"
+        required: false
       postgres-test:
         condition: "service_started"
         required: false
@@ -132,8 +138,6 @@ services:
 
   stripe:
     image: "stripe/stripe-cli"
-    depends_on:
-      - web
     command:
       - "listen"
       - "--api-key"
