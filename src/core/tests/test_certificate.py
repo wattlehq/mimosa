@@ -18,10 +18,10 @@ class CertificateModelTest(TestCase):
     def test_create_certificate(self):
         # Create a Certificate instance
         certificate = Certificate(
-            name="Test Certificate",
-            price=Decimal('19.99'),
+            name="Test Certificate 22",
+            price=Decimal("19.99"),
             description="A test certificate",
-            account_code="ACC123"
+            account_code="ACC123",
         )
 
         certificate.save()
@@ -30,7 +30,9 @@ class CertificateModelTest(TestCase):
         fetched_certificate = Certificate.objects.get(pk=certificate.pk)
 
         # Assert that the fetched certificate matches the created one
-        self.assertEqual(fetched_certificate.name, "Test Certificate")
-        self.assertEqual(fetched_certificate.price, Decimal('19.99'))
+        self.assertEqual(fetched_certificate.name, "Test Certificate 22")
+        self.assertEqual(fetched_certificate.price, Decimal("19.99"))
         self.assertEqual(fetched_certificate.description, "A test certificate")
         self.assertEqual(fetched_certificate.account_code, "ACC123")
+        print(certificate.stripe_price_id)
+        print(certificate.stripe_product_id)

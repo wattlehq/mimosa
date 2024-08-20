@@ -12,9 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 import socket
-from pathlib import Path
-
 from distutils.util import strtobool
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -102,22 +101,22 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation"
-                ".UserAttributeSimilarityValidator"
+        ".UserAttributeSimilarityValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation."
-                "MinimumLengthValidator"
+        "MinimumLengthValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation"
-                ".CommonPasswordValidator"
+        ".CommonPasswordValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation"
-                ".NumericPasswordValidator"
+        ".NumericPasswordValidator"
         # noqa: E501
     },
 ]
