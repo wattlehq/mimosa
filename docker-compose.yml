@@ -105,6 +105,11 @@ services:
       - "--forward-to"
       - "web:8000/webhook/stripe"
 
+  stripe-mock:
+    image: "stripe/stripe-mock"
+    ports:
+      - "12111-12112:12111-12112"
+
   worker:
     <<: *default-app
     command: celery -A app worker -l "${CELERY_LOG_LEVEL:-info}"
