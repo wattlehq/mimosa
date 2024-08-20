@@ -50,7 +50,7 @@ function manage-test {
   if [ "${1-''}" == "test" ]; then
     test-create-env
     cmd-test python3 manage.py collectstatic --no-input
-    cmd-test python3 manage.py "${@}"
+    cmd-test python3 manage.py "${@}" || docker-compose down
     docker-compose down
   else
     cmd-test python3 manage.py "${@}"
@@ -64,7 +64,7 @@ function manage {
   if [ "${1-''}" == "test" ]; then
     test-create-env
     cmd-test python3 manage.py collectstatic --no-input
-    cmd-test python3 manage.py "${@}"
+    cmd-test python3 manage.py "${@}" || docker-compose down
     docker-compose down
   else
     cmd python3 manage.py "${@}"
@@ -196,6 +196,7 @@ function ci:install-deps {
 function test-create-env {
   if [ ! -f .env.test ]; then
     cp -n .env.example .env.test
+    sed -i 's|redis://redis|redis://redis-test|g' .env.test
     sed -i '/POSTGRES_HOST=postgres/s/$/-test/' .env.test
     sed -i '/STRIPE_SECRET_KEY=/s/$/sk_test_123/' .env.test
     sed -i '/STRIPE_API_BASE=/s/$/http:\/\/stripe-mock:12111/' .env.test
