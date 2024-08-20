@@ -368,3 +368,24 @@ This is usually a non-issue since you'll be pulling down pre-built images from
 a Docker registry but if you decide to build your Docker images directly on
 your server you could run `docker compose build` as part of your deploy
 pipeline.
+
+##
+
+How Does Testing Work
+
+There is a second `docker-compose.test.yml` file which duplicates the web
+services to slightly change the configuration, eg: to destroy the database on
+down. It also includes the stripe-mock service, which emulates the Stripe API so
+that calls aren't actually persisted, but created in memory instead.
+
+This means that tests are encapsulated into separate ephemeral services that are
+spun up/down and destroyed when the tests are complete. This also means that the
+testing suite is portable, it creates everything it needs in the Github action
+pipeline and shouldn't need to reach out to external resources to run.
+
+When the test commands start:
+
+- Generate a .env.test if it doesn't exist
+- Boot the services in docker-compose.test.yml
+- Boot the Django tests
+- Spin down and destroy the test services
