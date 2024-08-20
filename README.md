@@ -369,9 +369,7 @@ a Docker registry but if you decide to build your Docker images directly on
 your server you could run `docker compose build` as part of your deploy
 pipeline.
 
-##
-
-How Does Testing Work
+## How Does Testing Work
 
 There is a second `docker-compose.test.yml` file which duplicates the web
 services to slightly change the configuration, eg: to destroy the database on
