@@ -34,5 +34,3 @@ class CertificateModelTest(TestCase):
         self.assertEqual(fetched_certificate.price, Decimal("19.99"))
         self.assertEqual(fetched_certificate.description, "A test certificate")
         self.assertEqual(fetched_certificate.account_code, "ACC123")
-        print(certificate.stripe_price_id)
-        print(certificate.stripe_product_id)
