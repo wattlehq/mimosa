@@ -196,11 +196,23 @@ function ci:install-deps {
 function test-create-env {
   if [ ! -f .env.test ]; then
     cp -n .env.example .env.test
-    sed -i'' -e 's|redis://redis|redis://redis-test|g' .env.test
-    sed -i'' -e '/POSTGRES_HOST=postgres/s/$/-test/' .env.test
-    sed -i'' -e '/STRIPE_SECRET_KEY=/s/$/sk_test_123/' .env.test
-    sed -i'' -e '/STRIPE_API_BASE=/s/$/http:\/\/stripe-mock:12111/' .env.test
-    sed -i'' -e '/STRIPE_WEBHOOK_SECRET=/s/$/sk_test_123/' .env.test
+
+    # Delete existing vars.
+    sed -i'' -e '/REDIS_URL=/d' .env.test
+    sed -i'' -e '/POSTGRES_HOST=/d' .env.test
+    sed -i'' -e '/STRIPE_SECRET_KEY=/d' .env.test
+    sed -i'' -e '/STRIPE_API_BASE=/d' .env.test
+    sed -i'' -e '/STRIPE_WEBHOOK_SECRET=/d' .env.test
+    sed -i'' -e '/REDIS_URL=/d' .env.test
+
+    # Append vars.
+    echo 'export REDIS_URL=redis://redis-test:6379/0' >> .env.test
+    echo 'export POSTGRES_HOST=postgres-test' >> .env.test
+    echo 'export STRIPE_SECRET_KEY=sk_test_123' >> .env.test
+    echo 'export STRIPE_API_BASE=http://stripe-mock:12111' >> .env.test
+    echo 'export STRIPE_WEBHOOK_SECRET=sk_test_123' >> .env.test
+
+    # Delete unused produced file on MacOS.
     rm -f .env.test-e
   fi
 }
