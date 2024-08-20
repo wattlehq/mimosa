@@ -196,11 +196,12 @@ function ci:install-deps {
 function test-create-env {
   if [ ! -f .env.test ]; then
     cp -n .env.example .env.test
-    sed -i 's|redis://redis|redis://redis-test|g' .env.test
-    sed -i '/POSTGRES_HOST=postgres/s/$/-test/' .env.test
-    sed -i '/STRIPE_SECRET_KEY=/s/$/sk_test_123/' .env.test
-    sed -i '/STRIPE_API_BASE=/s/$/http:\/\/stripe-mock:12111/' .env.test
-    sed -i '/STRIPE_WEBHOOK_SECRET=/s/$/sk_test_123/' .env.test
+    sed -i'' -e 's|redis://redis|redis://redis-test|g' .env.test
+    sed -i'' -e '/POSTGRES_HOST=postgres/s/$/-test/' .env.test
+    sed -i'' -e '/STRIPE_SECRET_KEY=/s/$/sk_test_123/' .env.test
+    sed -i'' -e '/STRIPE_API_BASE=/s/$/http:\/\/stripe-mock:12111/' .env.test
+    sed -i'' -e '/STRIPE_WEBHOOK_SECRET=/s/$/sk_test_123/' .env.test
+    rm .env.test-e
   fi
 }
 
