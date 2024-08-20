@@ -43,6 +43,20 @@ function cmd-js {
   _dc js "${@}"
 }
 
+function manage-test {
+  # Run any manage.py commands
+
+  # We need to collectstatic before we run our tests.
+  if [ "${1-''}" == "test" ]; then
+    docker-compose down
+    test-create-env
+    cmd-test python3 manage.py collectstatic --no-input
+    cmd-test python3 manage.py "${@}"
+  else
+    cmd-test python3 manage.py "${@}"
+  fi
+}
+
 function manage {
   # Run any manage.py commands
 
@@ -217,8 +231,8 @@ function ci:test {
   lint-js
   format:imports --check --diff
   format --check --diff
-  manage migrate
-  manage test
+  manage-test migrate
+  manage-test test
 }
 
 function help {
