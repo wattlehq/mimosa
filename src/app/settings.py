@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 import socket
-from distutils.util import strtobool
 from pathlib import Path
+
+import stripe
+from distutils.util import strtobool
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -101,22 +103,22 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation"
-        ".UserAttributeSimilarityValidator"
+                ".UserAttributeSimilarityValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation."
-        "MinimumLengthValidator"
+                "MinimumLengthValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation"
-        ".CommonPasswordValidator"
+                ".CommonPasswordValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation"
-        ".NumericPasswordValidator"
+                ".NumericPasswordValidator"
         # noqa: E501
     },
 ]
@@ -179,6 +181,10 @@ STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET")
 STRIPE_API_BASE = os.environ.get("STRIPE_API_BASE")
 STRIPE_CURRENCY = "aud"
+
+# Set the key and base so that it doesn't need to be set in each file.
+stripe.api_key = STRIPE_SECRET_KEY
+stripe.api_base = STRIPE_API_BASE
 
 # Site.
 SITE_PROTOCOL = os.environ.get("SITE_PROTOCOL")

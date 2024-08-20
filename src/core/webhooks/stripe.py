@@ -11,8 +11,6 @@ from core.models.order import OrderSessionLine
 from core.models.order import OrderSessionStatus
 from core.models.property import Property
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
-stripe.api_base = settings.STRIPE_API_BASE
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
 

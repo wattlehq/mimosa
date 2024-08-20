@@ -1,8 +1,4 @@
 import stripe
-from django.conf import settings
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
-stripe.api_base = settings.STRIPE_API_BASE
 
 
 def create_stripe_tax_rate(tax_rate):
