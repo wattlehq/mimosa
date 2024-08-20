@@ -48,10 +48,10 @@ function manage-test {
 
   # We need to collectstatic before we run our tests.
   if [ "${1-''}" == "test" ]; then
-    docker-compose down
     test-create-env
     cmd-test python3 manage.py collectstatic --no-input
     cmd-test python3 manage.py "${@}"
+    docker-compose down
   else
     cmd-test python3 manage.py "${@}"
   fi
@@ -64,7 +64,7 @@ function manage {
   if [ "${1-''}" == "test" ]; then
     test-create-env
     cmd-test python3 manage.py collectstatic --no-input
-    cmd-test python3 manage.py "${@}" || _dc down web-test
+    cmd-test python3 manage.py "${@}"
     docker-compose down
   else
     cmd python3 manage.py "${@}"
@@ -200,7 +200,6 @@ function test-create-env {
     sed -i '/STRIPE_SECRET_KEY=/s/$/sk_test_123/' .env.test
     sed -i '/STRIPE_API_BASE=/s/$/http:\/\/stripe-mock:12111/' .env.test
     sed -i '/STRIPE_WEBHOOK_SECRET=/s/$/sk_test_123/' .env.test
-    cat .env.test
   fi
 }
 

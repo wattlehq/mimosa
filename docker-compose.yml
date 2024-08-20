@@ -88,13 +88,13 @@ services:
     depends_on:
       stripe:
         condition: "service_started"
-        required: false
+        required: true
       postgres:
         condition: "service_started"
-        required: false
+        required: true
       redis:
         condition: "service_started"
-        required: false
+        required: true
     deploy:
       resources:
         limits:
@@ -115,16 +115,16 @@ services:
     depends_on:
       stripe:
         condition: "service_started"
-        required: false
+        required: true
       postgres-test:
         condition: "service_started"
-        required: false
+        required: true
       redis-test:
         condition: "service_started"
-        required: false
+        required: true
       stripe-mock:
         condition: "service_started"
-        required: false
+        required: true
     healthcheck:
       test: "${DOCKER_WEB_HEALTHCHECK_TEST:-curl localhost:8000/up}"
       interval: "60s"
