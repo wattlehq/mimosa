@@ -235,10 +235,10 @@ function ci:test {
 
   # create .env if not exists.
   test-create-env
-  cp -n .env.test .env
+  cp -n .env.test .env || echo "skipping .env.test create"
 
-  _dc-test build
-  _dc-test up web-test -d
+  docker compose -f ${DC_FILE_TEST} build
+  docker compose -f ${DC_FILE_TEST} up web-test -d
 
   # shellcheck disable=SC1091
   . .env
