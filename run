@@ -49,6 +49,7 @@ function manage {
   # We need to collectstatic before we run our tests.
   if [ "${1-''}" == "test" ]; then
     docker-compose down
+    test-create-env
     cmd-test python3 manage.py collectstatic --no-input
     cmd-test python3 manage.py "${@}"
   else
@@ -178,6 +179,16 @@ function ci:install-deps {
     -o /usr/local/bin/wait-until && sudo chmod +x /usr/local/bin/wait-until
 }
 
+function test-create-env {
+  if [ ! -f .env.test ]; then
+    cp -n .env.example .env.test
+    sed -i '' '/POSTGRES_HOST=postgres/s/$/-test/' .env.test
+    sed -i '' '/STRIPE_SECRET_KEY=/s/$/sk_test_123/' .env.test
+    sed -i '' '/STRIPE_API_BASE=/s/$/http:\/\/stripe-mock:12111/' .env.test
+    sed -i '' '/STRIPE_WEBHOOK_SECRET=/s/$/sk_test_123/' .env.test
+  fi
+}
+
 function ci:test {
   # Execute Continuous Integration (CI) pipeline
   #
@@ -188,10 +199,7 @@ function ci:test {
   # lint:dockerfile "${@}"
 
   # create .env if not exists.
-  if [ ! -f .env ]; then
-    cp -n .env.example .env
-  fi
-
+  test-create-env
 
   docker compose build
   docker compose up -d
