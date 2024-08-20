@@ -65,7 +65,7 @@ function manage {
     test-create-env
     cmd-test python3 manage.py collectstatic --no-input
     cmd-test python3 manage.py "${@}" || _dc down web-test
-    _dc down web-test
+    docker-compose down
   else
     cmd python3 manage.py "${@}"
   fi
