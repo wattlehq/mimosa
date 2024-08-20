@@ -134,7 +134,7 @@ services:
     ports:
       - "${DOCKER_WEB_PORT_FORWARD:-127.0.0.1:8000}:${PORT:-8000}"
     env_file:
-      - ".env.test.bak"
+      - ".env.test"
 
   stripe:
     image: "stripe/stripe-cli"
