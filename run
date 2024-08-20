@@ -215,6 +215,7 @@ function ci:test {
 
   # create .env if not exists.
   test-create-env
+  cp -n .env.test .env
 
   docker compose build
   docker compose up web-test -d
