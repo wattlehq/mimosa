@@ -33,6 +33,11 @@ function cmd {
   _dc web "${@}"
 }
 
+function cmd-test {
+  # Run any command you want in the web container
+  _dc web-test "${@}"
+}
+
 function cmd-js {
   # Run any command you want in the js container
   _dc js "${@}"
@@ -43,10 +48,12 @@ function manage {
 
   # We need to collectstatic before we run our tests.
   if [ "${1-''}" == "test" ]; then
-    cmd python3 manage.py collectstatic --no-input
+    docker-compose down
+    cmd-test python3 manage.py collectstatic --no-input
+    cmd-test python3 manage.py "${@}"
+  else
+    cmd python3 manage.py "${@}"
   fi
-
-  cmd python3 manage.py "${@}"
 }
 
 function lint:dockerfile {

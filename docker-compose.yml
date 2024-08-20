@@ -55,6 +55,15 @@ services:
     volumes:
       - "postgres:/var/lib/postgresql/data"
 
+  postgres-test:
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      # POSTGRES_DB: "${POSTGRES_DB}"
+    image: "postgres:16.2-bookworm"
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    stop_grace_period: "3s"
+
   redis:
     deploy:
       resources:
@@ -67,6 +76,12 @@ services:
     stop_grace_period: "3s"
     volumes:
       - "redis:/data"
+
+  redis-test:
+    image: "redis:7.2.4-bookworm"
+    profiles: [ "redis" ]
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    stop_grace_period: "3s"
 
   web:
     <<: *default-app
@@ -92,12 +107,33 @@ services:
       - "${DOCKER_WEB_PORT_FORWARD:-127.0.0.1:8000}:${PORT:-8000}"
     profiles: [ "web" ]
 
+  web-test:
+    <<: *default-app
+    depends_on:
+      postgres-test:
+        condition: "service_started"
+        required: false
+      redis-test:
+        condition: "service_started"
+        required: false
+      stripe-mock:
+        condition: "service_started"
+        required: false
+    healthcheck:
+      test: "${DOCKER_WEB_HEALTHCHECK_TEST:-curl localhost:8000/up}"
+      interval: "60s"
+      timeout: "3s"
+      start_period: "5s"
+      retries: 3
+    ports:
+      - "${DOCKER_WEB_PORT_FORWARD:-127.0.0.1:8000}:${PORT:-8000}"
+    env_file:
+      - ".env.test"
+
   stripe:
     image: "stripe/stripe-cli"
     depends_on:
       - web
-    env_file:
-      - ".env"
     command:
       - "listen"
       - "--api-key"

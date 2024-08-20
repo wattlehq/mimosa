@@ -13,6 +13,7 @@ from core.services.tax_rate.update_stripe_tax_rate import (
 )
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_base = settings.STRIPE_API_BASE
 
 
 class TaxRate(models.Model):

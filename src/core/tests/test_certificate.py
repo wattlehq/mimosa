@@ -1,7 +1,9 @@
-from django.test import TestCase
-from core.models.certificate import Certificate
 from decimal import Decimal
+
 import stripe
+from django.test import TestCase
+
+from core.models.certificate import Certificate
 
 
 class CertificateModelTest(TestCase):
@@ -11,16 +13,18 @@ class CertificateModelTest(TestCase):
         super().setUpClass()
         # Set the API base URL to stripe-mock
         stripe.api_key = "sk_test_123"
-        stripe.api_base = "http://localhost:12111"
+        stripe.api_base = "http://stripe-mock:12111"
 
     def test_create_certificate(self):
         # Create a Certificate instance
-        certificate = Certificate.objects.create(
+        certificate = Certificate(
             name="Test Certificate",
             price=Decimal('19.99'),
             description="A test certificate",
             account_code="ACC123"
         )
+
+        certificate.save()
 
         # Fetch the certificate from the database
         fetched_certificate = Certificate.objects.get(pk=certificate.pk)

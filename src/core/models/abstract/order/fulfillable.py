@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_base = settings.STRIPE_API_BASE
 
 
 class OrderFulfillable(models.Model):

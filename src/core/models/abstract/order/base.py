@@ -6,6 +6,7 @@ from django.utils import timezone
 from core.models.property import Property
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_base = settings.STRIPE_API_BASE
 
 
 # Merges common fields between order and order_session.
