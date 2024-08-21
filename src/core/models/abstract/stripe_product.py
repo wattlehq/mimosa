@@ -70,11 +70,9 @@ def sync_to_stripe_new(
     model_name: str,
     tax_rate: TaxRate = None,
 ):
-    print(f"Creating new Stripe product: {name_new}")
     stripe_product = stripe.Product.create(
         name=name_new, metadata={model_name + "_pk": pk}
     )
-    print(f"Created Stripe product: {stripe_product.id}")
 
     price_cents = int(price_new * 100)
     price_data = {
@@ -88,7 +86,6 @@ def sync_to_stripe_new(
         price_data["metadata"] = {"tax_rate": tax_rate.stripe_tax_rate_id}
 
     stripe_price = stripe.Price.create(**price_data)
-    print(f"Created Stripe price: {stripe_price.id}")
 
     return stripe_product.stripe_id, stripe_price.stripe_id
 

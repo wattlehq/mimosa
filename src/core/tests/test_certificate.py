@@ -1,7 +1,6 @@
 from decimal import Decimal
 from unittest.mock import patch, MagicMock, call
 
-import stripe
 from django.test import TestCase
 
 from app import settings
@@ -9,14 +8,6 @@ from core.models.certificate import Certificate
 
 
 class CertificateModelTest(TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        # Set the API base URL to stripe-mock
-        stripe.api_key = "sk_test_123"
-        stripe.api_base = "http://stripe-mock:12111"
-        print(f"Stripe API base set to: {stripe.api_base}")
 
     def test_create_certificate(self):
         # Create a Certificate instance
