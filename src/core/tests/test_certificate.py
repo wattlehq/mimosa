@@ -1,8 +1,10 @@
 from decimal import Decimal
+from unittest.mock import patch, MagicMock, call
 
 import stripe
 from django.test import TestCase
 
+from app import settings
 from core.models.certificate import Certificate
 
 
@@ -36,7 +38,11 @@ class CertificateModelTest(TestCase):
         self.assertEqual(fetched_certificate.description, "A test certificate")
         self.assertEqual(fetched_certificate.account_code, "ACC123")
 
-    def test_update_certificate_price(self):
+    @patch('stripe.Price.modify')
+    @patch('stripe.Price.create')
+    def test_update_certificate_price(self, mock_create, mock_modify):
+        mock_create.return_value = MagicMock(stripe_id="price_test")
+
         # Create a Certificate instance
         certificate = Certificate(
             name="Test Certificate",
@@ -44,44 +50,38 @@ class CertificateModelTest(TestCase):
             description="A test certificate",
             account_code="ACC123",
         )
+
+        # Initial save and store.
         certificate.save()
-        print(f"Created certificate: {certificate.name}, ID: {certificate.id}")
-        print(f"Initial Stripe Product ID: {certificate.stripe_product_id}")
-        print(f"Initial Stripe Price ID: {certificate.stripe_price_id}")
+        initial_product_id = certificate.stripe_product_id
+        initial_price_id = certificate.stripe_price_id
 
         # Update the price
         certificate.price = Decimal("29.99")
         certificate.save()
-        print(f"Updated certificate price to: {certificate.price}")
 
         # Fetch the updated certificate from the database
         updated_certificate = Certificate.objects.get(pk=certificate.pk)
-        print(
-            f"Fetched updated certificate: {updated_certificate.name}, ID: {updated_certificate.id}"
-        )
-        print(
-            f"Updated Stripe Product ID: {updated_certificate.stripe_product_id}"
-        )
-        print(
-            f"Updated Stripe Price ID: {updated_certificate.stripe_price_id}"
+
+        # Assert the initial price disabled.
+        mock_modify.assert_called_once_with(
+            initial_price_id,
+            active=False
         )
 
-        # Assert that the updated certificate matches the new price
-        self.assertEqual(updated_certificate.price, Decimal("29.99"))
+        expected_calls = [
+            # Assert the initial price created.
+            call(
+                product=initial_product_id,
+                unit_amount=1999,
+                currency=settings.STRIPE_CURRENCY
+            ),
+            # Assert the new price created.
+            call(
+                product=updated_certificate.stripe_product_id,
+                unit_amount=2999,
+                currency=settings.STRIPE_CURRENCY
+            )
+        ]
 
-        # Verify the price update in Stripe
-        stripe_product = stripe.Product.retrieve(
-            updated_certificate.stripe_product_id
-        )
-        stripe_price = stripe.Price.retrieve(
-            updated_certificate.stripe_price_id
-        )
-
-        # Debug: Print the retrieved product name and price
-        print(f"Retrieved Stripe Product Name: {stripe_product.name}")
-        print(f"Retrieved Stripe Price Amount: {stripe_price.unit_amount}")
-
-        self.assertEqual(stripe_product.name, "Test Certificate")
-        self.assertEqual(
-            stripe_price.unit_amount, 2999
-        )  # Stripe expects the amount in cents
+        self.assertEqual(mock_create.call_args_list, expected_calls)

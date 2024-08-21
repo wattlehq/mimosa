@@ -106,13 +106,10 @@ def sync_to_stripe_existing(
     price_id_new = price_id
     price_new_cents = int(price_new * 100)
 
-    print(f"Updating existing Stripe product: {product_id}")
     if name_old != name_new:
-        print(f"Updating product name from {name_old} to {name_new}")
         stripe.Product.modify(product_id, name=name_new)
 
     if price_old != price_new or tax_rate_new != tax_rate_old:
-        print(f"Updating price from {price_old} to {price_new}")
         stripe.Price.modify(price_id, active=False)
 
         price_data = {
@@ -129,6 +126,4 @@ def sync_to_stripe_existing(
 
         price_id_new = stripe.Price.create(**price_data).stripe_id
 
-    print(f"Updated Stripe product: {product_id}")
-    print(f"New Stripe price: {price_id_new}")
     return product_id, price_id_new
