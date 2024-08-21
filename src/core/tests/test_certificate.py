@@ -27,18 +27,20 @@ class CertificateModelTest(TestCase):
         certificate.save()
         initial_product_id = certificate.stripe_product_id
 
-        # Assert the initial price disabled.
+        # Assert product is created.
         mock_product_create.assert_called_once_with(
             name="Test Certificate 22",
             metadata={"certificate_pk": str(certificate.pk)},
         )
 
+        # Assert price is created.
         mock_price_create.assert_called_once_with(
             product=initial_product_id,
             unit_amount=1999,
             currency=settings.STRIPE_CURRENCY,
         )
 
+        # Assert new IDs are stored.
         self.assertEqual(certificate.stripe_product_id, "product_test")
         self.assertEqual(certificate.stripe_price_id, "price_test")
 
@@ -57,7 +59,6 @@ class CertificateModelTest(TestCase):
 
         # Initial save and store.
         certificate.save()
-        initial_product_id = certificate.stripe_product_id
         initial_price_id = certificate.stripe_price_id
 
         # Update the price
@@ -77,5 +78,5 @@ class CertificateModelTest(TestCase):
             currency=settings.STRIPE_CURRENCY,
         )
 
-        # Assert that the new price is saved.
+        # Assert new IDs are stored.
         self.assertEqual(certificate.stripe_price_id, "price_test")
