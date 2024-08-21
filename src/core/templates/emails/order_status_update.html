@@ -1,93 +1,162 @@
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Update</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background-color: #f4f4f4; padding: 10px; text-align: center; }
-        .content { padding: 20px 0; }
-        .footer { background-color: #f4f4f4; padding: 10px; text-align: center; font-size: 0.8em; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .certificate-list { margin-bottom: 20px; }
-        .certificate-list ul { padding-left: 20px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Update</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #f4f4f4;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .content {
+      padding: 20px 0;
+    }
+
+    .footer {
+      background-color: #f4f4f4;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.8em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+
+    .certificate-list {
+      margin-bottom: 20px;
+    }
+
+    .certificate-list ul {
+      padding-left: 20px;
+    }
+
+    .total-section {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Order Update</h1>
-        </div>
-        <div class="content">
-            <p>Dear {{ order.customer_name }},</p>
-            <p>We are writing to inform you about an update to your order.</p>
-           
-            <h2>Order Details:</h2>
-            <p><strong>Reference #:</strong> {{ order.id }}</p>
-            <p><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
-            <p><strong>Property:</strong> {{ order.property }}</p>
-           
-            {% if ready_certificates %}
-            <h2>Ready Certificates:</h2>
-            <div class="certificate-list">
-                <ul>
-                {% for line in ready_certificates %}
-                    <li><a href="{{ order_url }}">{{ line.certificate.name }}</a></li>
-                {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
+<div class="container">
+  <div class="header">
+    <h1>Order Update</h1>
+  </div>
+  <div class="content">
+    <p>Dear {{ order.customer_name }},</p>
+    <p>We are writing to inform you about an update to your order.</p>
 
-            {% if pending_certificates %}
-            <h2>Pending Certificates:</h2>
-            <div class="certificate-list">
-                <ul>
-                {% for line in pending_certificates %}
-                    <li>{{ line.certificate.name }}</li>
-                {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
+    <h2>Order Details:</h2>
+    <p><strong>Reference #:</strong> {{ order.id }}</p>
+    <p><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
+    <p><strong>Property:</strong> {{ order.property }}</p>
 
-            <h2>Order Items:</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Certificate</th>
-                        <th>Fee</th>
-                        <th>Certificate Cost</th>
-                        <th>Fee Cost</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for line in order_lines %}
-                    <tr>
-                        <td>{{ line.certificate.name }}</td>
-                        <td>{% if line.fee %}{{ line.fee.name }}{% else %}N/A{% endif %}</td>
-                        <td>${{ line.cost_certificate }}</td>
-                        <td>{% if line.cost_fee %}${{ line.cost_fee }}{% else %}N/A{% endif %}</td>
-                        <td>{% if line.is_fulfilled %}<a href="{{ order_url }}">Ready</a>{% else %}Pending{% endif %}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-           
-            <p><strong>Total Order Cost:</strong> ${{ order.cost_total }}</p>
-           
-            <p>To view the full details of your order, please click on the following link:</p>
-            <p><a href="{{ order_url }}">View Order Details</a></p>
-           
-            <p>If you have any questions or concerns about your order, please don't hesitate to contact us.</p>
-           
-        </div>
-        <div class="footer">
-            <p>This is an automated email, please do not reply directly to this message.</p>
-        </div>
+    {% if ready_certificates %}
+      <h2>Ready Certificates:</h2>
+      <div class="certificate-list">
+        <ul>
+          {% for line in ready_certificates %}
+            <li><a href="{{ order_url }}">{{ line.certificate.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if pending_certificates %}
+      <h2>Pending Certificates:</h2>
+      <div class="certificate-list">
+        <ul>
+          {% for line in pending_certificates %}
+            <li>{{ line.certificate.name }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <h2>Order Items:</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>Certificate</th>
+        <th>Fee</th>
+        <th>Certificate Cost</th>
+        <th>Tax</th>
+        <th>Total</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for line in order_lines %}
+        <tr>
+          <td>{{ line.certificate.name }}</td>
+          <td>
+            {% if line.fee %}
+              {{ line.fee.name }} (${{ line.cost_fee|default:"0.00" }})
+            {% else %}
+              N/A
+            {% endif %}
+          </td>
+          <td>${{ line.cost_certificate }}</td>
+          <td>
+            {% if line.tax > 0 %}
+              ${{ line.tax }}
+            {% else %}
+              N/A
+            {% endif %}
+          </td>
+          <td>${{ line.total }}</td>
+          <td>{% if line.is_fulfilled %}
+            <a href="{{ order_url }}">Ready</a>{% else %}Pending{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+
+    <div class="total-section">
+      <p><strong>Subtotal:</strong> ${{ order|order_subtotal }}</p>
+      <p><strong>Tax:</strong> ${{ order|order_tax }}</p>
+      <p><strong>Total Order Cost:</strong> ${{ order|order_total }}</p>
     </div>
+
+    <p>To view the full details of your order, please click on the following link:</p>
+    <p><a href="{{ order_url }}">View Order Details</a></p>
+
+    <p>If you have any questions or concerns about your order, please don't hesitate to contact us.</p>
+
+  </div>
+  <div class="footer">
+    <p>This is an automated email, please do not reply directly to this message.</p>
+  </div>
+</div>
 </body>
 </html>

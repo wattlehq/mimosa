@@ -4,12 +4,17 @@ import stripe
 from django.conf import settings
 from django.db import models
 
+from core.models.tax_rate import TaxRate
+
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class StripeProduct(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    tax_rate = models.ForeignKey(
+        TaxRate, on_delete=models.SET_NULL, null=True, blank=True
+    )
 
     stripe_product_id = models.CharField(max_length=100, blank=True, null=True)
     stripe_price_id = models.CharField(max_length=100, blank=True, null=True)
@@ -36,6 +41,7 @@ class StripeProduct(models.Model):
                 price_new=record_new.price,
                 pk=str(record_new.pk),
                 model_name=record_new.__class__.__name__.lower(),
+                tax_rate=record_new.tax_rate,
             )
         else:
             sync_product_id, sync_price_id = sync_to_stripe_existing(
@@ -45,6 +51,8 @@ class StripeProduct(models.Model):
                 name_old=record_old.name,
                 price_new=record_new.price,
                 price_old=record_old.price,
+                tax_rate_new=record_new.tax_rate,
+                tax_rate_old=record_old.tax_rate,
             )
 
         self.stripe_product_id = sync_product_id
@@ -58,18 +66,28 @@ class StripeProduct(models.Model):
 
 
 def sync_to_stripe_new(
-    name_new: str, price_new: Decimal, pk: str, model_name: str
+    name_new: str,
+    price_new: Decimal,
+    pk: str,
+    model_name: str,
+    tax_rate: TaxRate = None,
 ):
     stripe_product = stripe.Product.create(
         name=name_new, metadata={model_name + "_pk": pk}
     )
 
     price_cents = int(price_new * 100)
-    stripe_price = stripe.Price.create(
-        product=stripe_product.stripe_id,
-        unit_amount=price_cents,  # Stripe expects the amount in cents
-        currency=settings.STRIPE_CURRENCY,
-    )
+    price_data = {
+        "product": stripe_product.stripe_id,
+        "unit_amount": price_cents,  # Stripe expects the amount in cents
+        "currency": settings.STRIPE_CURRENCY,
+    }
+
+    if tax_rate and tax_rate.stripe_tax_rate_id:
+        price_data["tax_behavior"] = "exclusive"
+        price_data["metadata"] = {"tax_rate": tax_rate.stripe_tax_rate_id}
+
+    stripe_price = stripe.Price.create(**price_data)
 
     return stripe_product.stripe_id, stripe_price.stripe_id
 
@@ -81,6 +99,8 @@ def sync_to_stripe_existing(
     price_old: Decimal,
     name_new: str,
     name_old: str,
+    tax_rate_new: TaxRate = None,
+    tax_rate_old: TaxRate = None,
 ):
     price_id_new = price_id
     price_new_cents = int(price_new * 100)
@@ -88,13 +108,21 @@ def sync_to_stripe_existing(
     if name_old != name_new:
         stripe.Product.modify(product_id, name=name_new)
 
-    if price_old != price_new:
+    if price_old != price_new or tax_rate_new != tax_rate_old:
         stripe.Price.modify(price_id, active=False)
 
-        price_id_new = stripe.Price.create(
-            product=product_id,
-            unit_amount=price_new_cents,
-            currency=settings.STRIPE_CURRENCY,
-        ).stripe_id
+        price_data = {
+            "product": product_id,
+            "unit_amount": price_new_cents,
+            "currency": settings.STRIPE_CURRENCY,
+        }
+
+        if tax_rate_new and tax_rate_new.stripe_tax_rate_id:
+            price_data["tax_behavior"] = "exclusive"
+            price_data["metadata"] = {
+                "tax_rate": tax_rate_new.stripe_tax_rate_id
+            }
+
+        price_id_new = stripe.Price.create(**price_data).stripe_id
 
     return product_id, price_id_new

@@ -1,5 +1,4 @@
 import uuid
-from decimal import Decimal
 
 from django.db import models
 
@@ -49,6 +48,12 @@ class OrderSessionLine(models.Model):
     cost_fee = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
+    tax_amount_certificate = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0
+    )
+    tax_amount_fee = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0
+    )
 
     def __str__(self):
         return str(self.certificate) + " " + str(self.fee)
@@ -73,14 +78,6 @@ class Order(OrderBase, OrderFulfillable):
         null=True,
         blank=True,
     )
-
-    def cost_total(self):
-        total_cost = Decimal("0.00")
-        for order_line in self.orderline_set.all():
-            total_cost += order_line.cost_certificate
-            if order_line.cost_fee is not None:
-                total_cost += order_line.cost_fee
-        return total_cost
 
     def save(self, *args, **kwargs):
         super(Order, self).fulfilled_save(*args, **kwargs)
@@ -117,6 +114,12 @@ class OrderLine(OrderFulfillable):
 
     cost_certificate = models.DecimalField(max_digits=10, decimal_places=2)
     cost_fee = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    tax_amount_certificate = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    tax_amount_fee = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
 

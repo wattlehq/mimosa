@@ -3,6 +3,10 @@ from decimal import Decimal
 
 from django import template
 
+from core.services.order.calculations import calculate_order_subtotal
+from core.services.order.calculations import calculate_order_tax
+from core.services.order.calculations import calculate_order_total
+
 register = template.Library()
 
 
@@ -53,3 +57,18 @@ def money(value: Decimal | None):
         return formatted_value
     except (TypeError, AttributeError):
         return None
+
+
+@register.filter
+def order_subtotal(order):
+    return calculate_order_subtotal(order)
+
+
+@register.filter
+def order_tax(order):
+    return calculate_order_tax(order)
+
+
+@register.filter
+def order_total(order):
+    return calculate_order_total(order)

@@ -1,11 +1,586 @@
-/*
- * Your custom CSS goes here but before adding a lot of CSS check this out:
- *   https://tailwindcss.com/docs/extracting-components
-*/
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import url("./normalise.css");
+@import url("./base.css");
 
-input {
-  border: 1px solid #ccc;
+label {
+  font-weight: 400;
+  color: #515151;
+}
+
+input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], select, textarea {
+  width: 100%;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+input[type='radio'] {
+  display: inline-block;
+}
+
+/**
+ * Component: Button Next.
+ */
+
+.button-next {
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 1.25rem;
+  cursor: pointer;
+  vertical-align: middle;
+  font-weight: 300;
+  color: #515151;
+}
+
+.button-next:after {
+  content: "";
+  background: url("/static/images/icons/arrow-right-circle-fill.svg");
+  width: 1.25rem;
+  height: 1.25rem;
+  background-size: cover;
+  display: inline-block;
+  margin-left: 0.25rem;
+  vertical-align: middle;
+  position: relative;
+  top: -3px;
+}
+
+.button-next:hover,
+.button-next:focus {
+  color: #7ED321;
+}
+
+/**
+ * Component: Container.
+ */
+
+.container {
+  margin: 0 auto;
+  max-width: 43rem;
+  padding: 3rem 1.5rem 6rem;
+}
+
+/**
+ * Component: Form Item.
+ */
+
+.form-item {
+  margin: 1rem 0;
+}
+
+.form-item:first-child {
+  margin-top: 0;
+}
+
+.form-item:last-child {
+  margin-bottom: 0;
+}
+
+.form-item--submit {
+  text-align: right;
+}
+
+.form-item--list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.form-item--list input[type='radio'] {
+  margin-right: 0.5rem;
+}
+
+/**
+ * Component: Logo.
+ */
+
+.logo {
+  max-width: 10.5rem;
+  margin: 3rem auto;
+}
+
+.logo:first-child {
+  margin-top: 0;
+}
+
+.logo:last-child {
+  margin-bottom: 0;
+}
+
+/**
+ * Component: Logo Summary.
+ */
+
+.logo-summary {
+  margin: 2rem auto;
+}
+
+.logo-summary:first-child {
+  margin-top: 0;
+}
+
+.logo-summary:last-child {
+  margin-bottom: 0;
+}
+
+.logo-summary h1 {
+  margin: 0;
+}
+
+.logo-summary p {
+  margin-top: 0.25rem;
+  color: #757575;
+  font-size: 1.25rem;
+}
+
+/**
+ * Component: Find Parcel.
+ */
+
+.find-parcel {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.find-parcel label {
+  display: inline-block;
+}
+
+.find-parcel:first-child {
+  margin-top: 0;
+}
+
+.find-parcel:last-child {
+  margin-bottom: 0;
+}
+
+.find-parcel section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.find-parcel section:first-child {
+  margin-top: 0;
+}
+
+.find-parcel section:last-child {
+  margin-bottom: 0;
+}
+
+.find-parcel__search .form-item--or {
+  text-align: center;
+  font-weight: 700;
+}
+
+.find-parcel__property-list {
+  line-height: 1.6rem;
+}
+
+.find-parcel__property-list label {
+  margin: 0;
+}
+
+.find-parcel__property-list li {
+  display: inline-flex;
+  align-items: flex-start;
+}
+
+.find-parcel__property-list input {
+  margin-top: 0.5rem;
+  min-width: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .find-parcel__search .form-item--or {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .find-parcel__section--specific {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-gap: 2rem;
+  }
+
+  .find-parcel__section--specific .form-item {
+    margin-top: 0;
+  }
+}
+
+/**
+ * Component: Order Form.
+ */
+
+.order-form__section {
+  margin: 3rem 0;
+}
+
+.order-form__section:first-child {
+  margin-top: 0;
+}
+
+.order-form__section:last-child {
+  margin-bottom: 0;
+}
+
+.order-form__section-certificates .form-item--list li {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.order-form__section-certificates .form-item--list li li {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/**
+ * Component: Order Form Totals.
+ */
+
+.order-form__totals p {
+  margin: 0.5rem 0;
+}
+
+/**
+ * Component: Certificate List Item.
+ */
+
+.cert-li {
+  margin-bottom: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.cert-li:first-child {
+  margin-top: 0;
+}
+
+.cert-li:last-child {
+  margin-bottom: 0;
+}
+
+.cert-li label {
+  display: inline-block;
+}
+
+.cert-li input {
+  min-width: 0.75rem;
+}
+
+.cert-li__description {
+  margin: 0.25rem 0 0 0;
+  color: #757575;
+  font-size: 0.833rem;
+  line-height: 1.5;
+}
+
+.cert-li__cost {
+  display: flex;
+  margin-top: 0.5rem;
+  gap: 0.25rem;
+}
+
+.cert-li--cert .cert-li__price {
+  font-weight: 600;
+}
+
+.cert-li--cert .cert-li__title label {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.cert-li--cert .cert-li__description {
+  padding-left: 1.25rem;
+}
+
+.cert-li--fee {
+  margin-left: 1.25rem;
+}
+
+.cert-li--fee .cert-li__title label {
+  color: #757575;
+}
+
+.cert-li--fee .cert-li__price {
+  color: #757575;
+}
+
+@media (min-width: 48rem) {
+  .cert-li {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .cert-li__cost {
+    display: block;
+    margin-top: 0;
+    margin-right: 0;
+    margin-left: auto;
+    text-align: right;
+  }
+}
+
+/**
+ * Component: Tax Rate.
+ */
+
+.tax-rate {
+  color: #757575;
+  font-size: 0.5rem;
+  line-height: 1;
+  font-weight: 400;
+  background: #F9F9F9;
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  border: 1px solid #EBEBEB;
+  white-space: nowrap;
+  margin: 0.125rem;
+  display: inline-block;
+}
+
+/**
+ * Component: Order Customer.
+ */
+
+.order-customer {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.order-customer:first-child {
+  margin-top: 0;
+}
+
+.order-customer:last-child {
+  margin-bottom: 0;
+}
+
+.order-customer ul {
+  margin-left: 0;
+  padding: 0;
+}
+
+.order-customer li {
+  display: block;
+}
+
+.order-customer__company_name {
+  font-size: 1.25rem;
+  line-height: 1.13333;
+  font-weight: 700;
+}
+
+.order-customer__cus_email {
+  color: #757575;
+}
+
+/**
+ * Component: Order Status.
+ */
+
+.order-status {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.order-status:first-child {
+  margin-top: 0;
+}
+
+.order-status:last-child {
+  margin-bottom: 0;
+}
+
+.order-status ul {
+  margin-left: 0;
+  background: #252525;
+  display: inline-flex;
+  color: #FFF;
+  font-size: 0.833rem;
+  border-radius: 8px;
+  padding: 0.75rem 0;
+  line-height: 1.4;
+}
+
+.order-status strong {
+  display: block;
+}
+
+.order-status li {
+  display: block;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.order-status li:not(:first-child):before {
+  content: "";
+  height: 100%;
+  width: 1px;
+  background: #979797;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/**
+ * Component: Order Details.
+ */
+
+.order-assessment {
+  border-bottom: 1px solid #EBEBEB;
+  padding-bottom: 0.75rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.order-assessment ul {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.order-assessment li {
+  display: block;
+}
+
+.order-assessment__details h2,
+.order-assessment__details p {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.13333;
+  font-weight: 700;
+}
+
+@media (min-width: 48rem) {
+  .order-assessment__details {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .order-assessment__details > *:last-child {
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
+/**
+ * Component: Order Line.
+ */
+
+.order-line {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.order-line:first-child {
+  margin-top: 0;
+}
+
+.order-line:last-child {
+  margin-bottom: 0;
+}
+
+.order-line__name {
+  font-size: 1.58333rem;
+  line-height: 1.15789;
+  font-weight: 700;
+}
+
+.order-line__cost {
+  font-size: 1.25rem;
+  line-height: 1.13333;
+  font-weight: 700;
+}
+
+.order-line__header {
+  margin-bottom: 0.25rem;
+}
+
+.order-line__file {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.order-line__file:first-child {
+  margin-top: 0;
+}
+
+.order-line__file:last-child {
+  margin-bottom: 0;
+}
+
+.order-line__file ul {
+  margin: 0;
+  padding: 0 0 0 2rem;
+  position: relative;
+}
+
+.order-line__file ul:before {
+  content: "";
+  background: url("/static/images/icons/file.svg");
+  width: 1.25rem;
+  height: 1.7rem;
+  background-size: cover;
+  position: absolute;
+  top: 0.25rem;
+  left: 0;
+}
+
+.order-line__file li {
+  display: block;
+}
+
+.order-line__file a {
+  color: #2B2B2B;
+}
+
+.order-line__file a:hover,
+.order-line__file a:focus {
+  color: #7ED321;
+}
+
+.order-line__file__size {
+  font-size: .83333rem;
+  line-height: 1.2;
+  color: #757575;
+}
+
+@media (min-width: 48rem) {
+  .order-line__header {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .order-line__header > * {
+    margin-top: 0;
+  }
+
+  .order-line__header > *:last-child {
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
+.order-line__fee {
+  color: #757575;
+}
+
+
+/**
+ * Component: Order Details.
+ */
+
+@media (min-width: 64rem) {
+  .order-details__meta {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .order-details__meta > * {
+    margin-top: 0;
+  }
+
+  .order-details__meta > *:last-child {
+    margin-left: auto;
+    margin-right: 0;
+  }
 }

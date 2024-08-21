@@ -33,6 +33,11 @@ function cmd {
   _dc web "${@}"
 }
 
+function cmd-js {
+  # Run any command you want in the js container
+  _dc js "${@}"
+}
+
 function manage {
   # Run any manage.py commands
 
@@ -55,6 +60,14 @@ function lint {
   cmd flake8 "${@}"
 }
 
+function lint-js {
+  if [ "$1" == "fix" ]; then
+    cmd-js yarn lint:fix
+  else
+    cmd-js yarn lint
+  fi
+}
+
 function format:imports {
   # Sort Python imports
   cmd isort . "${@}"
@@ -70,6 +83,7 @@ function quality {
   format:imports
   format
   lint
+  lint-js fix
 }
 
 function secret {
@@ -184,6 +198,7 @@ function ci:test {
   docker compose logs
 
   lint "${@}"
+  lint-js
   format:imports --check --diff
   format --check --diff
   manage migrate
