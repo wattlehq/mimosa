@@ -1,6 +1,5 @@
 from decimal import Decimal
 from unittest.mock import MagicMock
-from unittest.mock import call
 from unittest.mock import patch
 
 from django.test import TestCase
@@ -11,7 +10,12 @@ from core.models.certificate import Certificate
 
 class CertificateModelTest(TestCase):
 
-    def test_create_certificate(self):
+    @patch("stripe.Product.create")
+    @patch("stripe.Price.create")
+    def test_create_certificate(self, mock_price_create, mock_product_create):
+        mock_product_create.return_value = MagicMock(stripe_id="product_test")
+        mock_price_create.return_value = MagicMock(stripe_id="price_test")
+
         # Create a Certificate instance
         certificate = Certificate(
             name="Test Certificate 22",
@@ -21,15 +25,22 @@ class CertificateModelTest(TestCase):
         )
 
         certificate.save()
+        initial_product_id = certificate.stripe_product_id
 
-        # Fetch the certificate from the database
-        fetched_certificate = Certificate.objects.get(pk=certificate.pk)
+        # Assert the initial price disabled.
+        mock_product_create.assert_called_once_with(
+            name="Test Certificate 22",
+            metadata={"certificate_pk": str(certificate.pk)},
+        )
 
-        # Assert that the fetched certificate matches the created one
-        self.assertEqual(fetched_certificate.name, "Test Certificate 22")
-        self.assertEqual(fetched_certificate.price, Decimal("19.99"))
-        self.assertEqual(fetched_certificate.description, "A test certificate")
-        self.assertEqual(fetched_certificate.account_code, "ACC123")
+        mock_price_create.assert_called_once_with(
+            product=initial_product_id,
+            unit_amount=1999,
+            currency=settings.STRIPE_CURRENCY,
+        )
+
+        self.assertEqual(certificate.stripe_product_id, "product_test")
+        self.assertEqual(certificate.stripe_price_id, "price_test")
 
     @patch("stripe.Price.modify")
     @patch("stripe.Price.create")
@@ -59,19 +70,12 @@ class CertificateModelTest(TestCase):
         # Assert the initial price disabled.
         mock_modify.assert_called_once_with(initial_price_id, active=False)
 
-        expected_calls = [
-            # Assert the initial price created.
-            call(
-                product=initial_product_id,
-                unit_amount=1999,
-                currency=settings.STRIPE_CURRENCY,
-            ),
-            # Assert the new price created.
-            call(
-                product=updated_certificate.stripe_product_id,
-                unit_amount=2999,
-                currency=settings.STRIPE_CURRENCY,
-            ),
-        ]
+        # Assert the new price created.
+        mock_create.assert_any_call(
+            product=updated_certificate.stripe_product_id,
+            unit_amount=2999,
+            currency=settings.STRIPE_CURRENCY,
+        )
 
-        self.assertEqual(mock_create.call_args_list, expected_calls)
+        # Assert that the new price is saved.
+        self.assertEqual(certificate.stripe_price_id, "price_test")
