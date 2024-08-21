@@ -10,6 +10,14 @@ from core.models.certificate import Certificate
 from core.services.order.create_order_session import create_order_session
 
 
+def group_items_by_parent(certificates):
+    grouped_dict = {}
+    for certificate in certificates:
+        if not certificate.parent_certificates.exists():
+            grouped_dict[certificate] = certificate.child_certificates.all()
+    return grouped_dict
+
+
 class OrderForm(View):
     """
     View for handling the find parcel component.
@@ -31,8 +39,15 @@ class OrderForm(View):
         form_find_parcel = FindParcelForm()
         form_create_order_session = CreateOrderSessionForm()
         certificates = Certificate.objects.all().prefetch_related(
-            "fees", "tax_rate"
+            "fees", "tax_rate", "child_certificates"
         )
+        grouped_certificates = group_items_by_parent(certificates)
+
+        context = {
+            "form_find_parcel": form_find_parcel,
+            "form_create_order_session": form_create_order_session,
+            "grouped_certificates": grouped_certificates,
+        }
         return render(
             request,
             self.template_name,
@@ -40,6 +55,7 @@ class OrderForm(View):
                 "form_find_parcel": form_find_parcel,
                 "form_create_order_session": form_create_order_session,
                 "certificates": certificates,
+                "context": context,
             },
         )
 

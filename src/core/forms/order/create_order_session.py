@@ -1,6 +1,15 @@
 from django import forms
 
+from core.models.certificate import Certificate
 from core.models.property import Property
+
+
+def build_child_parent_map(certificates):
+    child_parent_map = {cert: [] for cert in certificates}
+    for certificate in certificates:
+        for child in certificate.child_certificates.all():
+            child_parent_map[child].append(certificate)
+    return child_parent_map
 
 
 class CreateOrderSessionForm(forms.Form):
@@ -44,3 +53,28 @@ class CreateOrderSessionForm(forms.Form):
             elif "fee_id" in line and not isinstance(line["fee_id"], int):
                 raise forms.ValidationError("Fee ID must be a number")
         return lines
+
+    def clean(self):
+        cleaned_data = super().clean()
+        order_lines = cleaned_data.get("lines", [])
+
+        certificates = Certificate.objects.all()
+        child_parent_map = build_child_parent_map(certificates)
+
+        selected_certificates = set(
+            Certificate.objects.filter(
+                id__in=[line["certificate_id"] for line in order_lines]
+            )
+        )
+
+        for line in order_lines:
+            certificate = Certificate.objects.get(id=line["certificate_id"])
+            parents = child_parent_map[certificate]
+            for parent in parents:
+                if parent in selected_certificates:
+                    raise forms.ValidationError(
+                        f"Select either {parent.name} or {certificate.name}, "
+                        "not both."
+                    )
+
+        return cleaned_data
