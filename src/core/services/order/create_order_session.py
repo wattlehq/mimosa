@@ -6,7 +6,6 @@ from core.models.order import OrderSession
 from core.models.order import OrderSessionLine
 from core.models.property import Property
 from core.services.utils.site import get_site_url
-from core.models.certificate_bundle import CertificateBundle
 
 
 def create_order_session(
@@ -51,19 +50,6 @@ def create_order_session(
                     line_items.append(
                         {"price": fee.stripe_price_id, "quantity": 1}
                     )
-
-        # Check for the constraint
-        certificate_ids = [line['certificate_id'] for line in order_lines]
-        bundles = CertificateBundle.objects.filter(
-            parent_certificate_id__in=certificate_ids,
-            child_certificate_id__in=certificate_ids
-        )
-
-        if bundles.exists():
-            return {
-                "success": False,
-                "error": "You cannot select both a parent certificate and its child certificate."
-            }
 
         stripe_checkout = stripe.checkout.Session.create(
             line_items=line_items,

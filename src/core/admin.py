@@ -9,7 +9,6 @@ from core.models.order import OrderSession
 from core.models.order import OrderSessionLine
 from core.models.property import Property
 from core.models.settings import Settings
-from core.models.certificate_bundle import CertificateBundle
 
 
 class OrderLineInline(admin.TabularInline):
@@ -65,7 +64,3 @@ class SettingsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Property)
-
-@admin.register(CertificateBundle)
-class CertificateBundleAdmin(admin.ModelAdmin):
-    list_display = ('parent_certificate', 'child_certificate')
