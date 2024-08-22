@@ -10,6 +10,7 @@ from core.models.order import OrderSession
 from core.models.order import OrderSessionLine
 from core.models.order import OrderSessionStatus
 from core.models.property import Property
+from core.services.email.send_order_status import send_order_status_email
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
@@ -58,7 +59,7 @@ def webhook_stripe(request):
 
 # Creates an order instance from a Stripe Checkout Session.
 @transaction.atomic
-def save_event_order(event: stripe.checkout.Session):
+def save_event_order(event: stripe.checkout.Session) -> Order:
     """
     Create an Order instance from a completed Stripe Checkout Session.
 
@@ -67,6 +68,9 @@ def save_event_order(event: stripe.checkout.Session):
 
     Args:
         event (stripe.checkout.Session): The completed Stripe Checkout Session.
+
+    Returns:
+        order (Order): Order object
     """
     order_session_id = event.metadata["order_session_pk"]
     order_session = OrderSession.objects.get(id=order_session_id)
@@ -110,6 +114,7 @@ def save_event_order(event: stripe.checkout.Session):
 
     order_session.status = OrderSessionStatus.COMPLETED
     order_session.save()
+    return order
 
 
 def save_event_order_error(event: stripe.checkout.Session, e: Exception):
@@ -140,6 +145,7 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
         event (stripe.checkout.Session): The completed Stripe Checkout Session.
     """
     try:
-        save_event_order(event)
+        order = save_event_order(event)
+        send_order_status_email(order_id=order.pk)
     except Exception as e:
         save_event_order_error(event, e)
