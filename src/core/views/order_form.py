@@ -8,15 +8,7 @@ from core.forms.order.create_order_session import CreateOrderSessionForm
 from core.forms.order.find_parcel import FindParcelForm
 from core.models.certificate import Certificate
 from core.services.order.create_order_session import create_order_session
-
-
-def group_items_by_parent(certificates):
-    grouped_dict = {}
-    for certificate in certificates:
-        if not certificate.parent_certificates.exists():
-            grouped_dict[certificate] = certificate.child_certificates.all()
-    return grouped_dict
-
+from core.services.certificate.group_items import group_items_by_parent
 
 class OrderForm(View):
     """
