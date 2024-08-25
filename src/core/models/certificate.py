@@ -29,9 +29,7 @@ class Certificate(StripeProduct):
             raise ValidationError("A certificate cannot be its own child.")
 
     def save(self, *args, **kwargs):
-        self.full_clean()
         super(Certificate, self).stripe_save_sync(*args, **kwargs)
-        self.child_certificates.remove(self)
 
     def __str__(self):
         return self.name
