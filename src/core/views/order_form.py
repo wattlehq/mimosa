@@ -13,9 +13,16 @@ from core.services.order.create_order_session import create_order_session
 def group_items_by_parent(certificates):
     grouped_dict = {}
     for certificate in certificates:
-        if not certificate.parent_certificates.exists():
-            grouped_dict[certificate] = certificate.child_certificates.all()
+        if certificate.parent_certificates.exists():
+            for parent in certificate.parent_certificates.all():
+                if parent not in grouped_dict:
+                    grouped_dict[parent] = []
+                grouped_dict[parent].append(certificate)
+        else:
+            if certificate not in grouped_dict:
+                grouped_dict[certificate] = []
     return grouped_dict
+
 
 
 class OrderForm(View):
