@@ -59,16 +59,19 @@ class CreateOrderSessionForm(forms.Form):
         order_lines = cleaned_data.get("lines", [])
 
         certificates = Certificate.objects.all()
+        certificate_map = {obj.id: obj for obj in certificates}
         child_parent_map = build_child_parent_map(certificates)
 
-        selected_certificates = set(
-            Certificate.objects.filter(
-                id__in=[line["certificate_id"] for line in order_lines]
-            )
-        )
+        selected_certificates = set()
 
         for line in order_lines:
-            certificate = Certificate.objects.get(id=line["certificate_id"])
+            certificate_id = line["certificate_id"]
+            if certificate_id not in certificate_map:
+                raise forms.ValidationError(f"Certificate with ID {certificate_id} not found.")
+            
+            certificate = certificate_map[certificate_id]
+            selected_certificates.add(certificate)
+
             parents = child_parent_map[certificate]
             for parent in parents:
                 if parent in selected_certificates:
