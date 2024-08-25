@@ -20,16 +20,4 @@ class Migration(migrations.Migration):
                 to="core.certificate",
             ),
         ),
-        migrations.AlterField(
-            model_name="taxrate",
-            name="percentage",
-            field=models.DecimalField(
-                decimal_places=2,
-                max_digits=5,
-                validators=[
-                    django.core.validators.MinValueValidator(1),
-                    django.core.validators.MaxValueValidator(100),
-                ],
-            ),
-        ),
     ]
