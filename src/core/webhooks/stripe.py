@@ -67,25 +67,25 @@ def save_event_order(event: stripe.checkout.Session):
     Args:
         event (stripe.checkout.Session): The completed Stripe Checkout Session.
     """
-    order_session_id = event.metadata["order_session_pk"]
+    order_session_id = event["metadata"]["order_session_pk"]
     order_session = OrderSession.objects.get(id=order_session_id)
     property_obj = Property.objects.get(id=order_session.property_id)
-    customer = event.customer_details
+    customer = event["customer_details"]
 
     order = Order(
         customer_name=order_session.customer_name,
         customer_company_name=order_session.customer_company_name,
-        customer_email=customer.email,
-        customer_phone=customer.phone,
-        customer_address_street_line_1=customer.address.line1,
-        customer_address_street_line_2=customer.address.line2,
-        customer_address_suburb=customer.address.city,
-        customer_address_state=customer.address.state,
-        customer_address_post_code=customer.address.postal_code,
-        customer_address_country=customer.address.state,
+        customer_email=customer["email"],
+        customer_phone=customer["phone"],
+        customer_address_street_line_1=customer["address"]["line1"],
+        customer_address_street_line_2=customer["address"]["line2"],
+        customer_address_suburb=customer["address"]["city"],
+        customer_address_state=customer["address"]["state"],
+        customer_address_post_code=customer["address"]["postal_code"],
+        customer_address_country=customer["address"]["state"],
         property=property_obj,
         order_session=order_session,
-        stripe_payment_intent=event.payment_intent,
+        stripe_payment_intent=event["payment_intent"],
     )
 
     order.save()
