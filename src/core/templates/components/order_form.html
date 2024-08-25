@@ -97,6 +97,37 @@
                   {% endfor %}
                 </ul>
               {% endif %}
+              {% if certificate.fees.exists %}
+                <ul>
+                  {% for fee in certificate.fees.all %}
+                    <li>
+                      <div class="cert-li cert-li--fee">
+                        <div class="cert-li__title">
+                          <input
+                            type="checkbox"
+                            id="fee_{{ forloop.counter }}"
+                            value="{{ fee.id }}"
+                            data-price="{{ fee.price }}"
+                            data-tax-rate="{{ fee.tax_rate.percentage|default:0 }}"
+                            data-certificate="{{ certificate.id }}"
+                          />
+                          <label for="fee-{{ fee.id }}">
+                            {{ fee.name }}
+                          </label>
+                        </div>
+                        <div class="cert-li__cost">
+                          <div class="cert-li__price">
+                            {{ fee.price|money }}
+                          </div>
+                          {% if fee.tax_rate %}
+                            <span class="tax-rate">{{ fee.tax_rate.name }}</span>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
             </li>
           {% endif %}
         {% endfor %}
