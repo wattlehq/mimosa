@@ -67,8 +67,10 @@ class CreateOrderSessionForm(forms.Form):
         for line in order_lines:
             certificate_id = line["certificate_id"]
             if certificate_id not in certificate_map:
-                raise forms.ValidationError(f"Certificate with ID {certificate_id} not found.")
-            
+                raise forms.ValidationError(
+                    f"Certificate with ID {certificate_id} not found."
+                )
+
             certificate = certificate_map[certificate_id]
             selected_certificates.add(certificate)
 

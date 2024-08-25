@@ -6,8 +6,9 @@ def group_items_by_parent(certificates):
         certificates (list): A list of certificates.
 
     Returns:
-        dict: A dictionary where the keys are certificates without parent certificates,
-              and the values are lists of child certificates for each key.
+        dict: A dictionary where the keys are certificates without parent
+        certificates, and the values are lists of child certificates
+        for each key.
 
     """
     grouped_dict = {}
