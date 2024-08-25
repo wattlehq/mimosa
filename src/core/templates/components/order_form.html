@@ -20,147 +20,145 @@
     <h2>2. Select certificates</h2>
     <div class="form-item form-item--list">
       <ul>
-        {% for certificate in certificates %}
-          {% if not certificate.parent_certificates.exists %}
-            <li>
-              <div class="cert-li cert-li--cert">
-                <div class="cert-li__details">
-                  <div class="cert-li__title">
-                    <input
-                      type="checkbox"
-                      id="certificate_{{ forloop.counter }}"
-                      value="{{ certificate.id }}"
-                      data-price="{{ certificate.price }}"
-                      data-tax-rate="{{ certificate.tax_rate.percentage|default:0 }}"
-                    />
-                    <label for="cert-{{ certificate.id }}">
-                      {{ certificate.name }}
-                    </label>
-                  </div>
-                  {% if certificate.description %}
-                    <div class="cert-li__description">
-                      <p>
-                        {{ certificate.description }}
-                      </p>
-                    </div>
-                  {% endif %}
+        {% for parent_certificate, child_certificates in grouped_certificates.items %}
+          <li>
+            <div class="cert-li cert-li--cert">
+              <div class="cert-li__details">
+                <div class="cert-li__title">
+                  <input
+                    type="checkbox"
+                    id="certificate_{{ forloop.counter }}"
+                    value="{{ parent_certificate.id }}"
+                    data-price="{{ parent_certificate.price }}"
+                    data-tax-rate="{{ parent_certificate.tax_rate.percentage|default:0 }}"
+                  />
+                  <label for="cert-{{ parent_certificate.id }}">
+                    {{ parent_certificate.name }}
+                  </label>
                 </div>
-                <div class="cert-li__cost">
-                  <div class="cert-li__price">
+                {% if parent_certificate.description %}
+                  <div class="cert-li__description">
                     <p>
-                      {{ certificate.price|money }}
+                      {{ parent_certificate.description }}
                     </p>
                   </div>
-                  {% if certificate.tax_rate %}
-                    <span class="tax-rate">{{ certificate.tax_rate.name }}</span>
-                  {% endif %}
-                </div>
+                {% endif %}
               </div>
-              {% if certificate.fees.exists %}
-                <ul>
-                  {% for fee in certificate.fees.all %}
-                    <li>
-                      <div class="cert-li cert-li--fee">
+              <div class="cert-li__cost">
+                <div class="cert-li__price">
+                  <p>
+                    {{ parent_certificate.price|money }}
+                  </p>
+                </div>
+                {% if parent_certificate.tax_rate %}
+                  <span class="tax-rate">{{ parent_certificate.tax_rate.name }}</span>
+                {% endif %}
+              </div>
+            </div>
+            {% if parent_certificate.fees.exists %}
+              <ul>
+                {% for fee in parent_certificate.fees.all %}
+                  <li>
+                    <div class="cert-li cert-li--fee">
+                      <div class="cert-li__title">
+                        <input
+                          type="checkbox"
+                          id="fee_{{ forloop.counter }}"
+                          value="{{ fee.id }}"
+                          data-price="{{ fee.price }}"
+                          data-tax-rate="{{ fee.tax_rate.percentage|default:0 }}"
+                          data-certificate="{{ parent_certificate.id }}"
+                        />
+                        <label for="fee-{{ fee.id }}">
+                          {{ fee.name }}
+                        </label>
+                      </div>
+                      <div class="cert-li__cost">
+                        <div class="cert-li__price">
+                          {{ fee.price|money }}
+                        </div>
+                        {% if fee.tax_rate %}
+                          <span class="tax-rate">{{ fee.tax_rate.name }}</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+            {% if child_certificates %}
+              <ul style="margin-left: 30px;">
+                {% for child in child_certificates %}
+                  <li>
+                    <div class="cert-li cert-li--cert">
+                      <div class="cert-li__details">
                         <div class="cert-li__title">
                           <input
                             type="checkbox"
-                            id="fee_{{ forloop.counter }}"
-                            value="{{ fee.id }}"
-                            data-price="{{ fee.price }}"
-                            data-tax-rate="{{ fee.tax_rate.percentage|default:0 }}"
-                            data-certificate="{{ certificate.id }}"
+                            id="certificate_{{ forloop.parentloop.counter }}_{{ forloop.counter }}"
+                            value="{{ child.id }}"
+                            data-price="{{ child.price }}"
+                            data-tax-rate="{{ child.tax_rate.percentage|default:0 }}"
                           />
-                          <label for="fee-{{ fee.id }}">
-                            {{ fee.name }}
+                          <label for="cert-{{ child.id }}">
+                            {{ child.name }}
                           </label>
                         </div>
-                        <div class="cert-li__cost">
-                          <div class="cert-li__price">
-                            {{ fee.price|money }}
-                          </div>
-                          {% if fee.tax_rate %}
-                            <span class="tax-rate">{{ fee.tax_rate.name }}</span>
-                          {% endif %}
-                        </div>
-                      </div>
-                    </li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-              {% if certificate.child_certificates.exists %}
-                <ul style="margin-left: 30px;">
-                  {% for child in certificate.child_certificates.all %}
-                    <li>
-                      <div class="cert-li cert-li--cert">
-                        <div class="cert-li__details">
-                          <div class="cert-li__title">
-                            <input
-                              type="checkbox"
-                              id="certificate_{{ forloop.parentloop.counter }}_{{ forloop.counter }}"
-                              value="{{ child.id }}"
-                              data-price="{{ child.price }}"
-                              data-tax-rate="{{ child.tax_rate.percentage|default:0 }}"
-                            />
-                            <label for="cert-{{ child.id }}">
-                              {{ child.name }}
-                            </label>
-                          </div>
-                          {% if child.description %}
-                            <div class="cert-li__description">
-                              <p>
-                                {{ child.description }}
-                              </p>
-                            </div>
-                          {% endif %}
-                        </div>
-                        <div class="cert-li__cost">
-                          <div class="cert-li__price">
+                        {% if child.description %}
+                          <div class="cert-li__description">
                             <p>
-                              {{ child.price|money }}
+                              {{ child.description }}
                             </p>
                           </div>
-                          {% if child.tax_rate %}
-                            <span class="tax-rate">{{ child.tax_rate.name }}</span>
-                          {% endif %}
-                        </div>
+                        {% endif %}
                       </div>
-                      {% if child.fees.exists %}
-                        <ul>
-                          {% for fee in child.fees.all %}
-                            <li>
-                              <div class="cert-li cert-li--fee">
-                                <div class="cert-li__title">
-                                  <input
-                                    type="checkbox"
-                                    id="fee_{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}"
-                                    value="{{ fee.id }}"
-                                    data-price="{{ fee.price }}"
-                                    data-tax-rate="{{ fee.tax_rate.percentage|default:0 }}"
-                                    data-certificate="{{ child.id }}"
-                                  />
-                                  <label for="fee-{{ fee.id }}">
-                                    {{ fee.name }}
-                                  </label>
-                                </div>
-                                <div class="cert-li__cost">
-                                  <div class="cert-li__price">
-                                    {{ fee.price|money }}
-                                  </div>
-                                  {% if fee.tax_rate %}
-                                    <span class="tax-rate">{{ fee.tax_rate.name }}</span>
-                                  {% endif %}
-                                </div>
+                      <div class="cert-li__cost">
+                        <div class="cert-li__price">
+                          <p>
+                            {{ child.price|money }}
+                          </p>
+                        </div>
+                        {% if child.tax_rate %}
+                          <span class="tax-rate">{{ child.tax_rate.name }}</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                    {% if child.fees.exists %}
+                      <ul>
+                        {% for fee in child.fees.all %}
+                          <li>
+                            <div class="cert-li cert-li--fee">
+                              <div class="cert-li__title">
+                                <input
+                                  type="checkbox"
+                                  id="fee_{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}"
+                                  value="{{ fee.id }}"
+                                  data-price="{{ fee.price }}"
+                                  data-tax-rate="{{ fee.tax_rate.percentage|default:0 }}"
+                                  data-certificate="{{ child.id }}"
+                                />
+                                <label for="fee-{{ fee.id }}">
+                                  {{ fee.name }}
+                                </label>
                               </div>
-                            </li>
-                          {% endfor %}
-                        </ul>
-                      {% endif %}
-                    </li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </li>
-          {% endif %}
+                              <div class="cert-li__cost">
+                                <div class="cert-li__price">
+                                  {{ fee.price|money }}
+                                </div>
+                                {% if fee.tax_rate %}
+                                  <span class="tax-rate">{{ fee.tax_rate.name }}</span>
+                                {% endif %}
+                              </div>
+                            </div>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
         {% endfor %}
       </ul>
     </div>

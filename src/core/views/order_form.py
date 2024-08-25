@@ -35,19 +35,13 @@ class OrderForm(View):
         )
         grouped_certificates = group_items_by_parent(certificates)
 
-        context = {
-            "form_find_parcel": form_find_parcel,
-            "form_create_order_session": form_create_order_session,
-            "grouped_certificates": grouped_certificates,
-        }
         return render(
             request,
             self.template_name,
             {
                 "form_find_parcel": form_find_parcel,
                 "form_create_order_session": form_create_order_session,
-                "certificates": certificates,
-                "context": context,
+                "grouped_certificates": grouped_certificates,
             },
         )
 
