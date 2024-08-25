@@ -319,7 +319,11 @@ input[type='radio'] {
   }
 }
 
-.cert-li--cert ul {
+.cert-li__children {
+  margin-left: 30px;
+}
+
+.cert-li--child {
   margin-left: 30px;
 }
 

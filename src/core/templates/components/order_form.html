@@ -56,7 +56,7 @@
               </div>
             </div>
             {% if parent_certificate.fees.exists %}
-              <ul>
+              <ul class="cert-li__fees">
                 {% for fee in parent_certificate.fees.all %}
                   <li>
                     <div class="cert-li cert-li--fee">
@@ -87,10 +87,10 @@
               </ul>
             {% endif %}
             {% if child_certificates %}
-              <ul>
+              <ul class="cert-li__children">
                 {% for child in child_certificates %}
                   <li>
-                    <div class="cert-li cert-li--cert">
+                    <div class="cert-li cert-li--cert cert-li--child">
                       <div class="cert-li__details">
                         <div class="cert-li__title">
                           <input
@@ -124,7 +124,7 @@
                       </div>
                     </div>
                     {% if child.fees.exists %}
-                      <ul>
+                      <ul class="cert-li__fees">
                         {% for fee in child.fees.all %}
                           <li>
                             <div class="cert-li cert-li--fee">
