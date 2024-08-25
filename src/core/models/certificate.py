@@ -14,6 +14,7 @@ class Certificate(StripeProduct):
     account_code = models.CharField(max_length=10)
 
     fees = models.ManyToManyField(Fee, related_name="fees", blank=True)
+    is_active = models.BooleanField(default=True, editable=False)
 
     child_certificates = models.ManyToManyField(
         "self",
