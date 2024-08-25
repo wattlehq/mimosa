@@ -7,8 +7,9 @@ from django.views import View
 from core.forms.order.create_order_session import CreateOrderSessionForm
 from core.forms.order.find_parcel import FindParcelForm
 from core.models.certificate import Certificate
-from core.services.order.create_order_session import create_order_session
 from core.services.certificate.group_items import group_items_by_parent
+from core.services.order.create_order_session import create_order_session
+
 
 class OrderForm(View):
     """
@@ -48,6 +49,7 @@ class OrderForm(View):
     def post(self, request):
         form_find_parcel = FindParcelForm()
         certificates = Certificate.objects.all()
+        grouped_certificates = group_items_by_parent(certificates)
         form_create_order_session = CreateOrderSessionForm(request.POST)
 
         if form_create_order_session.is_valid():
@@ -75,6 +77,6 @@ class OrderForm(View):
             {
                 "form_find_parcel": form_find_parcel,
                 "form_create_order_session": form_create_order_session,
-                "certificates": certificates,
+                "grouped_certificates": grouped_certificates,
             },
         )
