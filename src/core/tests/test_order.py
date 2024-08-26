@@ -32,7 +32,7 @@ class OrderModelTest(TestCase):
             address_state="NSW",
             address_suburb="Faketown",
             address_street="123 Fake St",
-            address_post_code="2000"
+            address_post_code="2000",
         )
 
         property.save()
