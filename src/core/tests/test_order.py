@@ -67,6 +67,5 @@ class OrderModelTest(TestCase):
         self.assertEqual(order.orderline_set.all().count(), 1)
 
         self.assertEqual(
-            order.stripe_payment_intent,
-            "pi_3PrnOyBEiTiT42p6059j9f0h"
+            order.stripe_payment_intent, "pi_3PrnOyBEiTiT42p6059j9f0h"
         )
