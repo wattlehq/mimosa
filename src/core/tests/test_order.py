@@ -24,7 +24,7 @@ class OrderModelTest(TestCase):
         ) as json_file:
             event = json.load(json_file)
 
-        property = Property(
+        prop = Property(
             assessment="10",
             lot="100",
             section="1000",
@@ -35,7 +35,7 @@ class OrderModelTest(TestCase):
             address_post_code="2000",
         )
 
-        property.save()
+        prop.save()
 
         certificate = Certificate(
             name="Test Certificate",
@@ -47,7 +47,7 @@ class OrderModelTest(TestCase):
         certificate.save()
 
         create_order_session(
-            property_id=property.pk,
+            property_id=prop.pk,
             order_lines=[{"certificate_id": certificate.pk}],
             customer_name="John Doe",
             customer_company_name="Commins Hendricks",
@@ -61,3 +61,12 @@ class OrderModelTest(TestCase):
         order = Order.objects.get(pk=1)
 
         self.assertEqual(order.customer_name, "John Doe")
+        self.assertEqual(order.customer_email, "john@example.com")
+        self.assertEqual(order.property.pk, 1)
+        self.assertEqual(order.order_session.pk, 1)
+        self.assertEqual(order.orderline_set.all().count(), 1)
+
+        self.assertEqual(
+            order.stripe_payment_intent,
+            "pi_3PrnOyBEiTiT42p6059j9f0h"
+        )
