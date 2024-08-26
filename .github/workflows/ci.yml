@@ -16,6 +16,10 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
 
+      - uses: KengoTODA/actions-setup-docker-compose@v1
+        with:
+          version: '2.14.2'
+
       - name: "Install CI dependencies"
         run: |
           ./run ci:install-deps
@@ -31,8 +35,6 @@ jobs:
           # esbuild. This line ensures NODE_ENV is set to production.
           sed -i "s|export NODE_ENV|#export NODE_ENV|g" .env*
           
-          ls -la
-
           DEBUG=false NODE_ENV=production ./run ci:test
           
           git diff --exit-code -- src/ || (echo "Code is not formatted properly. Run ./run quality" && exit 1)

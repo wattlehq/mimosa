@@ -12,7 +12,6 @@ from core.models.order import OrderSessionStatus
 from core.models.property import Property
 from core.services.email.send_order_status import send_order_status_email
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
 

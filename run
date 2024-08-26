@@ -4,6 +4,7 @@ set -o errexit
 set -o pipefail
 
 DC="${DC:-run}"
+DC_FILE_TEST="docker-compose.test.yml"
 
 # If we're running in CI we need to disable TTY allocation for docker compose
 # commands that enable it by default, such as exec and run.
@@ -20,6 +21,10 @@ function _dc {
   docker compose "${DC}" ${TTY} "${@}"
 }
 
+function _dc-test {
+  docker compose -f ${DC_FILE_TEST} "${DC}" ${TTY} "${@}"
+}
+
 function _build_run_down {
   docker compose build
   docker compose run ${TTY} "${@}"
@@ -33,9 +38,28 @@ function cmd {
   _dc web "${@}"
 }
 
+function cmd-test {
+  # Run any command you want in the web container
+  _dc-test web-test "${@}"
+}
+
 function cmd-js {
   # Run any command you want in the js container
   _dc js "${@}"
+}
+
+function manage-test {
+  # Run any manage.py commands
+
+  # We need to collectstatic before we run our tests.
+  if [ "${1-''}" == "test" ]; then
+    test-create-env
+    cmd-test python3 manage.py collectstatic --no-input
+    cmd-test python3 manage.py "${@}" || docker compose down --remove-orphans
+    docker compose down --remove-orphans
+  else
+    cmd-test python3 manage.py "${@}"
+  fi
 }
 
 function manage {
@@ -43,10 +67,13 @@ function manage {
 
   # We need to collectstatic before we run our tests.
   if [ "${1-''}" == "test" ]; then
-    cmd python3 manage.py collectstatic --no-input
+    test-create-env
+    cmd-test python3 manage.py collectstatic --no-input
+    cmd-test python3 manage.py "${@}" || docker compose down --remove-orphans
+    docker compose down --remove-orphans
+  else
+    cmd python3 manage.py "${@}"
   fi
-
-  cmd python3 manage.py "${@}"
 }
 
 function lint:dockerfile {
@@ -171,6 +198,32 @@ function ci:install-deps {
     -o /usr/local/bin/wait-until && sudo chmod +x /usr/local/bin/wait-until
 }
 
+function test-create-env {
+  if [ ! -f .env.test ]; then
+    cp -n .env.example .env.test
+
+    # Delete existing vars.
+    sed -i'' -e '/REDIS_URL=/d' .env.test
+    sed -i'' -e '/POSTGRES_HOST=/d' .env.test
+    sed -i'' -e '/STRIPE_SECRET_KEY=/d' .env.test
+    sed -i'' -e '/STRIPE_API_BASE=/d' .env.test
+    sed -i'' -e '/STRIPE_WEBHOOK_SECRET=/d' .env.test
+    sed -i'' -e '/REDIS_URL=/d' .env.test
+    sed -i'' -e '/SITE_PORT==/d' .env.test
+
+    # Append vars.
+    echo 'export REDIS_URL=redis://redis-test:6379/0' >> .env.test
+    echo 'export POSTGRES_HOST=postgres-test' >> .env.test
+    echo 'export STRIPE_SECRET_KEY=sk_test_123' >> .env.test
+    echo 'export STRIPE_API_BASE=http://stripe-mock:12111' >> .env.test
+    echo 'export STRIPE_WEBHOOK_SECRET=sk_test_123' >> .env.test
+    echo 'export SITE_PORT=8000' >> .env.test
+
+    # Delete unused produced file on MacOS.
+    rm -f .env.test-e
+  fi
+}
+
 function ci:test {
   # Execute Continuous Integration (CI) pipeline
   #
@@ -181,13 +234,11 @@ function ci:test {
   # lint:dockerfile "${@}"
 
   # create .env if not exists.
-  if [ ! -f .env ]; then
-    cp -n .env.example .env
-  fi
+  test-create-env
+  cp -n .env.test .env || echo "skipping .env.test create"
 
-
-  docker compose build
-  docker compose up -d
+  docker compose -f ${DC_FILE_TEST} build
+  docker compose -f ${DC_FILE_TEST} up web-test -d
 
   # shellcheck disable=SC1091
   . .env
@@ -195,14 +246,14 @@ function ci:test {
   #   -e PGPASSWORD=${POSTGRES_PASSWORD} postgres \
   #   psql -U ${POSTGRES_USER} ${POSTGRES_USER} -c 'SELECT 1'"
 
-  docker compose logs
+  docker compose -f ${DC_FILE_TEST} logs
 
   lint "${@}"
   lint-js
   format:imports --check --diff
   format --check --diff
-  manage migrate
-  manage test
+  manage-test migrate
+  manage-test test
 }
 
 function help {

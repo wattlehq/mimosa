@@ -1,5 +1,3 @@
-import stripe
-from django.conf import settings
 from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -11,8 +9,6 @@ from core.services.tax_rate.create_stripe_tax_rate import (
 from core.services.tax_rate.update_stripe_tax_rate import (
     update_stripe_tax_rate,
 )
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class TaxRate(models.Model):

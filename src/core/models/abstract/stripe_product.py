@@ -6,8 +6,6 @@ from django.db import models
 
 from core.models.tax_rate import TaxRate
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
 
 class StripeProduct(models.Model):
     name = models.CharField(max_length=255)

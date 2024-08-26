@@ -1,9 +1,5 @@
-import stripe
-from django.conf import settings
 from django.db import models
 from django.utils import timezone
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class OrderFulfillable(models.Model):

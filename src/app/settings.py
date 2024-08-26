@@ -15,6 +15,8 @@ import socket
 from distutils.util import strtobool
 from pathlib import Path
 
+import stripe
+
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -177,7 +179,12 @@ if DEBUG:
 # Stripe.
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET")
+STRIPE_API_BASE = os.getenv("STRIPE_API_BASE", "https://api.stripe.com")
 STRIPE_CURRENCY = "aud"
+
+# Set the key and base so that it doesn't need to be set in each file.
+stripe.api_key = STRIPE_SECRET_KEY
+stripe.api_base = STRIPE_API_BASE
 
 # Site.
 SITE_PROTOCOL = os.environ.get("SITE_PROTOCOL")
