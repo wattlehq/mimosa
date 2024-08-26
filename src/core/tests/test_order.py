@@ -13,9 +13,13 @@ from core.webhooks.stripe import handle_stripe_checkout_session_completed
 
 
 class OrderModelTest(TestCase):
+
+    @patch("core.webhooks.stripe.send_order_status_email")
     @patch("stripe.Product.create")
     @patch("stripe.Price.create")
-    def test_create_certificate(self, mock_price_create, mock_product_create):
+    def test_create_certificate(
+        self, mock_price_create, mock_product_create, mock_email
+    ):
         mock_product_create.return_value = MagicMock(stripe_id="product_test")
         mock_price_create.return_value = MagicMock(stripe_id="price_test")
 
@@ -60,12 +64,17 @@ class OrderModelTest(TestCase):
 
         order = Order.objects.get(pk=1)
 
-        self.assertEqual(order.customer_name, "John Doe")
-        self.assertEqual(order.customer_email, "john@example.com")
-        self.assertEqual(order.property.pk, 1)
+        # Assert metadata has been loaded from metadata and embedded.
         self.assertEqual(order.order_session.pk, 1)
+        self.assertEqual(order.property.pk, 1)
         self.assertEqual(order.orderline_set.all().count(), 1)
 
+        # Assert Stripe data is embedded.
+        self.assertEqual(order.customer_name, "John Doe")
+        self.assertEqual(order.customer_email, "john@example.com")
         self.assertEqual(
             order.stripe_payment_intent, "pi_3PrnOyBEiTiT42p6059j9f0h"
         )
+
+        # Assert email is sent.
+        mock_email.assert_called_once()
