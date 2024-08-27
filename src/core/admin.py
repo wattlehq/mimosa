@@ -49,6 +49,7 @@ class CertificateAdmin(admin.ModelAdmin):
         "stripe_product_id",
         "stripe_price_id",
     )
+    filter_horizontal = ("child_certificates",)
 
 
 @admin.register(Fee)

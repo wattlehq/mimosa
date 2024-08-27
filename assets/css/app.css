@@ -319,6 +319,14 @@ input[type='radio'] {
   }
 }
 
+.cert-li__children {
+  margin-left: 1rem;
+}
+
+.cert-li--child {
+  margin-left: 1rem;
+}
+
 /**
  * Component: Tax Rate.
  */
