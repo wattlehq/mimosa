@@ -2,14 +2,7 @@ from django import forms
 
 from core.models.certificate import Certificate
 from core.models.property import Property
-
-
-def build_child_parent_map(certificates):
-    child_parent_map = {cert: [] for cert in certificates}
-    for certificate in certificates:
-        for child in certificate.child_certificates.all():
-            child_parent_map[child].append(certificate)
-    return child_parent_map
+from core.services.certificate.group_items import build_child_parent_map
 
 
 class CreateOrderSessionForm(forms.Form):
