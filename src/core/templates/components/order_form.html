@@ -21,13 +21,17 @@
     <div class="form-item form-item--list">
       <ul>
         {% for parent_certificate, child_certificates in grouped_certificates.items %}
-          <li>
-            {% include "components/certificate_item.html" with certificate=parent_certificate is_child=False counter=forloop.counter %}
-            {% if child_certificates %}
-              <ul class="cert-li__children">
-                {% for child in child_certificates %}
-                  <li>
-                    {% include "components/certificate_item.html" with certificate=child is_child=True counter=forloop.parentloop.counter|add:forloop.counter %}
+        <li>
+          {% with is_child=False counter=forloop.counter %}
+            {% include "components/certificate_item.html" with certificate=parent_certificate %}
+          {% endwith %}
+          {% if child_certificates %}
+            <ul class="cert-li__children">
+              {% for child in child_certificates %}
+                <li>
+                  {% with is_child=True counter=forloop.parentloop.counter|add:forloop.counter %}
+                    {% include "components/certificate_item.html" with certificate=child %}
+                  {% endwith %}
                   </li>
                 {% endfor %}
               </ul>
