@@ -6,7 +6,7 @@ from core.services.property.search_properties import search_properties
 
 class SearchPropertiesTest(TestCase):
 
-    def test_create_search_properties(self):
+    def test_search_properties(self):
         prop = Property(
             assessment="10",
             lot="100",
