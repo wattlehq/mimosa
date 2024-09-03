@@ -21,9 +21,7 @@ class SearchPropertiesTest(TestCase):
         prop.save()
 
         search = search_properties(
-            lot="10",
-            section="1000",
-            deposited_plan="1337"
+            lot="10", section="1000", deposited_plan="1337"
         )
 
         self.assertEqual(search.first().pk, prop.pk)

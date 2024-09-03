@@ -1,8 +1,9 @@
 from django.test import TestCase
 
 from core.models.property import Property
-from core.services.property.group_properties_by_assessment import \
-    group_properties_by_assessment
+from core.services.property.group_properties_by_assessment import (
+    group_properties_by_assessment,
+)
 
 
 class GroupPropertiesByAssessmentTest(TestCase):
