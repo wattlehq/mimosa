@@ -40,8 +40,6 @@ class SearchPropertiesTest(TestCase):
 
         prop.save()
 
-        search = search_properties(
-            street_address="123 Fake St."
-        )
+        search = search_properties(street_address="123 Fake St.")
 
         self.assertEqual(search.first().pk, prop.pk)
