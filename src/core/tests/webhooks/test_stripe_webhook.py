@@ -62,11 +62,13 @@ class OrderModelTest(TestCase):
         event_data = event["data"]["object"]
         handle_stripe_checkout_session_completed(event_data)
 
+        # @todo Get PK from `handle_stripe_checkout_session_completed`
         order = Order.objects.get(pk=1)
 
+        # @todo Get PK from `create_order_session`
         # Assert metadata has been loaded from metadata and embedded.
         self.assertEqual(order.order_session.pk, 1)
-        self.assertEqual(order.property.pk, 1)
+        self.assertEqual(order.property.pk, prop.pk)
         self.assertEqual(order.orderline_set.all().count(), 1)
 
         # Assert Stripe data is embedded.
