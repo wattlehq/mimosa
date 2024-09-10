@@ -87,6 +87,10 @@ def create_order_session(
         order_session.stripe_checkout_id = stripe_checkout.id
         order_session.save()
 
-        return {"success": True, "checkout_url": stripe_checkout.url}
+        return {
+            "success": True,
+            "checkout_url": stripe_checkout.url,
+            "order_session": order_session,
+        }
     except Exception as e:
         return {"success": False, "error": str(e)}
