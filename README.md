@@ -387,3 +387,9 @@ When the test commands start:
 - Boot the services in docker-compose.test.yml
 - Boot the Django tests
 - Spin down and destroy the test services
+
+## Monitoring
+
+This project has been setup to optionally use Sentry for application monitoring.
+Once `SENTRY_ENABLED` has been set to `True` and `SENTRY_DSN` has been
+configured, events will start to propogate to Sentry.

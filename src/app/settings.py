@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 import socket
-from distutils.util import strtobool
 from pathlib import Path
 
+import sentry_sdk
 import stripe
+from distutils.util import strtobool
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -103,22 +104,22 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation"
-        ".UserAttributeSimilarityValidator"
+                ".UserAttributeSimilarityValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation."
-        "MinimumLengthValidator"
+                "MinimumLengthValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation"
-        ".CommonPasswordValidator"
+                ".CommonPasswordValidator"
         # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation"
-        ".NumericPasswordValidator"
+                ".NumericPasswordValidator"
         # noqa: E501
     },
 ]
@@ -201,3 +202,17 @@ else:
     EMAIL_USE_TLS = bool(strtobool(os.environ.get("EMAIL_USE_TLS", "true")))
     EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
     EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+
+SENTRY_ENABLED = os.environ.get("SENTRY_ENABLED")
+SENTRY_DSN = os.environ.get("SENTRY_DSN")
+if SENTRY_ENABLED == "True":
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for tracing.
+        traces_sample_rate=1.0,
+        # Set profiles_sample_rate to 1.0 to profile 100%
+        # of sampled transactions.
+        # We recommend adjusting this value in production.
+        profiles_sample_rate=1.0,
+    )
