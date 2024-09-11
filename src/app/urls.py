@@ -28,7 +28,9 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
-    )
+# NOTE: This should be served by a separate web server or CDN, however we are
+# temporarily allowing Django to serve these files, see:
+# https://stackoverflow.com/questions/2237418/serving-static-media-during-django-development-why-not-media-root
+urlpatterns += static(
+    settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+)
