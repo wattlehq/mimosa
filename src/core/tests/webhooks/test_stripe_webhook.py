@@ -6,7 +6,6 @@ from unittest.mock import patch
 from django.test import TestCase
 
 from core.models.certificate import Certificate
-from core.models.order import Order
 from core.models.property import Property
 from core.services.order.create_order_session import create_order_session
 from core.webhooks.stripe import handle_stripe_checkout_session_completed
@@ -50,24 +49,20 @@ class OrderModelTest(TestCase):
 
         certificate.save()
 
-        create_order_session(
+        order_session = create_order_session(
             property_id=prop.pk,
             order_lines=[{"certificate_id": certificate.pk}],
             customer_name="John Doe",
             customer_company_name="Commins Hendricks",
-        )
+        )["order_session"]
 
         certificate.save()
 
         event_data = event["data"]["object"]
-        handle_stripe_checkout_session_completed(event_data)
+        order = handle_stripe_checkout_session_completed(event_data)
 
-        # @todo Get PK from `handle_stripe_checkout_session_completed`
-        order = Order.objects.get(pk=1)
-
-        # @todo Get PK from `create_order_session`
         # Assert metadata has been loaded from metadata and embedded.
-        self.assertEqual(order.order_session.pk, 1)
+        self.assertEqual(order.order_session.pk, order_session.pk)
         self.assertEqual(order.property.pk, prop.pk)
         self.assertEqual(order.orderline_set.all().count(), 1)
 

@@ -146,5 +146,6 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
     try:
         order = save_event_order(event)
         send_order_status_email(order_id=order.pk)
+        return order
     except Exception as e:
         save_event_order_error(event, e)
