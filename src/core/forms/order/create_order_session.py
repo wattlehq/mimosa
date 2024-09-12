@@ -57,16 +57,17 @@ class CreateOrderSessionForm(forms.Form):
 
         selected_certificates = set()
 
+        # First pass: Add all selected certificates
         for line in order_lines:
             certificate_id = line["certificate_id"]
             if certificate_id not in certificate_map:
                 raise forms.ValidationError(
                     f"Certificate with ID {certificate_id} not found."
-                )
+                    )
+            selected_certificates.add(certificate_map[certificate_id])
 
-            certificate = certificate_map[certificate_id]
-            selected_certificates.add(certificate)
-
+        # Second pass: Check for conflicts
+        for certificate in selected_certificates:
             parents = child_parent_map[certificate]
             for parent in parents:
                 if parent in selected_certificates:
