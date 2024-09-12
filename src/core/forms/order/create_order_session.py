@@ -63,7 +63,7 @@ class CreateOrderSessionForm(forms.Form):
             if certificate_id not in certificate_map:
                 raise forms.ValidationError(
                     f"Certificate with ID {certificate_id} not found."
-                    )
+                )
             selected_certificates.add(certificate_map[certificate_id])
 
         # Second pass: Check for conflicts
