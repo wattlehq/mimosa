@@ -1,3 +1,5 @@
+/* eslint-disable react/no-is-mounted */
+
 import { API } from './api.js'
 
 /**
