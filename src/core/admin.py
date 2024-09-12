@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from core.forms.certificates import CertificateAdminForm
 from core.forms.settings import SettingsForm
 from core.models.certificate import Certificate
 from core.models.fee import Fee
@@ -45,6 +46,7 @@ class OrderSessionAdmin(admin.ModelAdmin):
 
 @admin.register(Certificate)
 class CertificateAdmin(admin.ModelAdmin):
+    form = CertificateAdminForm
     exclude = (
         "stripe_product_id",
         "stripe_price_id",
