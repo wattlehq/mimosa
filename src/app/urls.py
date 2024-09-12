@@ -1,3 +1,6 @@
+from django.urls import re_path
+from django.views.static import serve
+
 """
 URL configuration for mimosa project.
 
@@ -16,7 +19,6 @@ Including another URLconf
 """
 
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
@@ -31,4 +33,11 @@ urlpatterns = [
 # NOTE: This should be served by a separate web server or CDN, however we are
 # temporarily allowing Django to serve these files, see:
 # https://stackoverflow.com/questions/2237418/serving-static-media-during-django-development-why-not-media-root
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+MEDIA_URL_STRIPPED = settings.MEDIA_URL.lstrip("/")
+urlpatterns += [
+    re_path(
+        r"^{}(?P<path>.*)$".format(MEDIA_URL_STRIPPED),
+        serve,
+        {"document_root": settings.MEDIA_ROOT},
+    ),
+]
