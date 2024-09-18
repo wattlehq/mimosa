@@ -12,7 +12,7 @@ from core.services.utils.site import get_site_url
 logger = logging.getLogger(__name__)
 
 
-def send_order_status_email(order_id, override_email=None):
+def send_email_status(order_id, override_email=None):
     """
     Send an order status update email to the customer.
 

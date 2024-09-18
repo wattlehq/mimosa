@@ -10,7 +10,7 @@ from core.models.order import OrderSession
 from core.models.order import OrderSessionLine
 from core.models.order import OrderSessionStatus
 from core.models.property import Property
-from core.services.email.send_order_status import send_order_status_email
+from core.services.order.send_email_status import send_email_status
 
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
@@ -145,7 +145,7 @@ def handle_stripe_checkout_session_completed(event: stripe.checkout.Session):
     """
     try:
         order = save_event_order(event)
-        send_order_status_email(order_id=order.pk)
+        send_email_status(order_id=order.pk)
         return order
     except Exception as e:
         save_event_order_error(event, e)

@@ -11,6 +11,7 @@ from core.models.order import OrderSessionLine
 from core.models.property import Property
 from core.models.settings import Settings
 from core.models.tax_rate import TaxRate
+from core.services.order.admin_send_email_status import admin_send_email_status
 
 
 class OrderLineInline(admin.TabularInline):
@@ -31,6 +32,7 @@ class OrderLineInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderLineInline]
     exclude = ("fulfilled_at",)
+    actions = [admin_send_email_status]
     readonly_fields = ("order_hash",)
 
 
