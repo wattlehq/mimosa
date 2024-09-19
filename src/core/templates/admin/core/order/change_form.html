@@ -1,0 +1,9 @@
+{% extends "admin/change_form.html" %}
+
+{% block content %}
+  <form method="post" action="{% url 'admin_order_send_email_status' original.pk %}" style="margin: 20px 0;">
+    {% csrf_token %}
+    <button type="submit" class="button" style="padding: 6px 8px">Send Order Status Email</button>
+  </form>
+  {{ block.super }}
+{% endblock %}
