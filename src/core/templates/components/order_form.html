@@ -21,17 +21,17 @@
     <div class="form-item form-item--list">
       <ul>
         {% for parent_certificate, child_certificates in grouped_certificates.items %}
-        <li>
-          {% with is_child=False counter=forloop.counter %}
-            {% include "components/certificate_item.html" with certificate=parent_certificate %}
-          {% endwith %}
-          {% if child_certificates %}
-            <ul class="cert-li__children">
-              {% for child in child_certificates %}
-                <li>
-                  {% with is_child=True counter=forloop.parentloop.counter|add:forloop.counter %}
-                    {% include "components/certificate_item.html" with certificate=child %}
-                  {% endwith %}
+          <li>
+            {% with is_child=False counter=forloop.counter %}
+              {% include "components/certificate_item.html" with certificate=parent_certificate %}
+            {% endwith %}
+            {% if child_certificates %}
+              <ul class="cert-li__children">
+                {% for child in child_certificates %}
+                  <li>
+                    {% with is_child=True counter=forloop.parentloop.counter|add:forloop.counter %}
+                      {% include "components/certificate_item.html" with certificate=child %}
+                    {% endwith %}
                   </li>
                 {% endfor %}
               </ul>
@@ -39,6 +39,11 @@
           </li>
         {% endfor %}
       </ul>
+    </div>
+    <div class="form-item form-item--submit">
+      <button type="submit" class="button-next">
+        Next
+      </button>
     </div>
   </section>
   <section class="order-form__section order-form__section-customer">
@@ -54,6 +59,11 @@
         {{ form.customer_company_name.label }}
       </label>
       {{ form.customer_company_name }}
+    </div>
+    <div class="form-item form-item--submit">
+      <button type="submit" class="button-next">
+        Next
+      </button>
     </div>
   </section>
   <section class="order-form__section order-form__section-finalise">

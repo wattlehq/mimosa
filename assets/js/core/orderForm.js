@@ -3,6 +3,7 @@ const htmlOrderSummary = `${htmlContainer} .order-form__totals`
 const htmlInputLines = `${htmlContainer} input[type="hidden"][name^="lines"]`
 const htmlOptionsCertificates = `${htmlContainer} input[type="checkbox"][id^="certificate"]`
 const htmlOptionsFees = `${htmlContainer} input[type="checkbox"][id^="fee"]`
+const htmlInputPropertyId = `${htmlContainer} input[name="property_id"]`
 
 // Update totals with selected options.
 function updateTotals () {
@@ -95,7 +96,13 @@ function updateLines () {
 }
 
 export class OrderForm {
+  inputPropertyId = null
+
   constructor () {
+    this.inputPropertyId = document.querySelectorAll(
+      `${htmlInputPropertyId}`
+    )
+
     const optionsAll = document.querySelectorAll(
       `${htmlOptionsCertificates}, ${htmlOptionsFees}`
     )
