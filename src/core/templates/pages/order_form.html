@@ -6,10 +6,8 @@
     <h1>Order Building & Property Certificates</h1>
     <p>Working with businesses around the nation</p>
   </div>
-  <div class="order-create">
-    {% include "components/order_find_parcel.html" with form=form_find_parcel %}
-    {% include "components/order_form.html" with certificates=certificates form=form_create_order_session %}
-  </div>
+  {% include "components/order_find_parcel.html" with form=form_find_parcel %}
+  {% include "components/order_form.html" with certificates=certificates form=form_create_order_session %}
 {% endblock %}
 
 {% block extra_js %}
