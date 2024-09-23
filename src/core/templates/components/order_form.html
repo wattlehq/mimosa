@@ -2,12 +2,12 @@
 
 <form method="post" action="{% url 'order_form' %}" class="order-form">
   {% for error in form.non_field_errors %}
-    <div class="order-form__error">{{ error }}</div>
+    <div class="order-form__error error">{{ error }}</div>
   {% endfor %}
   {% for field in form %}
     {% if field.errors %}
       {% for error in field.errors %}
-        <div class="order-form__error">
+        <div class="order-form__error error">
           {{ error }}
         </div>
       {% endfor %}
