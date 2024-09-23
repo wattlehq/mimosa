@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const formOrder = new OrderForm() // eslint-disable-line no-new
 
   const onPropertySelect = (value) => {
+    formOrder.activate()
     const input = formOrder.inputPropertyId
     if (input) {
       input.value = value
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const onPropertyReset = () => {
+    formOrder.deactivate()
     const input = formOrder.inputPropertyId
     if (input) {
       input.value = null

@@ -221,7 +221,6 @@ export class OrderFindParcel {
 
       li.appendChild(input)
       li.appendChild(label)
-      li.addEventListener('click', this.handlePropertySubmit.bind(this))
       ul.appendChild(li)
     })
 

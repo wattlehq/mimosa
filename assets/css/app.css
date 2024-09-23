@@ -592,3 +592,11 @@ input[type='radio'] {
     margin-right: 0;
   }
 }
+
+/**
+ * Utilities.
+ */
+
+.is-hidden {
+  display: none !important;
+}
