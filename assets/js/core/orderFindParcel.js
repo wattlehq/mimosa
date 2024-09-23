@@ -37,7 +37,7 @@ export class OrderFindParcel {
     this.propertySection = document.querySelector('.find-parcel__property')
     this.propertyList = document.querySelector('.find-parcel__property-list')
     this.propertyForm = document.querySelector('.find-parcel__property form')
-    this.error = document.querySelector('.find-parcel__search-errors')
+    this.error = document.querySelector('.find-parcel__search-error')
 
     if (this.searchForm) {
       console.debug('Search form found, adding event listener')
@@ -106,7 +106,8 @@ export class OrderFindParcel {
       const errorMessages = errors[field]
       for (const message of errorMessages) {
         if (!displayedErrors.has(message.message)) {
-          const errorElement = document.createElement('p')
+          const errorElement = document.createElement('div')
+          errorElement.classList.add('error')
           errorElement.textContent = message.message
           this.error.appendChild(errorElement)
           displayedErrors.add(message.message)

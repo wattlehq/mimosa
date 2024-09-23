@@ -6,9 +6,28 @@ from core.services.certificate.group_items import build_child_parent_map
 
 
 class CreateOrderSessionForm(forms.Form):
-    customer_name = forms.CharField(max_length=254, label="Full Name")
-    customer_company_name = forms.CharField(max_length=200, label="Business")
-    property_id = forms.IntegerField(widget=forms.HiddenInput())
+    customer_name = forms.CharField(
+        max_length=254,
+        label="Full Name",
+        error_messages={
+            "required": "A name is required.",
+        },
+    )
+    customer_company_name = forms.CharField(
+        max_length=200,
+        label="Business",
+        error_messages={
+            "required": "A business is required.",
+        },
+    )
+
+    property_id = forms.IntegerField(
+        widget=forms.HiddenInput(),
+        error_messages={
+            "required": "A property is required.",
+        },
+    )
+
     lines = forms.JSONField(
         widget=forms.HiddenInput(),
         error_messages={

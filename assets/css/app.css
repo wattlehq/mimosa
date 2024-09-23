@@ -242,6 +242,27 @@ input[type='radio'] {
 }
 
 /**
+ * Component: Order Form Errors.
+ */
+
+.error {
+  margin: 1rem 0;
+  background: #ba3939;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.error:first-child {
+  margin-top: 0;
+}
+
+.error:last-child {
+  margin-bottom: 0;
+}
+
+/**
  * Component: Certificate List Item.
  */
 
