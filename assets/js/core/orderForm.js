@@ -1,3 +1,5 @@
+/* eslint-disable react/no-is-mounted */
+
 const htmlContainer = '.order-form'
 const htmlOrderSummary = `${htmlContainer} .order-form__totals`
 const htmlInputLines = `${htmlContainer} input[type="hidden"][name^="lines"]`
@@ -8,9 +10,9 @@ const htmlInputPropertyId = `${htmlContainer} input[name="property_id"]`
 const htmlSectionCertificates = `${htmlContainer} .order-form__section-certificates`
 const htmlSectionCustomer = `${htmlContainer} .order-form__section-customer`
 const htmlSectionFinal = `${htmlContainer} .order-form__section-finalise`
-const htmlButtonNext = ".button-next"
+const htmlButtonNext = '.button-next'
 
-const classHidden = "is-hidden"
+const classHidden = 'is-hidden'
 
 // Update totals with selected options.
 function updateTotals () {
@@ -118,6 +120,25 @@ export class OrderForm {
     this.elemSectionFinal.classList.add(classHidden)
   }
 
+  bindSteps () {
+    const steps = [
+      this.elemSectionCertificates,
+      this.elemSectionCustomer,
+      this.elemSectionFinal
+    ]
+
+    steps.forEach((section, index) => {
+      const submit = section.querySelector(htmlButtonNext)
+      const next = steps[index + 1]
+      if (submit && next) {
+        submit.addEventListener('click', (event) => {
+          event.preventDefault()
+          next.classList.remove(classHidden)
+        })
+      }
+    })
+  }
+
   constructor () {
     this.inputPropertyId = document.querySelector(htmlInputPropertyId)
 
@@ -126,23 +147,7 @@ export class OrderForm {
     this.elemSectionFinal = document.querySelector(htmlSectionFinal)
 
     this.deactivate()
-
-    const sectionsNext = [
-      this.elemSectionCertificates,
-      this.elemSectionCustomer,
-      this.elemSectionFinal
-    ]
-
-    sectionsNext.forEach((section, index) => {
-      const submit = section.querySelector(htmlButtonNext)
-      const next = sectionsNext[index + 1]
-      if (submit && next) {
-        submit.addEventListener('click', (event) => {
-          event.preventDefault()
-          next.classList.remove(classHidden)
-        })
-      }
-    })
+    this.bindSteps()
 
     const optionsAll = document.querySelectorAll(
       `${htmlOptionsCertificates}, ${htmlOptionsFees}`
