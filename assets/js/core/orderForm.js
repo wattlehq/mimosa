@@ -1,8 +1,18 @@
+/* eslint-disable react/no-is-mounted */
+
 const htmlContainer = '.order-form'
 const htmlOrderSummary = `${htmlContainer} .order-form__totals`
 const htmlInputLines = `${htmlContainer} input[type="hidden"][name^="lines"]`
 const htmlOptionsCertificates = `${htmlContainer} input[type="checkbox"][id^="certificate"]`
 const htmlOptionsFees = `${htmlContainer} input[type="checkbox"][id^="fee"]`
+const htmlInputPropertyId = `${htmlContainer} input[name="property_id"]`
+
+const htmlSectionCertificates = `${htmlContainer} .order-form__section-certificates`
+const htmlSectionCustomer = `${htmlContainer} .order-form__section-customer`
+const htmlSectionFinal = `${htmlContainer} .order-form__section-finalise`
+const htmlButtonNext = '.button-next'
+
+const classHidden = 'is-hidden'
 
 // Update totals with selected options.
 function updateTotals () {
@@ -95,7 +105,50 @@ function updateLines () {
 }
 
 export class OrderForm {
+  inputPropertyId = null
+  elemSectionCertificates = null
+  elemSectionCustomer = null
+  elemSectionFinal = null
+
+  activate () {
+    this.elemSectionCertificates.classList.remove(classHidden)
+  }
+
+  deactivate () {
+    this.elemSectionCertificates.classList.add(classHidden)
+    this.elemSectionCustomer.classList.add(classHidden)
+    this.elemSectionFinal.classList.add(classHidden)
+  }
+
+  bindSteps () {
+    const steps = [
+      this.elemSectionCertificates,
+      this.elemSectionCustomer,
+      this.elemSectionFinal
+    ]
+
+    steps.forEach((section, index) => {
+      const submit = section.querySelector(htmlButtonNext)
+      const next = steps[index + 1]
+      if (submit && next) {
+        submit.addEventListener('click', (event) => {
+          event.preventDefault()
+          next.classList.remove(classHidden)
+        })
+      }
+    })
+  }
+
   constructor () {
+    this.inputPropertyId = document.querySelector(htmlInputPropertyId)
+
+    this.elemSectionCertificates = document.querySelector(htmlSectionCertificates)
+    this.elemSectionCustomer = document.querySelector(htmlSectionCustomer)
+    this.elemSectionFinal = document.querySelector(htmlSectionFinal)
+
+    this.deactivate()
+    this.bindSteps()
+
     const optionsAll = document.querySelectorAll(
       `${htmlOptionsCertificates}, ${htmlOptionsFees}`
     )

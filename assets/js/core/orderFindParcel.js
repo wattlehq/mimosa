@@ -10,7 +10,7 @@ export class OrderFindParcel {
    * Create a FindParcel instance.
    * Initialises DOM elements and sets up event listeners.
    */
-  constructor (inputSelectionTargetSel) {
+  constructor (onPropertySelect, onPropertyReset) {
     console.debug('OrderFindParcel constructor called')
     this.searchForm = null
     this.assessmentSection = null
@@ -19,8 +19,8 @@ export class OrderFindParcel {
     this.propertySection = null
     this.propertyList = null
     this.error = null
-    this.inputSelectionTarget = null
-    this.inputSelectionTargetSel = inputSelectionTargetSel
+    this.onPropertySelect = onPropertySelect
+    this.onPropertyReset = onPropertyReset
 
     this.initialiseElements()
   }
@@ -37,7 +37,6 @@ export class OrderFindParcel {
     this.propertySection = document.querySelector('.find-parcel__property')
     this.propertyList = document.querySelector('.find-parcel__property-list')
     this.propertyForm = document.querySelector('.find-parcel__property form')
-    this.inputSelectionTarget = document.querySelector(this.inputSelectionTargetSel)
     this.error = document.querySelector('.find-parcel__search-error')
 
     if (this.searchForm) {
@@ -223,7 +222,6 @@ export class OrderFindParcel {
 
       li.appendChild(input)
       li.appendChild(label)
-      li.addEventListener('click', this.handlePropertySubmit.bind(this))
       ul.appendChild(li)
     })
 
@@ -236,9 +234,9 @@ export class OrderFindParcel {
     const selectedPropertyRadio = document.querySelector('input[name="selected_property"]:checked')
     const selection = JSON.parse(selectedPropertyRadio.value)
 
-    if (this.inputSelectionTarget) {
+    if (this.onPropertySelect) {
       if (selectedPropertyRadio) {
-        this.inputSelectionTarget.value = selection.id
+        this.onPropertySelect(selection.id)
       } else {
         console.debug('No property selected')
         window.alert('Please select a property.')
@@ -250,8 +248,8 @@ export class OrderFindParcel {
 
   handlePropertyReset () {
     console.debug('handlePropertyReset called')
-    if (this.inputSelectionTarget) {
-      this.inputSelectionTarget.value = null
+    if (this.onPropertyReset) {
+      this.onPropertyReset()
     } else {
       console.debug('No property selection target')
     }
