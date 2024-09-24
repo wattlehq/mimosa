@@ -84,6 +84,6 @@ class OrderForm(View):
                 "form_create_order_session": form_create_order_session,
                 "grouped_certificates": grouped_certificates,
                 "submitted": True,
-                "property": property_serialized
+                "property": property_serialized,
             },
         )
