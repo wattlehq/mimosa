@@ -220,26 +220,22 @@ export class OrderForm {
     
     let errorContainer = document.querySelector('.order-form__error');
     if (!errorContainer) {
-      // Create error container if it doesn't exist
       const form = document.querySelector('.order-form');
       errorContainer = document.createElement('div');
-      errorContainer.className = 'order-form__error';
+      errorContainer.className = 'order-form__error error';
       form.insertBefore(errorContainer, form.firstChild);
     }
     
     errorContainer.innerHTML = '';
   
-    // Display form-wide errors
     if (errors.__all__) {
       errors.__all__.forEach(error => {
         const errorElement = document.createElement('div');
         errorElement.textContent = error;
-        errorElement.style.color = 'red';
         errorContainer.appendChild(errorElement);
       });
     }
   
-    // Make sure the error container is visible
     errorContainer.style.display = 'block';
   }
   
