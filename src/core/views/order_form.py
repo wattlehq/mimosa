@@ -3,6 +3,8 @@
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views import View
+from django.http import JsonResponse
+
 
 from core.forms.order.create_order_session import CreateOrderSessionForm
 from core.forms.order.find_parcel import FindParcelForm
@@ -67,10 +69,11 @@ class OrderForm(View):
             )
 
             if result and result["success"]:
-                dest = result["checkout_url"]
-                return redirect(dest)
+                return JsonResponse({"redirect_url": result["checkout_url"]})
             elif result and result["error"]:
-                form_create_order_session.add_error(None, result["error"])
+                return JsonResponse({"errors": result["error"]})
+        else:
+            return JsonResponse({"errors": form_create_order_session.errors})
         return render(
             request,
             self.template_name,
