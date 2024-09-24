@@ -1,6 +1,6 @@
 {% load static custom_filters %}
 
-<form method="post" action="{% url 'order_form' %}" class="order-form">
+<form method="post" action="{% url 'order_form' %}" class="order-form" {% if submitted %}data-submitted{% endif %}>
   {% for error in form.non_field_errors %}
     <div class="order-form__error error">{{ error }}</div>
   {% endfor %}

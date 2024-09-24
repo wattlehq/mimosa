@@ -12,6 +12,7 @@ export class OrderFindParcel {
    */
   constructor (onPropertySelect, onPropertyReset) {
     console.debug('OrderFindParcel constructor called')
+    this.container = null
     this.searchForm = null
     this.assessmentSection = null
     this.assessmentList = null
@@ -19,6 +20,7 @@ export class OrderFindParcel {
     this.propertySection = null
     this.propertyList = null
     this.error = null
+    this.submitted = false
     this.onPropertySelect = onPropertySelect
     this.onPropertyReset = onPropertyReset
 
@@ -30,6 +32,7 @@ export class OrderFindParcel {
    */
   initialiseElements () {
     console.debug('Initialising elements')
+    this.container = document.querySelector('.find-parcel')
     this.searchForm = document.querySelector('.find-parcel__search form')
     this.assessmentSection = document.querySelector('.find-parcel__assessment')
     this.assessmentList = document.querySelector('.find-parcel__assessment-list')
@@ -38,6 +41,16 @@ export class OrderFindParcel {
     this.propertyList = document.querySelector('.find-parcel__property-list')
     this.propertyForm = document.querySelector('.find-parcel__property form')
     this.error = document.querySelector('.find-parcel__search-error')
+
+    const isDataSubmitted = this.container.hasAttribute('data-submitted')
+    const isDataProperty = this.container.hasAttribute('data-property')
+    this.submitted = isDataSubmitted && isDataProperty
+
+    if (this.submitted) {
+      const propertyRaw = this.container.getAttribute('data-property')
+      const property = JSON.parse(propertyRaw)
+      this.displayAssessmentProperties([property], property.id)
+    }
 
     if (this.searchForm) {
       console.debug('Search form found, adding event listener')
@@ -209,6 +222,7 @@ export class OrderFindParcel {
       input.value = JSON.stringify(property)
       input.id = `property-${index}`
       input.required = true
+      input.checked = selectedAssessment && selectedAssessment === property.id
 
       const label = document.createElement('label')
       label.htmlFor = `property-${index}`
