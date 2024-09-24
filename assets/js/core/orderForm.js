@@ -154,8 +154,9 @@ export class OrderForm {
     if (!this.submitted) {
       // Don't collapse steps on submitted forms.
       this.deactivate()
-      this.bindSteps()
     }
+
+    this.bindSteps()
 
     const optionsAll = document.querySelectorAll(
       `${htmlOptionsCertificates}, ${htmlOptionsFees}`
