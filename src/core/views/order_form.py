@@ -1,10 +1,8 @@
 """Views for handling property searches and certificate orders."""
 
-from django.shortcuts import redirect
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
-from django.http import JsonResponse
-
 
 from core.forms.order.create_order_session import CreateOrderSessionForm
 from core.forms.order.find_parcel import FindParcelForm

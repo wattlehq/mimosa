@@ -190,8 +190,6 @@ input[type='radio'] {
   min-width: 1rem;
 }
 
-
-
 @media (min-width: 48rem) {
   .find-parcel__search .form-item--or {
     margin-top: 0.25rem;

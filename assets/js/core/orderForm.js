@@ -160,6 +160,7 @@ export class OrderForm {
 
     updateTotals()
     updateLines()
+
     const form = document.querySelector(htmlContainer)
     console.log('Form found:', form)
     if (form) {
@@ -170,7 +171,7 @@ export class OrderForm {
     }
   }
 
-  handleSubmit(event) {
+  handleSubmit (event) {
     console.log('Form submission started')
     event.preventDefault()
     const formData = new FormData(event.target)
@@ -184,59 +185,58 @@ export class OrderForm {
         'X-CSRFToken': formData.get('csrfmiddlewaretoken')
       }
     })
-    .then(response => {
-      console.log('Response received:', response)
-      if (response.headers.get('Content-Type').includes('application/json')) {
-        return response.json()
-      } else {
-        return response.text().then(text => {
-          console.log('Received HTML:', text)
-          throw new Error('Received HTML instead of JSON')
-        })
-      }
-    })
-    .then(data => {
-      console.log('Parsed data:', data)
-      if (data.errors) {
-        this.displayErrors(data.errors)
+      .then(response => {
+        console.log('Response received:', response)
+        if (response.headers.get('Content-Type').includes('application/json')) {
+          return response.json()
+        } else {
+          return response.text().then(text => {
+            console.log('Received HTML:', text)
+            throw new Error('Received HTML instead of JSON')
+          })
+        }
+      })
+      .then(data => {
+        console.log('Parsed data:', data)
+        if (data.errors) {
+          this.displayErrors(data.errors)
+          this.inputPropertyId.value = propertyId
+          this.activate()
+        } else if (data.redirect_url) {
+          window.location.href = data.redirect_url
+        } else {
+          console.error('Unexpected response format:', data)
+        }
+      })
+      .catch(error => {
+        console.error('Fetch error:', error)
+        this.displayErrors({ __all__: ['An unexpected error occurred. Please try again.'] })
         this.inputPropertyId.value = propertyId
         this.activate()
-      } else if (data.redirect_url) {
-        window.location.href = data.redirect_url
-      } else {
-        console.error('Unexpected response format:', data)
-      }
-    })
-    .catch(error => {
-      console.error('Fetch error:', error)
-      this.displayErrors({'__all__': ['An unexpected error occurred. Please try again.']});
-      this.inputPropertyId.value = propertyId
-      this.activate()
-    })
+      })
   }
 
-  displayErrors(errors) {
-    console.error('Form submission errors:', errors);
-    
-    let errorContainer = document.querySelector('.order-form__error');
+  displayErrors (errors) {
+    console.error('Form submission errors:', errors)
+
+    let errorContainer = document.querySelector('.order-form__error')
     if (!errorContainer) {
-      const form = document.querySelector('.order-form');
-      errorContainer = document.createElement('div');
-      errorContainer.className = 'order-form__error error';
-      form.insertBefore(errorContainer, form.firstChild);
+      const form = document.querySelector('.order-form')
+      errorContainer = document.createElement('div')
+      errorContainer.className = 'order-form__error error'
+      form.insertBefore(errorContainer, form.firstChild)
     }
-    
-    errorContainer.innerHTML = '';
-  
+
+    errorContainer.innerHTML = ''
+
     if (errors.__all__) {
       errors.__all__.forEach(error => {
-        const errorElement = document.createElement('div');
-        errorElement.textContent = error;
-        errorContainer.appendChild(errorElement);
-      });
+        const errorElement = document.createElement('div')
+        errorElement.textContent = error
+        errorContainer.appendChild(errorElement)
+      })
     }
-  
-    errorContainer.style.display = 'block';
+
+    errorContainer.style.display = 'block'
   }
-  
 }
