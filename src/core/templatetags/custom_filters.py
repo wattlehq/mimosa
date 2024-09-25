@@ -1,3 +1,4 @@
+import json
 import os
 from decimal import Decimal
 
@@ -72,3 +73,8 @@ def order_tax(order):
 @register.filter
 def order_total(order):
     return calculate_order_total(order)
+
+
+@register.filter()
+def json_encode(obj):
+    return json.dumps(obj)

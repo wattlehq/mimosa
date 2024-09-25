@@ -1,6 +1,11 @@
+{% load custom_filters %}
 {% load static %}
 
-<div class="find-parcel">
+<div
+  class="find-parcel"
+  {% if submitted %}data-submitted{% endif %}
+  {% if property %}data-property="{{ property|json_encode }}"{% endif %}
+>
   <section class="find-parcel__search">
     <h2>1. Find a parcel</h2>
     <form>

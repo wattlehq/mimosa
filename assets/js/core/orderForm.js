@@ -106,9 +106,11 @@ function updateLines () {
 
 export class OrderForm {
   inputPropertyId = null
+  elemContainer = null
   elemSectionCertificates = null
   elemSectionCustomer = null
   elemSectionFinal = null
+  submitted = false
 
   activate () {
     this.elemSectionCertificates.classList.remove(classHidden)
@@ -142,11 +144,18 @@ export class OrderForm {
   constructor () {
     this.inputPropertyId = document.querySelector(htmlInputPropertyId)
 
+    this.elemContainer = document.querySelector(htmlContainer)
     this.elemSectionCertificates = document.querySelector(htmlSectionCertificates)
     this.elemSectionCustomer = document.querySelector(htmlSectionCustomer)
     this.elemSectionFinal = document.querySelector(htmlSectionFinal)
 
-    this.deactivate()
+    this.submitted = this.elemContainer.hasAttribute('data-submitted')
+
+    if (!this.submitted) {
+      // Don't collapse steps on submitted forms.
+      this.deactivate()
+    }
+
     this.bindSteps()
 
     const optionsAll = document.querySelectorAll(
