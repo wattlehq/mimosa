@@ -13,7 +13,7 @@ from core.webhooks.stripe import handle_stripe_checkout_session_completed
 
 class OrderModelTest(TestCase):
 
-    @patch("core.webhooks.stripe.send_order_status_email")
+    @patch("core.webhooks.stripe.send_email_status")
     @patch("stripe.Product.create")
     @patch("stripe.Price.create")
     def test_create_certificate(

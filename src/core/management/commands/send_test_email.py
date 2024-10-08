@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from core.services.email.send_order_status import send_order_status_email
+from core.services.order.send_email_status import send_email_status
 
 
 class Command(BaseCommand):
@@ -26,7 +26,7 @@ class Command(BaseCommand):
         test_email = options["email"]
 
         # Send the test email
-        success = send_order_status_email(order_id, override_email=test_email)
+        success = send_email_status(order_id, override_email=test_email)
 
         if success:
             self.stdout.write(

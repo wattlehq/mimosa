@@ -21,8 +21,8 @@ function _dc {
   docker compose "${DC}" ${TTY} "${@}"
 }
 
-function _dc-test {
-  docker compose -f ${DC_FILE_TEST} "${DC}" ${TTY} "${@}"
+function _dc-test-rm {
+  docker compose -f ${DC_FILE_TEST} "${DC}" --rm ${TTY} "${@}"
 }
 
 function _build_run_down {
@@ -40,7 +40,7 @@ function cmd {
 
 function cmd-test {
   # Run any command you want in the web container
-  _dc-test web-test "${@}"
+  _dc-test-rm web-test "${@}"
 }
 
 function cmd-js {
@@ -55,7 +55,7 @@ function manage-test {
   if [ "${1-''}" == "test" ]; then
     test-create-env
     cmd-test python3 manage.py collectstatic --no-input
-    cmd-test python3 manage.py "${@}" || docker compose down --remove-orphans
+    cmd-test python3 manage.py "${@}"
     docker compose down --remove-orphans
   else
     cmd-test python3 manage.py "${@}"
