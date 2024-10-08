@@ -21,8 +21,8 @@ function _dc {
   docker compose "${DC}" ${TTY} "${@}"
 }
 
-function _dc-test {
-  docker compose -f ${DC_FILE_TEST} "${DC}" ${TTY} "${@}"
+function _dc-test-rm {
+  docker compose -f ${DC_FILE_TEST} "${DC}" --rm ${TTY} "${@}"
 }
 
 function _build_run_down {
@@ -40,7 +40,7 @@ function cmd {
 
 function cmd-test {
   # Run any command you want in the web container
-  _dc-test web-test "${@}"
+  _dc-test-rm web-test "${@}"
 }
 
 function cmd-js {
