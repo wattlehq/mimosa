@@ -55,7 +55,7 @@ function manage-test {
   if [ "${1-''}" == "test" ]; then
     test-create-env
     cmd-test python3 manage.py collectstatic --no-input
-    cmd-test python3 manage.py "${@}" || docker compose down --remove-orphans
+    cmd-test python3 manage.py "${@}"
     docker compose down --remove-orphans
   else
     cmd-test python3 manage.py "${@}"
