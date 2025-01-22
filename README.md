@@ -1,3 +1,6 @@
+> [!CAUTION]
+> This repository version of Wattle is not yet suitable for production use. Features may be incomplete, untested, or subject to breaking changes without notice.
+
 # Project Overview
 
 ![CI](https://github.com/nickjj/docker-django-example/workflows/CI/badge.svg?branch=main)
