@@ -1,129 +1,31 @@
-# An example Django + Docker app
+# Project Overview
 
 ![CI](https://github.com/nickjj/docker-django-example/workflows/CI/badge.svg?branch=main)
 
-[Source](https://github.com/nickjj/docker-django-example/tree/main)
-
-You could use this example app as a base for your new project or as a guide to
-Dockerize your existing Django app.
-
-The example app is minimal but it wires up a number of things you might use in
-a real world Django app, but at the same time it's not loaded up with a million
-personal opinions.
-
-For the Docker bits, everything included is an accumulation of [Docker best
-practices](https://nickjanetakis.com/blog/best-practices-around-production-ready-web-apps-with-docker-compose)
-based on building and deploying dozens of assorted Dockerized web apps since
-late 2014.
-
-**This app is using Django 5.0.3 and Python 3.12.2**. The screenshot doesn't get
-updated every time I bump the versions:
-
-[![Screenshot](.github/docs/screenshot.jpg)](https://github.com/nickjj/docker-django-example/blob/main/.github/docs/screenshot.jpg?raw=true)
+The Wattle Cloud Platform is designed to simplify the process of searching for properties and purchasing associated certificates. Users can input parcel details, view matching property assessments, select certificates (including urgent options), provide contact information, and make payments via Stripe.
 
 ## Table of contents
 
-- [Tech stack](#tech-stack)
-- [Notable opinions and extensions](#notable-opinions-and-extensions)
+- [Features](#features)
 - [Running this app](#running-this-app)
+- [Model Setup](#model-setup)
 - [Files of interest](#files-of-interest)
   - [`.env`](#env)
   - [`run`](#run)
-- [Running a script to automate renaming the project](#running-a-script-to-automate-renaming-the-project)
 - [Updating dependencies](#updating-dependencies)
-- [See a way to improve something?](#see-a-way-to-improve-something)
-- [Additional resources](#additional-resources)
-  - [Learn more about Docker and Django](#learn-more-about-docker-and-django)
-  - [Deploy to production](#deploy-to-production)
-- [About the author](#about-the-author)
+  - [In development](#in-development)
+  - [In CI](#in-ci)
+  - [In production](#in-production)
+- [How Does Testing Work](#how-does-testing-work)
+- [Monitoring](#monitoring)
 
-## Tech stack
+## Features
 
-If you don't like some of these choices that's no problem, you can swap them
-out for something else on your own.
-
-### Back-end
-
-- [PostgreSQL](https://www.postgresql.org/)
-- [Redis](https://redis.io/)
-- [Celery](https://github.com/celery/celery)
-
-### Front-end
-
-- [esbuild](https://esbuild.github.io/)
-- [TailwindCSS](https://tailwindcss.com/)
-- [Heroicons](https://heroicons.com/)
-
-#### But what about JavaScript?!
-
-Picking a JS library is a very app specific decision because it depends on
-which library you like and it also depends on if your app is going to be
-mostly Django templates with sprinkles of JS or an API back-end.
-
-This isn't an exhaustive list but here's a few reasonable choices depending on
-how you're building your app:
-
-- <https://hotwired.dev/>
-- <https://htmx.org/>
-- <https://github.com/alpinejs/alpine>
-- <https://vuejs.org/>
-- <https://reactjs.org/>
-- <https://jquery.com/>
-
-On the bright side with esbuild being set up you can use any (or none) of these
-solutions very easily. You could follow a specific library's installation
-guides to get up and running in no time.
-
-Personally I'm going to be using Hotwire Turbo + Stimulus in most newer
-projects.
-
-## Notable opinions and extensions
-
-Django is an opinionated framework and I've added a few extra opinions based on
-having Dockerized and deployed a number of Django projects. Here's a few (but
-not all) note worthy additions and changes.
-
-- **Packages and extensions**:
-  - *[gunicorn](https://gunicorn.org/)* for an app server in both development
-    and production
-  - *[whitenoise](https://github.com/evansd/whitenoise)* for serving static
-    files
-  - *[django-debug-toolbar](https://github.com/jazzband/django-debug-toolbar)*
-    for displaying info about a request
-- **Linting and formatting**:
-  - *[flake8](https://github.com/PyCQA/flake8)* is used to lint the code base
-  - *[isort](https://github.com/PyCQA/isort)* is used to auto-sort Python
-    imports
-  - *[black](https://github.com/psf/black)* is used to format the code base
-- **Django apps**:
-  - Add `pages` app to render a home page
-  - Add `up` app to provide a few health check pages
-- **Config**:
-  - Log to STDOUT so that Docker can consume and deal with log output
-  - Extract a bunch of configuration settings into environment variables
-  - Rename project directory from its custom name to `config/`
-  - `src/config/settings.py` and the `.env` file handles configuration in all
-    environments
-- **Front-end assets**:
-  - `assets/` contains all your CSS, JS, images, fonts, etc. and is managed by
-    esbuild
-  - Custom `502.html` and `maintenance.html` pages
-  - Generate favicons using modern best practices
-- **Django defaults that are changed**:
-  - Use Redis as the default Cache back-end
-  - Use signed cookies as the session back-end
-  - `public/` is the static directory where Django will serve static files from
-  - `public_collected/` is where `collectstatic` will write its files to
-
-Besides the Django app itself:
-
-- Docker support has been added which would be any files having `*docker*` in
-  its name
-- GitHub Actions have been set up
-- A `requirements-lock.txt` file has been introduced using `pip3`. The
-  management of this file is fully automated by the commands found in the `run`
-  file. We'll cover this in more detail when we talk about [updating
-  dependencies](#updating-dependencies).
+- Property search and certificate purchase
+- Order management for certificates
+- Stripe payment integration
+- Detailed user flows for parcel search and order fulfilment
+- Infrastructure setup and testing commands
 
 ## Running this app
 
@@ -149,7 +51,7 @@ these commands for PowerShell if you want.
 #### Clone this repo anywhere you want and move into the directory:
 
 ```sh
-git clone https://github.com/nickjj/docker-django-example mimosa
+git clone https://github.com/wattlehq/mimosa.git mimosa
 cd mimosa
 
 # Optionally checkout a specific tag, such as: git checkout 0.10.0
@@ -163,9 +65,9 @@ cp .env.example .env
 
 #### Build everything:
 
-*The first time you run this it's going to take 5-10 minutes depending on your
+_The first time you run this it's going to take 5-10 minutes depending on your
 internet connection speed and computer's hardware specs. That's because it's
-going to download a few Docker images and build the Python + Yarn dependencies.*
+going to download a few Docker images and build the Python + Yarn dependencies._
 
 ```sh
 docker compose up --build
@@ -207,7 +109,7 @@ Create a new admin super user.
 ./run manage createsuperuser
 ```
 
-*We'll go over that `./run` script in a bit!*
+_We'll go over that `./run` script in a bit!_
 
 #### Check it out in a browser:
 
@@ -234,7 +136,7 @@ Visit <http://localhost:8000> in your favorite browser.
 ./run format
 ```
 
-*There's also a `./run quality` command to run the above 3 commands together.*
+_There's also a `./run quality` command to run the above 3 commands together._
 
 #### Running the test suite:
 
@@ -252,6 +154,13 @@ docker compose down
 
 You can start things up again with `docker compose up` and unlike the first
 time it should only take seconds.
+
+## Model Setup
+
+In order to deploy and run the Web Application successfully, you will need to setup a
+few Models, particularly `Properties`, `Certificates` and `Fees`.
+
+You can create instances of these models from within the Django Admin by browsing to the URL: http://localhost:8000/admin
 
 ## Files of interest
 
@@ -286,9 +195,9 @@ This comes in handy to run various Docker commands because sometimes these
 commands can be a bit long to type. Feel free to add as many convenience
 functions as you want. This file's purpose is to make your experience better!
 
-*If you get tired of typing `./run` you can always create a shell alias with
+_If you get tired of typing `./run` you can always create a shell alias with
 `alias run=./run` in your `~/.bash_aliases` or equivalent file. Then you'll be
-able to run `run` instead of `./run`.*
+able to run `run` instead of `./run`._
 
 #### Start and setup the project:
 
@@ -316,12 +225,12 @@ adding custom changes.
 ```
 
 If everything passes now you can optionally `git add -A && git commit -m
-"Initial commit"` and start customizing your app. Alternatively you can wait
-until you develop more of your app before committing anything. It's up to you!
+"Initial commit"` and start customizing the app. Alternatively you can wait
+until you develop more of the app before committing anything. It's up to you!
 
 ## Updating dependencies
 
-Let's say you've customized your app and it's time to make a change to your
+Let's say you've customized the app and it's time to make a change to the
 `requirements.txt` or `package.json` file.
 
 Without Docker you'd normally run `pip3 install -r requirements.txt` or `yarn
@@ -333,10 +242,10 @@ don't run that just yet.
 
 You can run `./run pip3:outdated` or `./run yarn:outdated` to get a list of
 outdated dependencies based on what you currently have installed. Once you've
-figured out what you want to update, go make those updates in your
+figured out what you want to update, go make those updates in the
 `requirements.txt` and / or `assets/package.json` file.
 
-Then to update your dependencies you can run `./run pip3:install` or `./run
+Then to update the dependencies you can run `./run pip3:install` or `./run
 yarn:install`. That'll make sure any lock files get copied from Docker's image
 (thanks to volumes) into your code repo and now you can commit those files to
 version control like usual.
@@ -392,4 +301,4 @@ When the test commands start:
 
 This project has been setup to optionally use Sentry for application monitoring.
 Once `SENTRY_ENABLED` has been set to `True` and `SENTRY_DSN` has been
-configured, events will start to propogate to Sentry.
+configured, events will start to propagate to Sentry.
